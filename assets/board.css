@@ -7,6 +7,7 @@
 .board-square{
     height: 100%;
     width: calc(100% / 8);
+    position: relative;
     /* border: 1px solid black; */
 }
 
@@ -16,4 +17,30 @@
 
 .board-square.white {
     background-color: var(--white);
+}
+
+.square-label{
+    position: absolute;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    padding: 0.5rem;
+}
+
+.board-square.white .square-label{
+    color: var(--brown);
+}
+
+.board-square.brown .square-label{
+    color: var(--white);
+}
+
+.square-label.file {
+    bottom: 0;
+    right: 0;
+}
+
+.square-label.rank {
+    top: 0;
+    left: 0;
 }

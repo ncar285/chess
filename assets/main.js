@@ -6,6 +6,22 @@ document.addEventListener("DOMContentLoaded", function() {
     setupChessBoard();
 });
 
+function addSquareLabels(square, pos){
+    const [file,rank] =  pos;
+    if (file === "a") {
+        const rankLabel = document.createElement('div');
+        rankLabel.className = 'rank square-label';
+        rankLabel.innerText = `${rank}`;
+        square.appendChild(rankLabel);
+    } 
+    if (rank === 1) {
+        const fileLabel = document.createElement('div');
+        fileLabel.className = 'file square-label';
+        fileLabel.innerText = `${file}`;
+        square.appendChild(fileLabel);
+    }
+}
+
 function setupChessBoard(){
     const board = document.querySelector('.chess-board');
     let color = "brown";
@@ -21,6 +37,7 @@ function setupChessBoard(){
             const file = String.fromCharCode(charCode)
             square.id = `${rank}-${file}`;
             square.className = `board-square ${color}`;
+            addSquareLabels(square, [file,rank]);
             row.appendChild(square);
             color = (color === "brown") ? "white" : "brown";
         }
