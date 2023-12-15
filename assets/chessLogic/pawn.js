@@ -15,17 +15,18 @@ Pawn.prototype.getType = function(){
 }
 
 Pawn.prototype.getMoves = function(){
-    const [rank, file] = this.square;
+    const [rank, file] = this.getSquare();
+    // debugger
     const color = this.getColor();
     const options = [];
     if (color === "white"){
         options.push([rank + 1, file]);
-        if (rank === 2){
+        if (rank === 1){
             options.push([rank + 2, file]);
         }
     } else {
         options.push([rank - 1, file]);
-        if (rank === 7){
+        if (rank === 6){
             options.push([rank - 2, file]);
         }
     }

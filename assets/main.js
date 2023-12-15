@@ -62,10 +62,8 @@ function renderPiecesOnDOM(gameBoard){
         row.forEach((square, b) => {
             const pos = [a,b];
 
-            const charCode = 'a'.charCodeAt(0) + b;
-            const rank = a + 1;
-            const file = String.fromCharCode(charCode);
-            const squareId = `${rank}-${file}`
+            const squareId = posToId([a,b])
+
             const squareElement = document.getElementById(squareId);
             const piece = document.createElement('img');
             const pieceObj = gameBoard.getPiece(pos);
@@ -83,7 +81,7 @@ function renderPiecesOnDOM(gameBoard){
                 squareElement.appendChild(piece);
 
                 // Add event listeners to this piece
-                addDragEventsToPiece(piece, source);
+                addDragEventsToPiece(piece, pieceObj);
             }
 
         })
@@ -92,13 +90,46 @@ function renderPiecesOnDOM(gameBoard){
 }
 
 
-function addDragEventsToPiece(piece) {
+function addDragEventsToPiece(piece, pieceObj) {
+
+    const validMoves = pieceObj.getMoves();
+    // console.log("valid moves: ", validMoves)
+
+
     piece.addEventListener('dragstart', function(event) {
         this.style.opacity = '0'; // Hide the original piece
+
+        console.log("valid moves: ", validMoves)
+
+        validMoves.forEach((pos)=>{
+            const suggestion = document.createElement('div');
+            suggestion.className = 'suggested-square';
+            const squareId = posToId(pos);
+            const squareElement = document.getElementById(squareId);
+            squareElement.appendChild(suggestion);
+        })
+        
+        
+
     });
 
     piece.addEventListener('dragend', function(event) {
         this.style.opacity = '1'; // Show the piece again when the drag ends
         // Update the piece's position in your game state here
+
+        const suggestions = document.querySelectorAll('.suggested-square');
+        suggestions.forEach(suggestion => {
+            suggestion.parentNode.removeChild(suggestion);
+        })
     });
+
+ 
+}
+
+function posToId(pos){
+    const [a,b] =  pos;
+    const charCode = 'a'.charCodeAt(0) + b;
+    const rank = a + 1;
+    const file = String.fromCharCode(charCode);
+    return `${rank}-${file}`
 }
