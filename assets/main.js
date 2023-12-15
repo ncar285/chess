@@ -93,37 +93,44 @@ function renderPiecesOnDOM(gameBoard){
 function addDragEventsToPiece(piece, pieceObj) {
 
     const validMoves = pieceObj.getMoves();
-    // console.log("valid moves: ", validMoves)
+
+    piece.addEventListener('click', function(event) {
+        event.stopPropagation(); // Prevent the click from reaching the document
+        showMovePossibilities(validMoves);
+        // Global click event listener to hide move possibilities
+        // document.addEventListener('click', function(event) {
+        //     hideMovePossibilities();
+        // });
+    });
 
 
     piece.addEventListener('dragstart', function(event) {
         this.style.opacity = '0'; // Hide the original piece
-
-        console.log("valid moves: ", validMoves)
-
-        validMoves.forEach((pos)=>{
-            const suggestion = document.createElement('div');
-            suggestion.className = 'suggested-square';
-            const squareId = posToId(pos);
-            const squareElement = document.getElementById(squareId);
-            squareElement.appendChild(suggestion);
-        })
-        
-        
-
+        showMovePossibilities(validMoves);
     });
 
     piece.addEventListener('dragend', function(event) {
         this.style.opacity = '1'; // Show the piece again when the drag ends
-        // Update the piece's position in your game state here
-
-        const suggestions = document.querySelectorAll('.suggested-square');
-        suggestions.forEach(suggestion => {
-            suggestion.parentNode.removeChild(suggestion);
-        })
+        // Update the piece's position in game state here
+        hideMovePossibilities()
     });
+}
 
- 
+function showMovePossibilities(validMoves){
+    validMoves.forEach((pos)=>{
+        const suggestion = document.createElement('div');
+        suggestion.className = 'suggested-square';
+        const squareId = posToId(pos);
+        const squareElement = document.getElementById(squareId);
+        squareElement.appendChild(suggestion);
+    })
+}
+
+function hideMovePossibilities(){
+    const suggestions = document.querySelectorAll('.suggested-square');
+    suggestions.forEach(suggestion => {
+        suggestion.parentNode.removeChild(suggestion);
+    })
 }
 
 function posToId(pos){
