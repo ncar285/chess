@@ -70,20 +70,35 @@ function renderPiecesOnDOM(gameBoard){
             const piece = document.createElement('img');
             const pieceObj = gameBoard.getPiece(pos);
 
-            console.log(pieceObj)
+            // console.log(pieceObj)
 
             if (pieceObj){
                 let name = "";
                 name += (pieceObj.getColor() === "white") ? "w_" : "b_";
                 name += pieceObj.getType();
-                piece.src = `./images/pieces/${name}.png`;
-                console.log(squareId)
+                const source = `./images/pieces/${name}.png`;
+                piece.src = source;
+                // console.log(squareId)
                 piece.className = "chess-piece";
                 squareElement.appendChild(piece);
 
+                // Add event listeners to this piece
+                addDragEventsToPiece(piece, source);
             }
 
         })
     })
 
+}
+
+
+function addDragEventsToPiece(piece) {
+    piece.addEventListener('dragstart', function(event) {
+        this.style.opacity = '0'; // Hide the original piece
+    });
+
+    piece.addEventListener('dragend', function(event) {
+        this.style.opacity = '1'; // Show the piece again when the drag ends
+        // Update the piece's position in your game state here
+    });
 }
