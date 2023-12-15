@@ -1,0 +1,19 @@
+.board-row{
+    height: calc(100% / 8);
+    width: 100%;
+    display: flex;
+}
+
+.board-square{
+    height: 100%;
+    width: calc(100% / 8);
+    /* border: 1px solid black; */
+}
+
+.board-square.brown {
+    background-color: var(--brown);
+}
+
+.board-square.white {
+    background-color: var(--white);
+}

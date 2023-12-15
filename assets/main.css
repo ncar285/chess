@@ -1,3 +1,8 @@
+:root {
+    --brown: #744D2A;
+    --white: #CEB07E;
+}
+
 .is-preload .chess-board {
     background-color: #cccc;
 }
@@ -24,6 +29,7 @@
     background-color: aquamarine;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border: 1px solid #000;
+    border-radius: 0.2em;
 }
 
 @media (max-width: 1000px) {
