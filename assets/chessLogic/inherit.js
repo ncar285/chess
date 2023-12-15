@@ -1,7 +1,8 @@
-const inherit = function(parent,child){
-    const Surrogate = function(){};
+export const inherit = function(parent,child){
+    function Surrogate(){};
     Surrogate.prototype = parent.prototype;
-    child.prototype = new child;
+    child.prototype = new Surrogate();
+    child.prototype.constructor = child;
 };
 
-module.exports = inherit;
+// module.exports = inherit;

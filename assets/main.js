@@ -1,9 +1,18 @@
+import { Board } from './chessLogic/board.js';
+import { Pawn } from './chessLogic/pawn.js'; 
+
+window.Pawn = Pawn;
+
 document.addEventListener("DOMContentLoaded", function() {
     if (document.body.classList.contains('is-preload')) {
         document.body.classList.remove('is-preload');
     }
 
     setupChessBoard();
+
+    const gameBoard = new Board();
+    renderPiecesOnDOM(gameBoard);
+
 });
 
 function addSquareLabels(square, pos){
@@ -43,4 +52,38 @@ function setupChessBoard(){
         }
         color = (color === "brown") ? "white" : "brown";
     }
+}
+
+function renderPiecesOnDOM(gameBoard){
+
+    const board = gameBoard.getBoard();
+
+    board.forEach((row, a)=>{
+        row.forEach((square, b) => {
+            const pos = [a,b];
+
+            const charCode = 'a'.charCodeAt(0) + b;
+            const rank = a + 1;
+            const file = String.fromCharCode(charCode);
+            const squareId = `${rank}-${file}`
+            const squareElement = document.getElementById(squareId);
+            const piece = document.createElement('img');
+            const pieceObj = gameBoard.getPiece(pos);
+
+            console.log(pieceObj)
+
+            if (pieceObj){
+                let name = "";
+                name += (pieceObj.getColor() === "white") ? "w_" : "b_";
+                name += pieceObj.getType();
+                piece.src = `./images/pieces/${name}.png`;
+                console.log(squareId)
+                piece.className = "chess-piece";
+                squareElement.appendChild(piece);
+
+            }
+
+        })
+    })
+
 }

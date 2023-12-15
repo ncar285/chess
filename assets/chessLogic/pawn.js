@@ -1,15 +1,22 @@
-const Piece = require("./piece.js");
-const inherit = require("./inherit.js");
+// const Piece = require("./piece.js");
+// const inherit = require("./inherit.js");
+import { inherit } from './inherit.js';
+import { Piece } from './piece.js';
 
-function Pawn(square){
+export function Pawn(color,square){
+    this.type = "pawn";
     Piece.call(this, color, square);
 }
 
 inherit(Piece, Pawn);
 
+Pawn.prototype.getType = function(){
+    return this.type;
+}
+
 Pawn.prototype.getMoves = function(){
     const [rank, file] = this.square;
-    const color = this.getColor;
+    const color = this.getColor();
     const options = [];
     if (color === "white"){
         options.push([rank + 1, file]);
@@ -25,4 +32,4 @@ Pawn.prototype.getMoves = function(){
     return options;
 }
 
-module.exports = Pawn;
+// module.exports = Pawn;

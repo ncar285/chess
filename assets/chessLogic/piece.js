@@ -1,4 +1,4 @@
-function Piece(color, square){
+export function Piece(color, square){
     this.color = color;
     this.square = square;
 }
@@ -15,4 +15,4 @@ Piece.prototype.setSquare = function(pos){
     this.square = pos;
 }
 
-module.exports = Piece;
+// module.exports = Piece;
