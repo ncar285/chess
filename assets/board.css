@@ -44,3 +44,17 @@
     top: 0;
     left: 0;
 }
+
+.chess-piece {
+    width: 65%;
+    height: auto; 
+    display: block;
+    margin: auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.chess-piece:hover {
+    cursor: pointer;
+}
