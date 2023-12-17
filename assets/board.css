@@ -11,16 +11,18 @@
     /* border: 1px solid black; */
 }
 
-.board-square.highlight-square{
+.board-square.selected{
     filter: brightness(1.3); 
 }
 
-.board-square:active{
-    height: calc(100% - 0.8rem);
-    width: calc(100% / 8 - 0.8rem);
-    border: 0.4rem solid rgba(255,255,255,0.9);
-    z-index: 10;
+/* highlight before placing */
+.board-square .highlight.active{
+    width: calc(100% - 1rem);
+    height: calc(100% - 1rem);
+    background-color: transparent;
+    border: 0.5rem solid rgba(255,255,255,0.7);
 }
+
 
 .board-square.brown {
     background-color: var(--brown);
