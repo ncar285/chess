@@ -90,31 +90,51 @@ function renderPiecesOnDOM(gameBoard){
 }
 
 
+let pieceSelected = false;
+let selectedId = null;
+
 function addDragEventsToPiece(piece, pieceObj) {
 
-    const validMoves = pieceObj.getMoves();
-
     piece.addEventListener('click', function(event) {
-        event.stopPropagation(); // Prevent the click from reaching the document
-        showMovePossibilities(validMoves);
-        // Global click event listener to hide move possibilities
-        // document.addEventListener('click', function(event) {
-        //     hideMovePossibilities();
-        // });
+        if (selectedId) unSelectSquare(selectedId);
+        selectSquare(piece, pieceObj)
     });
-
 
     piece.addEventListener('dragstart', function(event) {
         this.style.opacity = '0'; // Hide the original piece
-        showMovePossibilities(validMoves);
+        if (selectedId) unSelectSquare(selectedId);
+        selectSquare(piece, pieceObj);
     });
 
     piece.addEventListener('dragend', function(event) {
         this.style.opacity = '1'; // Show the piece again when the drag ends
-        // Update the piece's position in game state here
-        hideMovePossibilities()
+        document.body.style.cursor = ''; 
+        //! Update the piece's position in game state here
+        unSelectSquare(selectedId);
     });
 }
+
+function selectSquare(piece, pieceObj){
+    const validMoves = pieceObj.getMoves();
+    const currentId = piece.parentNode.id;
+    if (selectedId === currentId) {
+        pieceSelected = false; // if current selection is reclicked
+        selectedId = null;
+    } else {
+        selectedId = currentId;
+        document.getElementById(selectedId).classList.add('highlight-square');
+        showMovePossibilities(validMoves);
+    }
+}
+
+function unSelectSquare(selectedId){
+    document.getElementById(selectedId).classList.remove('highlight-square');
+    hideMovePossibilities();
+    pieceSelected = false; 
+    selectedId = null;
+}
+
+
 
 function showMovePossibilities(validMoves){
     validMoves.forEach((pos)=>{
