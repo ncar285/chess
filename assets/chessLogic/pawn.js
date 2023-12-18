@@ -3,9 +3,9 @@
 import { inherit } from './inherit.js';
 import { Piece } from './piece.js';
 
-export function Pawn(color,square){
+export function Pawn(color,square, board){
     this.type = "pawn";
-    Piece.call(this, color, square);
+    Piece.call(this, color, square, board);
 }
 
 inherit(Piece, Pawn);
@@ -16,16 +16,19 @@ Pawn.prototype.getType = function(){
 
 Pawn.prototype.validMoves = function(){
     const [rank, file] = this.getSquare();
-    // debugger
     const color = this.getColor();
     const options = [];
     if (color === "white"){
-        options.push([rank + 1, file]);
+        if (!this.board.isOccupied([rank + 1, file])){
+            options.push([rank + 1, file]);
+        }
         if (rank === 1){
             options.push([rank + 2, file]);
         }
     } else {
-        options.push([rank - 1, file]);
+        if (!this.board.isOccupied([rank - 1, file])){
+            options.push([rank - 1, file]);
+        }
         if (rank === 6){
             options.push([rank - 2, file]);
         }

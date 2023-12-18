@@ -1,6 +1,7 @@
-export function Piece(color, square){
+export function Piece(color, square, board){
     this.color = color;
     this.square = square;
+    this.board = board;
 }
 
 Piece.prototype.getColor = function(){

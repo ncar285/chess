@@ -10,11 +10,11 @@ export function Board(){
 Board.prototype.placePieces = function() {
     // Place white pawns
     for (let file = 0; file < 8; file++) {
-        this.board[1][file] = new Pawn("white", [1, file]);
+        this.board[1][file] = new Pawn("white", [1, file], this);
     }
     // Place black pawns
     for (let file = 0; file < 8; file++) {
-        this.board[6][file] = new Pawn("black", [6, file]);
+        this.board[6][file] = new Pawn("black", [6, file], this);
     }
 }
 
@@ -36,6 +36,16 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
     piece.setSquare(endSquare);
     return this.board;
 }
+
+Board.prototype.isOccupied = function(pos) {
+    const [rank, file] =  pos;
+    return this.board[rank][file] != null;
+};
+
+Board.prototype.isOccupiedByColor = function(pos, color) {
+    const [rank, file] =  pos;
+    return this.isOccupied(rank, file) && this.board[rank][file].color === color;
+};
 
 
 // module.exports = Board;
