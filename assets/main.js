@@ -42,9 +42,9 @@ function setupChessBoard(){
         board.prepend(row);
         for (let b = 0 ; b  < 8 ; b++ ){
             const square = document.createElement('div');
-            const highlight = document.createElement('div');
-            highlight.className = 'highlight';
-            square.appendChild(highlight);
+            // const highlight = document.createElement('div');
+            // highlight.className = 'highlight';
+            // square.appendChild(highlight);
             const charCode = 'a'.charCodeAt(0) + b;
             const file = String.fromCharCode(charCode)
             square.id = `${rank}-${file}`;
@@ -118,37 +118,10 @@ function addDragEventsToPiece(piece, pieceObj) {
     });
 }
 
-// Add a global dragover listener to the chess board
-document.querySelector('.chess-board').addEventListener('dragover', function(event) {
-    event.preventDefault(); // Prevent default to allow dropping
-    highlightBelow(event);
-});
 
 let lastHighlightedSquare = null;
 
-// function highlightBelow(event) {
-//     // Get the element below the cursor
-//     const elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-//     const highlightBox = elemBelow.querySelector('.highlight');
-    
-//     // If there's a previously highlighted square, remove the highlight
-//     if (lastHighlightedSquare && elemBelow !== lastHighlightedSquare) {
-//         const highlightBox = lastHighlightedSquare.querySelector('.highlight');
-//         highlightBox.classList.remove('active');
-//     }
-
-//     // Check if the element below is a chessboard square
-//     if (elemBelow && elemBelow.classList.contains('board-square')) {
-//         const highlightBox = elemBelow.querySelector('.highlight');
-//         highlightBox.classList.add('active');
-//         lastHighlightedSquare = elemBelow; // Keep track of the current highlighted square
-//     }
-// }
-
-// let lastHighlightedSquare = null;
-
-// // Add a global mousemove and dragover listener to the chess board
-// document.querySelector('.chess-board').addEventListener('mousemove', highlightBelow);
+// Add a global dragover listener to the chess board
 document.querySelector('.chess-board').addEventListener('dragover', function(event) {
     event.preventDefault(); // Prevent default to allow dropping
     highlightBelow(event);
@@ -156,18 +129,15 @@ document.querySelector('.chess-board').addEventListener('dragover', function(eve
 
 function highlightBelow(event) {
     const elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-
     if (elemBelow && elemBelow.classList.contains('board-square')) {
         if (lastHighlightedSquare && lastHighlightedSquare !== elemBelow) {
-            const lastHighlightBox = lastHighlightedSquare.querySelector('.highlight');
-            if (lastHighlightBox) {
-                lastHighlightBox.classList.remove('active');
+            // const lastHighlightBox = lastHighlightedSquare.querySelector('.highlight');
+            if (lastHighlightedSquare) {
+                lastHighlightedSquare.classList.remove('highlight');
             }
         }
-
-        const currentHighlightBox = elemBelow.querySelector('.highlight');
-        if (currentHighlightBox) {
-            currentHighlightBox.classList.add('active');
+        if (elemBelow) {
+            elemBelow.classList.add('highlight');
             lastHighlightedSquare = elemBelow;
         }
     }
