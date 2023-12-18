@@ -96,6 +96,8 @@ function renderPiecesOnDOM(gameBoard){
 let pieceSelected = false;
 let selectedId = null;
 
+let lastHighlightedSquare = null;
+
 function addDragEventsToPiece(piece, pieceObj) {
 
     piece.addEventListener('click', function(event) {
@@ -105,8 +107,11 @@ function addDragEventsToPiece(piece, pieceObj) {
 
     piece.addEventListener('dragstart', function(event) {
         this.style.opacity = '0'; // Hide the original piece
-        if (selectedId) unSelectSquare(selectedId);
-        selectSquare(piece, pieceObj);
+        if (!this.parentNode.classList.contains('selected')) { // Check if the piece is not already selected
+            if (selectedId) unSelectSquare(selectedId);
+            selectSquare(piece, pieceObj);
+            selectedId = this.parentNode.id;
+        }
         highlightBelow(event, this);
     });
 
@@ -115,11 +120,11 @@ function addDragEventsToPiece(piece, pieceObj) {
         document.body.style.cursor = ''; 
         //! Update the piece's position in game state here
         unSelectSquare(selectedId);
+        if (lastHighlightedSquare) {
+            lastHighlightedSquare.classList.remove('highlight');
+        }
     });
 }
-
-
-let lastHighlightedSquare = null;
 
 // Add a global dragover listener to the chess board
 document.querySelector('.chess-board').addEventListener('dragover', function(event) {
