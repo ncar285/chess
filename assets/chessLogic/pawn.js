@@ -14,7 +14,7 @@ Pawn.prototype.getType = function(){
     return this.type;
 }
 
-Pawn.prototype.getMoves = function(){
+Pawn.prototype.validMoves = function(){
     const [rank, file] = this.getSquare();
     // debugger
     const color = this.getColor();

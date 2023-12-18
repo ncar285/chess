@@ -106,23 +106,46 @@ function addDragEventsToPiece(piece, pieceObj) {
     });
 
     piece.addEventListener('dragstart', function(event) {
-        this.style.opacity = '0'; // Hide the original piece
+        // event.preventDefault();
+
+        // // Create a clone of the piece as a custom drag image
+        // const dragImage = this.cloneNode(true);
+
+        // Hide the original piece
+        this.style.opacity = '0'; 
+
         if (!this.parentNode.classList.contains('selected')) { // Check if the piece is not already selected
             if (selectedId) unSelectSquare(selectedId);
             selectSquare(piece, pieceObj);
             selectedId = this.parentNode.id;
         }
         highlightBelow(event, this);
+
+        // // Set the cursor style to "grabbing" during drag
+        // event.dataTransfer.effectAllowed = 'move';
+
+        // // Set the custom drag image
+        // event.dataTransfer.setDragImage(dragImage, 0, 0);
+        // document.body.style.cursor = 'grabbing';
     });
 
     piece.addEventListener('dragend', function(event) {
         this.style.opacity = '1'; // Show the piece again when the drag ends
         document.body.style.cursor = ''; 
-        //! Update the piece's position in game state here
         unSelectSquare(selectedId);
         if (lastHighlightedSquare) {
             lastHighlightedSquare.classList.remove('highlight');
         }
+        
+        //! Update the piece's position in game state
+        const validSquareIds = pieceObj.getMoves();
+        const elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+        
+        if (validSquareIds.has(elemBelow.id)){
+            console.log("VALID MOVE!!")
+
+        }
+        
     });
 }
 
@@ -173,10 +196,10 @@ function unSelectSquare(selectedId){
 
 
 function showMovePossibilities(validMoves){
-    validMoves.forEach((pos)=>{
+    validMoves.forEach((squareId)=>{
         const suggestion = document.createElement('div');
         suggestion.className = 'suggested-square';
-        const squareId = posToId(pos);
+        // const squareId = posToId(pos);
         const squareElement = document.getElementById(squareId);
         squareElement.appendChild(suggestion);
     })
