@@ -28,5 +28,14 @@ Board.prototype.getPiece = function(pos){
     return board[pos[0]][pos[1]];
 }
 
+Board.prototype.movePiece = function(startSquare, endSquare, piece){
+    this.board[startSquare[0]][startSquare[1]] = null;
+    this.board[endSquare[0]][endSquare[1]] = piece;
+    const takenPiece = this.getPiece(endSquare);
+    if (takenPiece) takenPiece.setSquare(null);
+    piece.setSquare(endSquare);
+    return this.board;
+}
+
 
 // module.exports = Board;

@@ -3,6 +3,8 @@ import { Pawn } from './chessLogic/pawn.js';
 
 window.Pawn = Pawn;
 
+const gameBoard = new Board();
+
 document.addEventListener("DOMContentLoaded", function() {
     if (document.body.classList.contains('is-preload')) {
         document.body.classList.remove('is-preload');
@@ -10,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     setupChessBoard();
 
-    const gameBoard = new Board();
     renderPiecesOnDOM(gameBoard);
 
 });
@@ -102,7 +103,7 @@ function addDragEventsToPiece(piece, pieceObj) {
 
     piece.addEventListener('click', function(event) {
         if (selectedId) unSelectSquare(selectedId);
-        selectSquare(piece, pieceObj)
+        selectSquare(piece, pieceObj);
     });
 
     piece.addEventListener('dragstart', function(event) {
@@ -139,11 +140,14 @@ function addDragEventsToPiece(piece, pieceObj) {
         
         //! Update the piece's position in game state
         const validSquareIds = pieceObj.getMoves();
-        const elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-        
-        if (validSquareIds.has(elemBelow.id)){
-            console.log("VALID MOVE!!")
+        let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+        if (elemBelow.tagName === 'IMG') {
+            elemBelow = elemBelow.parentNode; // Update to the parent (chess square)
+        }
 
+        if (validSquareIds.has(elemBelow.id)){
+            const [startSquare, endSquare] = [selectedId, elemBelow.id];
+            playMove(startSquare, endSquare, pieceObj);
         }
         
     });
@@ -199,6 +203,7 @@ function showMovePossibilities(validMoves){
     validMoves.forEach((squareId)=>{
         const suggestion = document.createElement('div');
         suggestion.className = 'suggested-square';
+        console.log("valid move: ", squareId)
         // const squareId = posToId(pos);
         const squareElement = document.getElementById(squareId);
         squareElement.appendChild(suggestion);
@@ -212,10 +217,49 @@ function hideMovePossibilities(){
     })
 }
 
+function playMove(startSquare, endSquare, pieceObj){
+    const startPos = idToPos(startSquare);
+    const endPos = idToPos(endSquare);
+    gameBoard.movePiece(startPos, endPos, pieceObj);
+    console.log("board", gameBoard.getBoard())
+    updatePiecesOnDOM(startSquare, endSquare)
+}
+
+function updatePiecesOnDOM(startSquare, endSquare) {
+    // debugger;
+    // Get the DOM elements for the start and end squares
+    const startSquareElement = document.getElementById(startSquare);
+    const endSquareElement = document.getElementById(endSquare);
+
+    // Find the image element within the start square
+    const imageElement = startSquareElement.querySelector('img');
+
+    // If an image is found in the start square, remove it
+    if (imageElement) {
+        startSquareElement.removeChild(imageElement);
+    }
+
+    // Check if there's already an image in the end square, remove it
+    const existingImageElement = endSquareElement.querySelector('img');
+    if (existingImageElement) {
+        endSquareElement.removeChild(existingImageElement);
+    }
+
+    // Append the image element to the end square
+    endSquareElement.appendChild(imageElement);
+}
 function posToId(pos){
     const [a,b] =  pos;
     const charCode = 'a'.charCodeAt(0) + b;
     const rank = a + 1;
     const file = String.fromCharCode(charCode);
     return `${rank}-${file}`
+}
+
+function idToPos(id){
+    // debugger
+    const [rank, file] = id.split('-');
+    const b = file.charCodeAt(0) - 'a'.charCodeAt(0);
+    const a = parseInt(rank) - 1;
+    return [a,b];
 }
