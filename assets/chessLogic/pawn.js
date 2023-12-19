@@ -16,25 +16,29 @@ Pawn.prototype.getType = function(){
 
 Pawn.prototype.validMoves = function(){
     const [rank, file] = this.getSquare();
-    const color = this.getColor();
     const options = [];
     const takeOptions = [];
-    if (color === "white"){
-        if (!this.board.isOccupied([rank + 1, file])){
-            options.push([rank + 1, file]);
-        }
-        if (rank === 1){
-            options.push([rank + 2, file]);
-        }
-    } else {
-        if (!this.board.isOccupied([rank - 1, file])){
-            options.push([rank - 1, file]);
-        }
-        if (rank === 6){
-            options.push([rank - 2, file]);
-        }
+    const isWhite = this.getColor() === "white";
+    const dir = isWhite ? 1 : -1;
+    const startRank = isWhite ? 1 : 6;
+   
+    if (!this.board.isOccupied([rank + 1*dir, file])){
+        options.push([rank + 1*dir, file]);
     }
-    return options;
+    if (rank === startRank){
+        options.push([rank + 2*dir, file]);
+    }
+
+    const leftDiag = [rank + 1*dir, file - 1*dir];
+    const rightDiag = [rank + 1*dir, file + 1*dir];
+    if (this.board.isOccupied(leftDiag)){
+        takeOptions.push(leftDiag);
+    }
+    if (this.board.isOccupied(rightDiag)){
+        takeOptions.push(rightDiag);
+    }
+
+    return [options,takeOptions];
 }
 
 // module.exports = Pawn;

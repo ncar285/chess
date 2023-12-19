@@ -1,3 +1,5 @@
+import { posToId, idToPos } from "./utils.js";
+
 export function Piece(color, square, board){
     this.color = color;
     this.square = square;
@@ -20,20 +22,11 @@ Piece.prototype.getMoves = function(){
     const options = new Set();
     const takeOptions = new Set();
     const [moves, takeMoves] = this.validMoves();
-    moves.forEach(([a,b]) => {
-        const charCode = 'a'.charCodeAt(0) + b;
-        const rank = a + 1;
-        const file = String.fromCharCode(charCode);
-        options.add(`${rank}-${file}`);
+    moves.forEach( pos => {
+        options.add(posToId(pos));
     });
-    takeMoves.forEach(([a,b]) => {
-        const charCode = 'a'.charCodeAt(0) + b;
-        const rank = a + 1;
-        const file = String.fromCharCode(charCode);
-        takeMoves.add(`${rank}-${file}`);
+    takeMoves.forEach( pos => {
+        takeOptions.add(posToId(pos));
     });
-    const res = {options: options, takeOptions: takeOptions}
-    return moves;
+    return {options: options, takeOptions: takeOptions}
 }
-
-// module.exports = Piece;
