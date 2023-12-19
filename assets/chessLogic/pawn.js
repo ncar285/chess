@@ -18,6 +18,7 @@ Pawn.prototype.validMoves = function(){
     const [rank, file] = this.getSquare();
     const color = this.getColor();
     const options = [];
+    const takeOptions = [];
     if (color === "white"){
         if (!this.board.isOccupied([rank + 1, file])){
             options.push([rank + 1, file]);

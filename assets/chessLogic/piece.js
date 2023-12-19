@@ -17,14 +17,22 @@ Piece.prototype.setSquare = function(pos){
 }
 
 Piece.prototype.getMoves = function(){
-    const moves = new Set();
-    this.validMoves().forEach(([a,b]) => {
-        // const [a,b] =  pos;
+    const options = new Set();
+    const takeOptions = new Set();
+    const [moves, takeMoves] = this.validMoves();
+    moves.forEach(([a,b]) => {
         const charCode = 'a'.charCodeAt(0) + b;
         const rank = a + 1;
         const file = String.fromCharCode(charCode);
-        moves.add(`${rank}-${file}`);
+        options.add(`${rank}-${file}`);
     });
+    takeMoves.forEach(([a,b]) => {
+        const charCode = 'a'.charCodeAt(0) + b;
+        const rank = a + 1;
+        const file = String.fromCharCode(charCode);
+        takeMoves.add(`${rank}-${file}`);
+    });
+    const res = {options: options, takeOptions: takeOptions}
     return moves;
 }
 
