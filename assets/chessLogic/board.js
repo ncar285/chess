@@ -28,17 +28,34 @@ Board.prototype.getPiece = function(pos){
 }
 
 Board.prototype.movePiece = function(startSquare, endSquare, piece){
-    this.board[startSquare[0]][startSquare[1]] = null;
-    this.board[endSquare[0]][endSquare[1]] = piece;
-    const takenPiece = this.getPiece(endSquare);
-    if (takenPiece) takenPiece.setSquare(null);
-    piece.setSquare(endSquare);
+    try {
+        if (!Board.isInsideBoard(startSquare) || !Board.isInsideBoard(endSquare)) {
+            throw new Error("Move is outside the board.");
+        }
 
-    if (piece.type === "pawn") {
-        piece.firstMove = false;
+        if (!this.isOccupied(startSquare)) {
+            throw new Error("No piece at the start square.");
+        }
+
+        // Capture logic
+        const capturedPiece = this.getPiece(endSquare);
+        if (capturedPiece) {
+            capturedPiece.setSquare(null);
+        }
+
+        // Move the piece
+        this.board[startSquare[0]][startSquare[1]] = null;
+        this.board[endSquare[0]][endSquare[1]] = piece;
+        piece.setSquare(endSquare);
+
+        // Update pawn's firstMove property
+        if (piece.type === "pawn") {
+            piece.firstMove = false;
+        }
+        
+    } catch (error) {
+        console.error(error.message);
     }
-    
-    return this.board;
 }
 
 Board.prototype.isOccupied = function(pos) {
