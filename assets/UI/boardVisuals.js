@@ -1,13 +1,14 @@
+import { gameState } from "../chessLogic/gameState";
+
 export function selectSquare(piece, pieceObj){
     const validOptions = pieceObj.getMoves().options;
     const validTakeOptions = pieceObj.getMoves().takeOptions;
     const currentId = piece.parentNode.id;
     if (selectedId === currentId) {
-        pieceSelected = false; // if current selection is reclicked
-        selectedId = null;
+        gameState.setSelectedId(null);
     } else {
-        selectedId = currentId;
-        document.getElementById(selectedId).classList.add('selected');
+        gameState.setSelectedId(currentId);
+        document.getElementById(currentId).classList.add('selected');
         showMovePossibilities(validOptions);
         showTakePossibilities(validTakeOptions);
     }
@@ -17,8 +18,7 @@ export function unSelectSquare(){
     const selected = document.querySelectorAll('.selected');
     selected.forEach(selected => selected.classList.remove('selected'));
     hideMovePossibilities();
-    pieceSelected = false; 
-    selectedId = null;
+    gameState.setSelectedId(currentId);
 }
 
 

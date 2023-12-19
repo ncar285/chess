@@ -1,7 +1,6 @@
-export class GameState {
+class GameState {
     constructor() {
         this.selectedId = null;
-        this.pieceSelected = null;
         this.lastHighlightedSquare = null;
     }
 
@@ -13,14 +12,6 @@ export class GameState {
         return this.selectedId;
     }
 
-    setPieceSelected(piece) {
-        this.pieceSelected = piece;
-    }
-
-    getPieceSelected() {
-        return this.pieceSelected;
-    }
-
     setLastHighlightedSquare(square) {
         this.lastHighlightedSquare = square;
     }
@@ -30,3 +21,5 @@ export class GameState {
     }
 
 }
+
+export const gameState = new GameState();

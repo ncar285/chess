@@ -1,4 +1,4 @@
-import { addDragEventsToPiece } from "../main";
+import { addDragEventsToPiece } from "./eventHandlers";
 
 export function drawChessBoard(gameBoard){
     setupChessBoardDomElements();

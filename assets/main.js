@@ -4,17 +4,20 @@ import { posToId, idToPos } from './chessLogic/utils.js';
 import { startDrag, highlightBelow } from './UI/pieceMovement.js';
 import { drawChessBoard } from './UI/drawBoard.js';
 import { selectSquare, unSelectSquare, showMovePossibilities, showTakePossibilities, hideMovePossibilities } from './UI/boardVisuals.js';
+import { gameState } from './chessLogic/gameState.js'; 
 
 window.Pawn = Pawn;
 
 const gameBoard = new Board();
+
 
 document.addEventListener("DOMContentLoaded", function() {
     if (document.body.classList.contains('is-preload')) {
         document.body.classList.remove('is-preload');
     }
 
-    drawChessBoard();
+    drawChessBoard(gameBoard);
+
 
 });
 
@@ -24,59 +27,12 @@ document.querySelector('.chess-board').addEventListener('dragover', function(eve
     highlightBelow(event);
 });
 
-let selectedId = null;
-let pieceSelected = null;
-let lastHighlightedSquare = null;
-
-export function addDragEventsToPiece(piece, pieceObj) {
-
-    piece.addEventListener('mousedown', startDrag, false);
-    piece.addEventListener('touchstart', startDrag, false);
-
-    piece.addEventListener('click', function(event) {
-        unSelectSquare();
-        selectSquare(piece, pieceObj);
-    });
-
-    piece.addEventListener('dragstart', function(event) {
-        if (!this.parentNode.classList.contains('selected')) { // Check if the piece is not already selected
-            unSelectSquare(selectedId);
-            selectSquare(piece, pieceObj);
-            selectedId = this.parentNode.id;
-        }
-    });
-
-    piece.addEventListener('dragend', function(event) {
-        this.style.opacity = '1'; // Show the piece again when the drag ends
-        document.body.style.cursor = ''; 
-
-        const validOptions = pieceObj.getMoves().options;
-        const validTakeOptions = pieceObj.getMoves().takeOptions;
-        let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-        if (!elemBelow.classList.contains('board-square')) {
-            elemBelow = elemBelow.parentNode; // Update to the parent (chess square)
-        }
-
-        // Update the piece's position in game state
-        if (validOptions.has(elemBelow.id) || validTakeOptions.has(elemBelow.id)){
-            const [startSquare, endSquare] = [selectedId, elemBelow.id];
-            playMove(startSquare, endSquare, pieceObj);
-        }
-
-        unSelectSquare();
-        if (lastHighlightedSquare) {
-            lastHighlightedSquare.classList.remove('highlight');
-        }
-        
-    });
-}
-
 function playMove(startSquare, endSquare, pieceObj){
     const startPos = idToPos(startSquare);
     const endPos = idToPos(endSquare);
     gameBoard.movePiece(startPos, endPos, pieceObj);
     updatePiecesOnDOM(startSquare, endSquare);
-    selectedId = null;
+    gameState.setSelectedId(null);
 }
 
 function updatePiecesOnDOM(startSquare, endSquare) {
