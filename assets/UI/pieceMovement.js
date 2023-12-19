@@ -1,5 +1,5 @@
 
-function startDrag(event, piece, pieceObj) {
+export function startDrag(event, piece, pieceObj) {
     // Prevent default behavior for images on mobile
     event.preventDefault();
 
@@ -50,7 +50,7 @@ function startDrag(event, piece, pieceObj) {
 
 
 // highlighting squares we hover over
-function highlightBelow(event) {
+export function highlightBelow(event) {
     const elemBelow = document.elementFromPoint(event.clientX, event.clientY);
     if (elemBelow && elemBelow.classList.contains('board-square')) {
         if (lastHighlightedSquare && lastHighlightedSquare !== elemBelow) {
