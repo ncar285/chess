@@ -87,6 +87,7 @@ function renderPiecesOnDOM(gameBoard){
 }
 
 let selectedId = null;
+let pieceSelected = null;
 let lastHighlightedSquare = null;
 
 function addDragEventsToPiece(piece, pieceObj) {
