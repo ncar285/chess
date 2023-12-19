@@ -1,11 +1,10 @@
-// const Piece = require("./piece.js");
-// const inherit = require("./inherit.js");
 import { inherit } from './inherit.js';
 import { Piece } from './piece.js';
 
 export function Pawn(color,square, board){
     this.type = "pawn";
     Piece.call(this, color, square, board);
+    this.firstMove = true;
 }
 
 inherit(Piece, Pawn);
@@ -14,31 +13,31 @@ Pawn.prototype.getType = function(){
     return this.type;
 }
 
+Pawn.prototype.isFirstMove = function(){
+    return this.firstMove;
+}
+
 Pawn.prototype.validMoves = function(){
     const [rank, file] = this.getSquare();
-    const options = [];
-    const takeOptions = [];
     const isWhite = this.getColor() === "white";
+    const opponentColor = isWhite ? "black" : "white";
     const dir = isWhite ? 1 : -1;
-    const startRank = isWhite ? 1 : 6;
    
-    if (!this.board.isOccupied([rank + 1*dir, file])){
-        options.push([rank + 1*dir, file]);
-    }
-    if (rank === startRank){
-        options.push([rank + 2*dir, file]);
+    const options = [];
+    const forwardOne = [rank + 1 * dir, file];
+    if (!this.board.isOccupied(forwardOne)) {
+        options.push(forwardOne);
+        const forwardTwo = [rank + 2 * dir, file];
+        if (this.isFirstMove && !this.board.isOccupied(forwardTwo)){
+            options.push(forwardTwo);
+        }
     }
 
     const leftDiag = [rank + 1*dir, file - 1*dir];
     const rightDiag = [rank + 1*dir, file + 1*dir];
-    if (this.board.isOccupied(leftDiag)){
-        takeOptions.push(leftDiag);
-    }
-    if (this.board.isOccupied(rightDiag)){
-        takeOptions.push(rightDiag);
-    }
+    const takeOptions = [leftDiag, rightDiag].filter(pos =>
+        this.board.isOccupiedByColor(pos, opponentColor)
+    )
 
     return [options,takeOptions];
 }
-
-// module.exports = Pawn;

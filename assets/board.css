@@ -77,10 +77,23 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 2rem;
-    height: 2rem;
+    width: 30%;
+    height: 30%;
     transform: translateX(-50%) translateY(-50%);
-    border-radius: 1rem;
+    border-radius: 50%;
     background-color: rgba(0,0,0,0.1);
+    z-index: 11;
+}
+
+.suggested-capture {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    outline: 0.6vw solid rgba(0,0,0,0.1);
+    /* background-color: rgba(0,0,0,0.1); */
     z-index: 11;
 }

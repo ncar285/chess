@@ -1,4 +1,3 @@
-// const Pawn = require("./pawn.js");
 import { Pawn } from './pawn.js';
 
 export function Board(){
@@ -34,18 +33,27 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
     const takenPiece = this.getPiece(endSquare);
     if (takenPiece) takenPiece.setSquare(null);
     piece.setSquare(endSquare);
+
+    if (piece.type === "pawn") {
+        piece.firstMove = false;
+    }
+    
     return this.board;
 }
 
 Board.prototype.isOccupied = function(pos) {
+    if (!Board.isInsideBoard(pos)) return false;
     const [rank, file] =  pos;
     return this.board[rank][file] != null;
 };
 
 Board.prototype.isOccupiedByColor = function(pos, color) {
+    if (!Board.isInsideBoard(pos)) return false;
     const [rank, file] =  pos;
-    return this.isOccupied(rank, file) && this.board[rank][file].color === color;
+    return this.isOccupied(pos) && this.board[rank][file].color === color;
 };
 
-
-// module.exports = Board;
+Board.isInsideBoard = function(pos) {
+    const [rank, file] = pos;
+    return rank >= 0 && rank < 8 && file >= 0 && file < 8;
+};

@@ -140,13 +140,18 @@ function addDragEventsToPiece(piece, pieceObj) {
         }
         
         //! Update the piece's position in game state
-        const validSquareIds = pieceObj.getMoves();
+        // const validSquareIds = pieceObj.getMoves();
+        const validOptions = pieceObj.getMoves().options;
+        const validTakeOptions = pieceObj.getMoves().takeOptions;
         let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-        if (elemBelow.tagName === 'IMG') {
+        if (!elemBelow.classList.contains('board-square')) {
             elemBelow = elemBelow.parentNode; // Update to the parent (chess square)
         }
 
-        if (validSquareIds.has(elemBelow.id)){
+        console.log("validTakeOptions",validTakeOptions)
+        console.log("elemBelow.id",elemBelow)
+        if (validOptions.has(elemBelow.id) || validTakeOptions.has(elemBelow.id)){
+            console.log("VALID!")
             const [startSquare, endSquare] = [selectedId, elemBelow.id];
             playMove(startSquare, endSquare, pieceObj);
         }
@@ -177,7 +182,9 @@ function highlightBelow(event) {
 }
 
 function selectSquare(piece, pieceObj){
-    const validMoves = pieceObj.getMoves();
+    // const validMoves = pieceObj.getMoves();
+    const validOptions = pieceObj.getMoves().options;
+    const validTakeOptions = pieceObj.getMoves().takeOptions;
     const currentId = piece.parentNode.id;
     if (selectedId === currentId) {
         pieceSelected = false; // if current selection is reclicked
@@ -185,7 +192,8 @@ function selectSquare(piece, pieceObj){
     } else {
         selectedId = currentId;
         document.getElementById(selectedId).classList.add('selected');
-        showMovePossibilities(validMoves);
+        showMovePossibilities(validOptions);
+        showTakePossibilities(validTakeOptions);
     }
 }
 
@@ -204,18 +212,26 @@ function showMovePossibilities(validMoves){
     validMoves.forEach((squareId)=>{
         const suggestion = document.createElement('div');
         suggestion.className = 'suggested-square';
-        console.log("valid move: ", squareId)
-        // const squareId = posToId(pos);
         const squareElement = document.getElementById(squareId);
         squareElement.appendChild(suggestion);
     })
 }
 
-function hideMovePossibilities(){
-    const suggestions = document.querySelectorAll('.suggested-square');
+function showTakePossibilities(validTakes){
+    // console.log("valid capturees", validTakes)
+    validTakes.forEach((squareId)=>{
+        const suggestion = document.createElement('div');
+        suggestion.className = 'suggested-capture';
+        const squareElement = document.getElementById(squareId);
+        squareElement.appendChild(suggestion);
+    })
+}
+
+function hideMovePossibilities() {
+    const suggestions = document.querySelectorAll('.suggested-square, .suggested-capture');
     suggestions.forEach(suggestion => {
         suggestion.parentNode.removeChild(suggestion);
-    })
+    });
 }
 
 function playMove(startSquare, endSquare, pieceObj){

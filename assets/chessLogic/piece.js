@@ -1,4 +1,5 @@
 import { posToId, idToPos } from "./utils.js";
+import { Board } from "./board.js";
 
 export function Piece(color, square, board){
     this.color = color;
@@ -19,14 +20,18 @@ Piece.prototype.setSquare = function(pos){
 }
 
 Piece.prototype.getMoves = function(){
+    const validMoves = this.validMoves();
     const options = new Set();
     const takeOptions = new Set();
-    const [moves, takeMoves] = this.validMoves();
-    moves.forEach( pos => {
-        options.add(posToId(pos));
+    validMoves[0].forEach( pos => {
+        if (Board.isInsideBoard(pos)){
+            options.add(posToId(pos));
+        }
     });
-    takeMoves.forEach( pos => {
-        takeOptions.add(posToId(pos));
+    validMoves[1].forEach( pos => {
+        if (Board.isInsideBoard(pos)){
+            takeOptions.add(posToId(pos));
+        }
     });
-    return {options: options, takeOptions: takeOptions}
+    return { options, takeOptions }
 }
