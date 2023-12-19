@@ -44,9 +44,6 @@ function setupChessBoard(){
         board.prepend(row);
         for (let b = 0 ; b  < 8 ; b++ ){
             const square = document.createElement('div');
-            // const highlight = document.createElement('div');
-            // highlight.className = 'highlight';
-            // square.appendChild(highlight);
             const charCode = 'a'.charCodeAt(0) + b;
             const file = String.fromCharCode(charCode)
             square.id = `${rank}-${file}`;
@@ -64,16 +61,12 @@ function renderPiecesOnDOM(gameBoard){
     const board = gameBoard.getBoard();
 
     board.forEach((row, a)=>{
-        row.forEach((square, b) => {
+        row.forEach((_, b) => {
             const pos = [a,b];
-
             const squareId = posToId([a,b])
-
             const squareElement = document.getElementById(squareId);
             const piece = document.createElement('img');
             const pieceObj = gameBoard.getPiece(pos);
-
-            // console.log(pieceObj)
 
             if (pieceObj){
                 let name = "";
@@ -81,7 +74,6 @@ function renderPiecesOnDOM(gameBoard){
                 name += pieceObj.getType();
                 const source = `./images/pieces/${name}.png`;
                 piece.src = source;
-                // console.log(squareId)
                 piece.className = "chess-piece";
                 squareElement.appendChild(piece);
 
@@ -94,16 +86,13 @@ function renderPiecesOnDOM(gameBoard){
 
 }
 
-
-let pieceSelected = false;
 let selectedId = null;
-
 let lastHighlightedSquare = null;
 
 function addDragEventsToPiece(piece, pieceObj) {
 
     piece.addEventListener('click', function(event) {
-        if (selectedId) unSelectSquare(selectedId);
+        unSelectSquare();
         selectSquare(piece, pieceObj);
     });
 
@@ -117,7 +106,7 @@ function addDragEventsToPiece(piece, pieceObj) {
         this.style.opacity = '0'; 
 
         if (!this.parentNode.classList.contains('selected')) { // Check if the piece is not already selected
-            if (selectedId) unSelectSquare(selectedId);
+            unSelectSquare(selectedId);
             selectSquare(piece, pieceObj);
             selectedId = this.parentNode.id;
         }
@@ -134,13 +123,7 @@ function addDragEventsToPiece(piece, pieceObj) {
     piece.addEventListener('dragend', function(event) {
         this.style.opacity = '1'; // Show the piece again when the drag ends
         document.body.style.cursor = ''; 
-        unSelectSquare(selectedId);
-        if (lastHighlightedSquare) {
-            lastHighlightedSquare.classList.remove('highlight');
-        }
-        
-        //! Update the piece's position in game state
-        // const validSquareIds = pieceObj.getMoves();
+
         const validOptions = pieceObj.getMoves().options;
         const validTakeOptions = pieceObj.getMoves().takeOptions;
         let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
@@ -148,12 +131,15 @@ function addDragEventsToPiece(piece, pieceObj) {
             elemBelow = elemBelow.parentNode; // Update to the parent (chess square)
         }
 
-        console.log("validTakeOptions",validTakeOptions)
-        console.log("elemBelow.id",elemBelow)
+        // Update the piece's position in game state
         if (validOptions.has(elemBelow.id) || validTakeOptions.has(elemBelow.id)){
-            console.log("VALID!")
             const [startSquare, endSquare] = [selectedId, elemBelow.id];
             playMove(startSquare, endSquare, pieceObj);
+        }
+
+        unSelectSquare();
+        if (lastHighlightedSquare) {
+            lastHighlightedSquare.classList.remove('highlight');
         }
         
     });
@@ -169,7 +155,6 @@ function highlightBelow(event) {
     const elemBelow = document.elementFromPoint(event.clientX, event.clientY);
     if (elemBelow && elemBelow.classList.contains('board-square')) {
         if (lastHighlightedSquare && lastHighlightedSquare !== elemBelow) {
-            // const lastHighlightBox = lastHighlightedSquare.querySelector('.highlight');
             if (lastHighlightedSquare) {
                 lastHighlightedSquare.classList.remove('highlight');
             }
@@ -182,7 +167,6 @@ function highlightBelow(event) {
 }
 
 function selectSquare(piece, pieceObj){
-    // const validMoves = pieceObj.getMoves();
     const validOptions = pieceObj.getMoves().options;
     const validTakeOptions = pieceObj.getMoves().takeOptions;
     const currentId = piece.parentNode.id;
@@ -197,15 +181,13 @@ function selectSquare(piece, pieceObj){
     }
 }
 
-function unSelectSquare(selectedId){
-    if (selectedId){
-        document.getElementById(selectedId).classList.remove('selected');
-    }
+function unSelectSquare(){
+    const selected = document.querySelectorAll('.selected');
+    selected.forEach(selected => selected.classList.remove('selected'));
     hideMovePossibilities();
     pieceSelected = false; 
     selectedId = null;
 }
-
 
 
 function showMovePossibilities(validMoves){
@@ -218,7 +200,6 @@ function showMovePossibilities(validMoves){
 }
 
 function showTakePossibilities(validTakes){
-    // console.log("valid capturees", validTakes)
     validTakes.forEach((squareId)=>{
         const suggestion = document.createElement('div');
         suggestion.className = 'suggested-capture';
@@ -238,8 +219,8 @@ function playMove(startSquare, endSquare, pieceObj){
     const startPos = idToPos(startSquare);
     const endPos = idToPos(endSquare);
     gameBoard.movePiece(startPos, endPos, pieceObj);
-    console.log("board", gameBoard.getBoard())
-    updatePiecesOnDOM(startSquare, endSquare)
+    updatePiecesOnDOM(startSquare, endSquare);
+    selectedId = null;
 }
 
 function updatePiecesOnDOM(startSquare, endSquare) {

@@ -22,13 +22,12 @@ Pawn.prototype.validMoves = function(){
     const isWhite = this.getColor() === "white";
     const opponentColor = isWhite ? "black" : "white";
     const dir = isWhite ? 1 : -1;
-   
     const options = [];
     const forwardOne = [rank + 1 * dir, file];
     if (!this.board.isOccupied(forwardOne)) {
         options.push(forwardOne);
         const forwardTwo = [rank + 2 * dir, file];
-        if (this.isFirstMove && !this.board.isOccupied(forwardTwo)){
+        if (this.isFirstMove() && !this.board.isOccupied(forwardTwo)){
             options.push(forwardTwo);
         }
     }
