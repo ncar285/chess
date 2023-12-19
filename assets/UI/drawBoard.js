@@ -51,6 +51,10 @@ function renderPiecesOnDOM(gameBoard){
                 squareElement.appendChild(piece);
 
                 // Add event listeners to this piece
+                piece.addEventListener('mousedown', startDrag, false);
+                piece.addEventListener('touchstart', startDrag, false);
+
+
                 addDragEventsToPiece(piece, pieceObj);
             }
 
