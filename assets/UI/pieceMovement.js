@@ -1,9 +1,15 @@
+import { selectSquare, unSelectSquare } from "./pieceSelection.js";
+import { gameState } from "../chessLogic/gameState.js";
+import { playMoveIfValid } from "../chessLogic/makeMove.js";
 
 export function startDrag(event, piece, pieceObj) {
     // Prevent default behavior for images on mobile
     event.preventDefault();
 
-    // debugger
+    // add visual aid to chess board
+    unSelectSquare();
+    selectSquare(piece, pieceObj);
+
     // Create a clone of the piece for visual dragging
     const clone = piece.cloneNode(true);
     clone.style.position = 'absolute';
@@ -38,6 +44,12 @@ export function startDrag(event, piece, pieceObj) {
 
     function onDrag(event) {
         moveAt(event.pageX, event.pageY);
+        // debugger
+        if (!piece.parentNode.classList.contains('selected')) { // Check if the piece is not already selected
+            unSelectSquare();
+            selectSquare(piece, pieceObj);
+            gameState.setSelectedId(this.parentNode.id);
+        }
     }
 
     function endDrag() {
@@ -51,8 +63,8 @@ export function startDrag(event, piece, pieceObj) {
         document.removeEventListener('touchmove', onDrag, false);
         document.removeEventListener('touchend', endDrag, false);
 
-        // Implement logic to handle the end of the drag
-        // ...
+        playMoveIfValid(event, pieceObj)
+
     }
 }
 

@@ -5,7 +5,7 @@ export function selectSquare(piece, pieceObj){
     const validOptions = pieceObj.getMoves().options;
     const validTakeOptions = pieceObj.getMoves().takeOptions;
     const currentId = piece.parentNode.id;
-    if (selectedId === currentId) {
+    if (gameState.getSelectedId() === currentId) {
         gameState.setSelectedId(null);
     } else {
         gameState.setSelectedId(currentId);
@@ -19,5 +19,5 @@ export function unSelectSquare(){
     const selected = document.querySelectorAll('.selected');
     selected.forEach(selected => selected.classList.remove('selected'));
     hideMovePossibilities();
-    gameState.setSelectedId(currentId);
+    gameState.setSelectedId(null);
 }
