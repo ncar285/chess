@@ -1,6 +1,7 @@
 import { Board } from './chessLogic/board.js';
 import { Pawn } from './chessLogic/pawn.js'; 
 import { posToId, idToPos } from './chessLogic/utils.js';
+import { startDrag } from './UI/pieceMovement.js';
 
 window.Pawn = Pawn;
 
@@ -92,19 +93,15 @@ let lastHighlightedSquare = null;
 
 function addDragEventsToPiece(piece, pieceObj) {
 
+    piece.addEventListener('mousedown', startDrag, false);
+    piece.addEventListener('touchstart', startDrag, false);
+
     piece.addEventListener('click', function(event) {
         unSelectSquare();
         selectSquare(piece, pieceObj);
     });
 
     piece.addEventListener('dragstart', function(event) {
-        // event.preventDefault();
-
-        // // Create a clone of the piece as a custom drag image
-        // const dragImage = this.cloneNode(true);
-
-        // Hide the original piece
-        this.style.opacity = '0'; 
 
         if (!this.parentNode.classList.contains('selected')) { // Check if the piece is not already selected
             unSelectSquare(selectedId);
@@ -113,12 +110,6 @@ function addDragEventsToPiece(piece, pieceObj) {
         }
         highlightBelow(event, this);
 
-        // // Set the cursor style to "grabbing" during drag
-        // event.dataTransfer.effectAllowed = 'move';
-
-        // // Set the custom drag image
-        // event.dataTransfer.setDragImage(dragImage, 0, 0);
-        // document.body.style.cursor = 'grabbing';
     });
 
     piece.addEventListener('dragend', function(event) {
