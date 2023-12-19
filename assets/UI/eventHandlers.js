@@ -1,6 +1,4 @@
-import { selectSquare, unSelectSquare, showMovePossibilities, showTakePossibilities, hideMovePossibilities } from "./boardVisuals.js";
-import { posToId } from "../chessLogic/utils.js";
-import { startDrag } from './pieceMovement.js';
+import { selectSquare, unSelectSquare } from "./pieceSelection.js";
 
 export function addDragEventsToPiece(piece, pieceObj) {
 

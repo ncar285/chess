@@ -1,9 +1,8 @@
 import { Board } from './chessLogic/board.js';
 import { Pawn } from './chessLogic/pawn.js'; 
-import { posToId, idToPos } from './chessLogic/utils.js';
-import { startDrag, highlightBelow } from './UI/pieceMovement.js';
+import { idToPos } from './chessLogic/utils.js';
+import { highlightBelow } from './UI/pieceMovement.js';
 import { drawChessBoard } from './UI/drawBoard.js';
-import { selectSquare, unSelectSquare, showMovePossibilities, showTakePossibilities, hideMovePossibilities } from './UI/boardVisuals.js';
 import { gameState } from './chessLogic/gameState.js'; 
 
 window.Pawn = Pawn;
