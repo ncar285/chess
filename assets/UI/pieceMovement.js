@@ -3,13 +3,21 @@ export function startDrag(event, piece, pieceObj) {
     // Prevent default behavior for images on mobile
     event.preventDefault();
 
+    // debugger
     // Create a clone of the piece for visual dragging
     const clone = piece.cloneNode(true);
     clone.style.position = 'absolute';
     
     clone.style.zIndex = 1000;
-    clone.style.width = "65%"
     document.body.appendChild(clone);
+
+    // Calculate the width of the piece based on the viewport and chess board settings
+    const chessBoardWidth = document.querySelector('.chess-board').clientWidth;
+    const squareWidth = chessBoardWidth / 8; // There are 8 squares in a row
+    const pieceWidth = squareWidth * 0.65; // 65% of the square's width
+
+    clone.style.width = `${pieceWidth}px`;
+    clone.style.height = 'auto'; // Maintain aspect ratio
 
     // Hide the original piece
     piece.style.visibility = 'hidden';
@@ -25,7 +33,7 @@ export function startDrag(event, piece, pieceObj) {
 
     function moveAt(pageX, pageY) {
         clone.style.left = pageX - clone.offsetWidth / 2 + 'px';
-        clone.style.top = pageY - clone.offsetHeight / 2 + 'px';
+        clone.style.top = pageY  + 'px';
     }
 
     function onDrag(event) {

@@ -1,9 +1,11 @@
-import { selectSquare, unSelectSquare, showMovePossibilities, showTakePossibilities, hideMovePossibilities } from "./boardVisuals";
+import { selectSquare, unSelectSquare, showMovePossibilities, showTakePossibilities, hideMovePossibilities } from "./boardVisuals.js";
+import { posToId } from "../chessLogic/utils.js";
+import { startDrag } from './pieceMovement.js';
 
 export function addDragEventsToPiece(piece, pieceObj) {
 
-    piece.addEventListener('mousedown', startDrag, false);
-    piece.addEventListener('touchstart', startDrag, false);
+    // piece.addEventListener('mousedown', (event) => startDrag(event, piece, pieceObj), false);
+    // piece.addEventListener('touchstart', (event) => startDrag(event, piece, pieceObj), false);
 
     piece.addEventListener('click', function(event) {
         unSelectSquare();

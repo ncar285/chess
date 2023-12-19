@@ -1,4 +1,6 @@
-import { addDragEventsToPiece } from "./eventHandlers";
+import { addDragEventsToPiece } from "./eventHandlers.js";
+import { posToId } from "../chessLogic/utils.js";
+import { startDrag } from './pieceMovement.js';
 
 export function drawChessBoard(gameBoard){
     setupChessBoardDomElements();
@@ -51,8 +53,8 @@ function renderPiecesOnDOM(gameBoard){
                 squareElement.appendChild(piece);
 
                 // Add event listeners to this piece
-                piece.addEventListener('mousedown', startDrag, false);
-                piece.addEventListener('touchstart', startDrag, false);
+                piece.addEventListener('mousedown', (event) => startDrag(event, piece, pieceObj), false);
+                piece.addEventListener('touchstart', (event) => startDrag(event, piece, pieceObj), false);
 
 
                 addDragEventsToPiece(piece, pieceObj);

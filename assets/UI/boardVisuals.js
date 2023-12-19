@@ -1,4 +1,4 @@
-import { gameState } from "../chessLogic/gameState";
+import { gameState } from "../chessLogic/gameState.js";
 
 export function selectSquare(piece, pieceObj){
     const validOptions = pieceObj.getMoves().options;
