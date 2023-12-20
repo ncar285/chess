@@ -12,6 +12,7 @@
 
 .board-square.highlight {
     outline: 0.5vw solid rgba(255, 255, 255, 0.7);
+    /* outline: 5px solid blue; */
     outline-offset: -0.5vw;
 }
 

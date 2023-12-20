@@ -2,6 +2,8 @@ import { selectSquare, unSelectSquare } from "./pieceSelection.js";
 import { gameState } from "../chessLogic/gameState.js";
 import { playMoveIfValid } from "../chessLogic/makeMove.js";
 
+let lastHighlightedSquare = null;
+
 export function startDrag(event, piece, pieceObj) {
     // Prevent default behavior for images on mobile
     event.preventDefault();
@@ -27,6 +29,8 @@ export function startDrag(event, piece, pieceObj) {
         y = event.clientY;
     }
 
+    highlightBelow(x, y, clone);
+
 
     // Calculate the width of the piece based on the viewport and chess board settings
     const chessBoardWidth = document.querySelector('.chess-board').clientWidth;
@@ -40,7 +44,6 @@ export function startDrag(event, piece, pieceObj) {
     piece.style.visibility = 'hidden';
 
     // Position the clone under the cursor
-    // moveAt(event.pageX, event.pageY);
     moveAt(x, y);
 
     // Listeners for moving and dropping the piece
@@ -56,8 +59,8 @@ export function startDrag(event, piece, pieceObj) {
 
     let lastKnownX = 0;
     let lastKnownY = 0;
-    // let startSquare = null;
     const startSquare = document.getElementById(gameState.getSelectedId());
+
 
     function onDrag(event) {
         // Check if the event is a touch event and extract the first touch coordinates
@@ -69,10 +72,9 @@ export function startDrag(event, piece, pieceObj) {
             lastKnownY = event.clientY;
         }
 
-    moveAt(lastKnownX, lastKnownY);
+        moveAt(lastKnownX, lastKnownY);
+        highlightBelow(lastKnownX, lastKnownY, clone);
 
-        // moveAt(event.pageX, event.pageY);
-        // debugger
         if (!piece.parentNode.classList.contains('selected')) { // Check if the piece is not already selected
             unSelectSquare();
             selectSquare(piece, pieceObj);
@@ -82,17 +84,11 @@ export function startDrag(event, piece, pieceObj) {
 
     function endDrag() {
 
-        clone.style.display = 'none'; 
+        // clone.style.display = 'none'; 
 
-        let dropSquare;
-        // Ensure coordinates are finite numbers
-        if (isFinite(lastKnownX) && isFinite(lastKnownY)) {
-            dropSquare = document.elementFromPoint(lastKnownX, lastKnownY);
-        }
-        // Check if the element below is not a board square and update it to its parent if needed
-        if (!dropSquare.classList.contains('board-square')) {
-            dropSquare = dropSquare.parentNode;
-        }
+        // const dropSquare = findChessSquareFromCoordinates(lastKnownY,lastKnownY, clone);
+
+        const dropSquare = lastHighlightedSquare;
 
         // Remove the clone and show the original piece
         piece.style.visibility = 'visible';
@@ -104,24 +100,54 @@ export function startDrag(event, piece, pieceObj) {
         document.removeEventListener('touchmove', onDrag, false);
         document.removeEventListener('touchend', endDrag, false);
 
-        playMoveIfValid(pieceObj, startSquare, dropSquare)
+        // debugger
+
+        if (dropSquare && dropSquare.id !== startSquare.id){
+            playMoveIfValid(pieceObj, startSquare, dropSquare)
+        }
+
+        // Reset the highlight on the board
+        if (lastHighlightedSquare) {
+            lastHighlightedSquare.classList.remove('highlight');
+            lastHighlightedSquare = null;
+        }
 
     }
 }
 
-
-// highlighting squares we hover over
-export function highlightBelow(event) {
-    const elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-    if (elemBelow && elemBelow.classList.contains('board-square')) {
-        if (lastHighlightedSquare && lastHighlightedSquare !== elemBelow) {
-            if (lastHighlightedSquare) {
-                lastHighlightedSquare.classList.remove('highlight');
-            }
+function highlightBelow(x, y, clone) {
+    const square = findChessSquareFromCoordinates(x,y, clone);
+    if (square && square.classList.contains('board-square')) {
+        if (lastHighlightedSquare && lastHighlightedSquare !== square) {
+            lastHighlightedSquare.classList.remove('highlight');
         }
-        if (elemBelow) {
-            elemBelow.classList.add('highlight');
-            lastHighlightedSquare = elemBelow;
-        }
+        lastHighlightedSquare = square;
+        lastHighlightedSquare.classList.add('highlight');
     }
 }
+
+function findChessSquareFromCoordinates(x,y, clone){
+
+    if (clone) {
+        // Make the clone "click-through"
+        clone.style.pointerEvents = 'none';
+    }
+
+    let square;
+    // Ensure coordinates are finite numbers
+    if (isFinite(x) && isFinite(y)) {
+        square = document.elementFromPoint(x, y);
+    }
+    // Check if the element below is not a board square and update it to its parent if needed
+    if (!square.classList.contains('board-square')) {
+        square = square.parentNode;
+    }
+
+
+    if (clone) {
+        // Reset pointer-events property
+        clone.style.pointerEvents = '';
+    }
+
+    return square;
+};
