@@ -1,13 +1,14 @@
 import { Board } from './chessLogic/board.js';
 import { Pawn } from './chessLogic/pawn.js'; 
-import { idToPos } from './chessLogic/utils.js';
+// import { idToPos } from './chessLogic/utils.js';
 import { highlightBelow } from './UI/pieceMovement.js';
 import { drawChessBoard } from './UI/drawBoard.js';
-import { gameState } from './chessLogic/gameState.js'; 
+// import { gameBoard } from './chessLogic/board.js';
+// import { gameState } from './chessLogic/gameState.js'; 
 
 window.Pawn = Pawn;
 
-const gameBoard = new Board();
+export const gameBoard = new Board();
 
 
 document.addEventListener("DOMContentLoaded", function() {

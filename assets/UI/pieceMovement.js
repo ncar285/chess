@@ -42,7 +42,15 @@ export function startDrag(event, piece, pieceObj) {
         clone.style.top = pageY  + 'px';
     }
 
+    let lastKnownX = 0;
+    let lastKnownY = 0;
+    // let startSquare = null;
+    const startSquare = document.getElementById(gameState.getSelectedId());
+
     function onDrag(event) {
+        lastKnownX = event.clientX;
+        lastKnownY = event.clientY;
+
         moveAt(event.pageX, event.pageY);
         // debugger
         if (!piece.parentNode.classList.contains('selected')) { // Check if the piece is not already selected
@@ -53,6 +61,15 @@ export function startDrag(event, piece, pieceObj) {
     }
 
     function endDrag() {
+
+        clone.style.display = 'none'; 
+
+        let dropSquare = document.elementFromPoint(lastKnownX, lastKnownY);
+        // Check if the element below is not a board square and update it to its parent if needed
+        if (!dropSquare.classList.contains('board-square')) {
+            dropSquare = dropSquare.parentNode;
+        }
+
         // Remove the clone and show the original piece
         piece.style.visibility = 'visible';
         clone.remove();
@@ -63,7 +80,7 @@ export function startDrag(event, piece, pieceObj) {
         document.removeEventListener('touchmove', onDrag, false);
         document.removeEventListener('touchend', endDrag, false);
 
-        playMoveIfValid(event, pieceObj)
+        playMoveIfValid(pieceObj, startSquare, dropSquare)
 
     }
 }

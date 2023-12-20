@@ -1,6 +1,7 @@
 import { addDragEventsToPiece } from "./eventHandlers.js";
 import { posToId } from "../chessLogic/utils.js";
 import { startDrag } from './pieceMovement.js';
+// import { gameBoard } from "../chessLogic/board.js";
 
 export function drawChessBoard(gameBoard){
     setupChessBoardDomElements();

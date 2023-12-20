@@ -1,4 +1,4 @@
-export function updateBoard(startSquare, endSquare) {
+function updateBoard(startSquare, endSquare) {
     // debugger;
     // Get the DOM elements for the start and end squares
     const startSquareElement = document.getElementById(startSquare);

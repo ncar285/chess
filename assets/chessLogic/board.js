@@ -74,3 +74,6 @@ Board.isInsideBoard = function(pos) {
     const [rank, file] = pos;
     return rank >= 0 && rank < 8 && file >= 0 && file < 8;
 };
+
+
+// export const gameBoard = new Board();
