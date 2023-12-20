@@ -1,6 +1,7 @@
 import { addDragEventsToPiece } from "./eventHandlers.js";
 import { posToId } from "../chessLogic/utils.js";
 import { startDrag } from './pieceMovement.js';
+import { clickMove } from "./pieceMovement.js";
 // import { gameBoard } from "../chessLogic/board.js";
 
 export function drawChessBoard(gameBoard){
@@ -24,6 +25,9 @@ function setupChessBoardDomElements(){
             const file = String.fromCharCode(charCode)
             square.id = `${rank}-${file}`;
             square.className = `board-square ${color}`;
+
+            square.addEventListener('click', (event) => clickMove(event), false);
+
             addSquareLabels(square, [file,rank]);
             row.appendChild(square);
             color = (color === "brown") ? "white" : "brown";
@@ -56,7 +60,6 @@ function renderPiecesOnDOM(gameBoard){
                 // Add event listeners to this piece
                 piece.addEventListener('mousedown', (event) => startDrag(event, piece, pieceObj), false);
                 piece.addEventListener('touchstart', (event) => startDrag(event, piece, pieceObj), false);
-
 
                 addDragEventsToPiece(piece, pieceObj);
             }

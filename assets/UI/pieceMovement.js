@@ -1,6 +1,8 @@
 import { selectSquare, unSelectSquare } from "./pieceSelection.js";
 import { gameState } from "../chessLogic/gameState.js";
 import { playMoveIfValid } from "../chessLogic/makeMove.js";
+import { gameBoard } from "../main.js";
+import { idToPos } from "../chessLogic/utils.js";
 
 let lastHighlightedSquare = null;
 
@@ -8,9 +10,6 @@ export function startDrag(event, piece, pieceObj) {
     // Prevent default behavior for images on mobile
     event.preventDefault();
 
-    // add visual aid to chess board
-    unSelectSquare();
-    selectSquare(piece, pieceObj);
 
     // Create a clone of the piece for visual dragging
     const clone = piece.cloneNode(true);
@@ -30,6 +29,18 @@ export function startDrag(event, piece, pieceObj) {
     }
 
     highlightBelow(x, y, clone);
+
+    // debugger
+
+    // select or unselect the square
+    const square = findChessSquareFromCoordinates(x,y, clone);
+    if (square.id === gameState.getSelectedId()){
+        unSelectSquare();
+    } else {
+        unSelectSquare();
+        selectSquare(piece, pieceObj);
+    }
+    
 
 
     // Calculate the width of the piece based on the viewport and chess board settings
@@ -59,8 +70,8 @@ export function startDrag(event, piece, pieceObj) {
 
     let lastKnownX = 0;
     let lastKnownY = 0;
-    const startSquare = document.getElementById(gameState.getSelectedId());
-
+    // const startSquare = document.getElementById(gameState.getSelectedId());
+    const startSquare = square;
 
     function onDrag(event) {
         // Check if the event is a touch event and extract the first touch coordinates
@@ -75,18 +86,9 @@ export function startDrag(event, piece, pieceObj) {
         moveAt(lastKnownX, lastKnownY);
         highlightBelow(lastKnownX, lastKnownY, clone);
 
-        if (!piece.parentNode.classList.contains('selected')) { // Check if the piece is not already selected
-            unSelectSquare();
-            selectSquare(piece, pieceObj);
-            gameState.setSelectedId(this.parentNode.id);
-        }
     }
 
     function endDrag() {
-
-        // clone.style.display = 'none'; 
-
-        // const dropSquare = findChessSquareFromCoordinates(lastKnownY,lastKnownY, clone);
 
         const dropSquare = lastHighlightedSquare;
 
@@ -99,10 +101,8 @@ export function startDrag(event, piece, pieceObj) {
         document.removeEventListener('mouseup', endDrag, false);
         document.removeEventListener('touchmove', onDrag, false);
         document.removeEventListener('touchend', endDrag, false);
-
-        // debugger
-
-        if (dropSquare && dropSquare.id !== startSquare.id){
+        
+        if (dropSquare !== null && dropSquare.id !== startSquare.id){
             playMoveIfValid(pieceObj, startSquare, dropSquare)
         }
 
@@ -123,6 +123,27 @@ function highlightBelow(x, y, clone) {
         }
         lastHighlightedSquare = square;
         lastHighlightedSquare.classList.add('highlight');
+    }
+}
+
+export function clickMove(event) {
+    let x = 0;
+    let y = 0;
+    if (event.touches) {
+        x = event.touches[0].clientX;
+        y = event.touches[0].clientY;
+    } else {
+        x = event.clientX;
+        y = event.clientY;
+    }
+    const clickedSquare = findChessSquareFromCoordinates(x,y);
+
+    const pieceId = gameState.getSelectedId();
+    const startSquare = document.getElementById(pieceId);
+    const pieceObj = gameBoard.getPiece(idToPos(pieceId));
+
+    if (clickedSquare !== null && clickedSquare.id !== startSquare.id){
+        playMoveIfValid(pieceObj, startSquare, clickedSquare)
     }
 }
 

@@ -20,9 +20,3 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 });
-
-// // Add a global dragover listener to the chess board
-// document.querySelector('.chess-board').addEventListener('dragover', function(event) {
-//     event.preventDefault(); // Prevent default to allow dropping
-//     highlightBelow(event);
-// });
