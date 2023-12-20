@@ -17,6 +17,17 @@ export function startDrag(event, piece, pieceObj) {
     clone.style.zIndex = 1000;
     document.body.appendChild(clone);
 
+    // Handle the coordinates for both touch and mouse events
+    let x, y;
+    if (event.type === 'touchstart' && event.touches) {
+        x = event.touches[0].clientX;
+        y = event.touches[0].clientY;
+    } else {
+        x = event.clientX;
+        y = event.clientY;
+    }
+
+
     // Calculate the width of the piece based on the viewport and chess board settings
     const chessBoardWidth = document.querySelector('.chess-board').clientWidth;
     const squareWidth = chessBoardWidth / 8; // There are 8 squares in a row
@@ -29,7 +40,8 @@ export function startDrag(event, piece, pieceObj) {
     piece.style.visibility = 'hidden';
 
     // Position the clone under the cursor
-    moveAt(event.pageX, event.pageY);
+    // moveAt(event.pageX, event.pageY);
+    moveAt(x, y);
 
     // Listeners for moving and dropping the piece
     document.addEventListener('mousemove', onDrag, false);
@@ -48,10 +60,18 @@ export function startDrag(event, piece, pieceObj) {
     const startSquare = document.getElementById(gameState.getSelectedId());
 
     function onDrag(event) {
-        lastKnownX = event.clientX;
-        lastKnownY = event.clientY;
+        // Check if the event is a touch event and extract the first touch coordinates
+        if (event.touches) {
+            lastKnownX = event.touches[0].clientX;
+            lastKnownY = event.touches[0].clientY;
+        } else {
+            lastKnownX = event.clientX;
+            lastKnownY = event.clientY;
+        }
 
-        moveAt(event.pageX, event.pageY);
+    moveAt(lastKnownX, lastKnownY);
+
+        // moveAt(event.pageX, event.pageY);
         // debugger
         if (!piece.parentNode.classList.contains('selected')) { // Check if the piece is not already selected
             unSelectSquare();
@@ -64,7 +84,11 @@ export function startDrag(event, piece, pieceObj) {
 
         clone.style.display = 'none'; 
 
-        let dropSquare = document.elementFromPoint(lastKnownX, lastKnownY);
+        let dropSquare;
+        // Ensure coordinates are finite numbers
+        if (isFinite(lastKnownX) && isFinite(lastKnownY)) {
+            dropSquare = document.elementFromPoint(lastKnownX, lastKnownY);
+        }
         // Check if the element below is not a board square and update it to its parent if needed
         if (!dropSquare.classList.contains('board-square')) {
             dropSquare = dropSquare.parentNode;
