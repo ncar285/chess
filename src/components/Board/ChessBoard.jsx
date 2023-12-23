@@ -7,7 +7,11 @@ import ChessSquare from '../ChessSquare/ChessSquare';
 function ChessBoard({ gameBoard }) {
     const [pieces, setPieces] = useState([]);
 
-    function boardArray(){
+    const [chessBoard, setChessBoard] = useState([]);
+
+
+    useEffect(() => {
+        const gameStateBoard = gameBoard.getBoard();
         let color = "brown";
         const board = [];
         for (let a = 0 ; a  < 8 ; a++ ){
@@ -15,19 +19,22 @@ function ChessBoard({ gameBoard }) {
             const rank = a + 1;
             for (let b = 0 ; b  < 8 ; b++ ){
                 const square = {};
+                square.pieceObj = gameStateBoard.getPiece([a, b]);
                 const charCode = 'a'.charCodeAt(0) + b;
                 const file = String.fromCharCode(charCode)
                 square.id = `${rank}-${file}`;
                 square.className = `board-square ${color}`;
                 square.rankLabel = (file === "a") ? true : false;
                 square.fileLabel = (rank === 1) ? true : false;
-                square.color = color;
                 board[a].push(square);
                 color = switchColor(color);
             }
             color = switchColor(color);
         }
-    }
+        setChessBoard(board)
+    }, [gameBoard]);
+
+
 
     function switchColor(color){
         if (color === "brown"){
@@ -37,21 +44,6 @@ function ChessBoard({ gameBoard }) {
         }
     }
 
-    function addSquareLabels(square, pos){
-        const [file,rank] =  pos;
-        if (file === "a") {
-            const rankLabel = document.createElement('div');
-            rankLabel.className = 'rank square-label';
-            rankLabel.innerText = `${rank}`;
-            square.appendChild(rankLabel);
-        } 
-        if (rank === 1) {
-            const fileLabel = document.createElement('div');
-            fileLabel.className = 'file square-label';
-            fileLabel.innerText = `${file}`;
-            square.appendChild(fileLabel);
-        }
-    }
 
     useEffect(() => {
         const newPieces = [];
@@ -87,38 +79,38 @@ function ChessBoard({ gameBoard }) {
 </div>
 
 
+// .map(({ id, imgSrc, pieceObj }) => (
+//     <div key={id} id={id}>
+//         <img 
+//             src={imgSrc} 
+//             className="chess-piece"
+//             onMouseDown={(e) => startDrag(e, pieceObj)}
+//             onTouchStart={(e) => startDrag(e, pieceObj)} 
+//         />
+//     </div>
+
 
 
     return (
-
-
-
         <div className="chess-board">
-            {boardArray().map((row, r) => {
-                <div id={`rank-${r+1}`} className={`board-row ${a+1}`} >
-                    {row.map((squareParams) =>  {
-                        <ChessSquare><ChessSquare squareParams = {squareParams} />
-
-                    } )
-                    }
-                </div>
-                return row.map(({id, class, rankLabel, fileLabel, color}) =>  {
-                    
-
-                } )
-            }
-        }
-            .map(({ id, imgSrc, pieceObj }) => (
-                <div key={id} id={id}>
-                    <img 
-                        src={imgSrc} 
-                        className="chess-piece"
-                        onMouseDown={(e) => startDrag(e, pieceObj)}
-                        onTouchStart={(e) => startDrag(e, pieceObj)} 
-                    />
+            {chessBoard.map((row, r) => (
+                <div 
+                    key={`rank-${r+1}`} 
+                    id={`rank-${r+1}`} 
+                    className={`board-row ${r+1}`}
+                >
+                    {row.map((squareParams, c) => {
+                        const id = posToId([r,c]);
+                        return (
+                            <ChessSquare 
+                                key={`${id}`} 
+                                id={`${id}`} 
+                                squareParams={squareParams} 
+                            />
+                        );
+                    })}
                 </div>
             ))}
-            {/* Render the rest of your chess board here */}
         </div>
     );
 }
