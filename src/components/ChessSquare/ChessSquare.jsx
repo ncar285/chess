@@ -1,5 +1,6 @@
 // import { clickMove } from "../../Utils/pieceMovement";
 import ChessPiece from "../ChessPiece/ChessPiece";
+import "./ChessSquare.css"
 
 function ChessSquare(squareParams) {
 

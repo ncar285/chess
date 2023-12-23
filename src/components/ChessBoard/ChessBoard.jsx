@@ -3,6 +3,7 @@ import { posToId } from '../../Utils/posIdConversion';
 // import { startDrag, clickMove } from "./pieceMovement";
 import "./ChessBoard.css"
 import ChessSquare from '../ChessSquare/ChessSquare';
+import { Board } from '../../chessLogic/board';
 
 function ChessBoard({ gameBoard }) {
 
@@ -10,7 +11,6 @@ function ChessBoard({ gameBoard }) {
 
 
     useEffect(() => {
-        const gameStateBoard = gameBoard.getBoard();
         let color = "brown";
         const board = [];
         for (let a = 0 ; a  < 8 ; a++ ){
@@ -18,7 +18,7 @@ function ChessBoard({ gameBoard }) {
             const rank = a + 1;
             for (let b = 0 ; b  < 8 ; b++ ){
                 const square = {};
-                square.pieceObj = gameStateBoard.getPiece([a, b]);
+                square.pieceObj = gameBoard.getPiece([a, b]);
                 const charCode = 'a'.charCodeAt(0) + b;
                 const file = String.fromCharCode(charCode)
                 square.id = `${rank}-${file}`;
@@ -53,6 +53,7 @@ function ChessBoard({ gameBoard }) {
                 >
                     {row.map((squareParams, c) => {
                         const id = posToId([r,c]);
+                        // console.log("id", id)
                         return (
                             <ChessSquare 
                                 key={`${id}`} 

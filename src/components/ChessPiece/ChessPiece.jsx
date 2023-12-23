@@ -1,6 +1,7 @@
 import React from 'react';
 // import { selectSquare, unSelectSquare } from "./pieceSelection";
 // import { gameState, playMove, lastHighlightedSquare } from './gameState';
+import './ChessPiece.css'
 
 const ChessPiece = ({ pieceObj, source }) => {
 

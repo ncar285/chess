@@ -1,11 +1,14 @@
-#chat-box {
-    border: 1px solid black;
-    padding: 10px;
-    height: 400px;
-    overflow-y: scroll;
+.is-preload .chess-board {
+    background-color: #cccc;
 }
 
-textarea {
-    width: 100%;
-    margin-top: 10px;
+#game {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

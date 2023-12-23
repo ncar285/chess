@@ -1,0 +1,14 @@
+.chess-piece {
+    width: 65%;
+    height: auto; 
+    display: block;
+    margin: auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: grab;
+    z-index: 11;
+}
+.chess-piece:active {
+    cursor: grabbing;
+}
