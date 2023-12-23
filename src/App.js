@@ -19,9 +19,9 @@ function App() {
             </Switch>
 
             <footer className="footer">
-                <p className='copyright'>
+                {/* <p className='copyright'>
                     &copy; Nico's Chess Game
-                </p>                
+                </p>                 */}
             </footer>
         </div>
     )
