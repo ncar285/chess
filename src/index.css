@@ -2,12 +2,3 @@
     --brown: #744D2A;
     --white: #CEB07E;
 }
-
-@media (max-width: 1000px) {
-    .chess-board {
-        width: 90vw;
-        height: 90vw;
-        max-width: 90vh;
-        max-height: 90vh;
-    }
-}

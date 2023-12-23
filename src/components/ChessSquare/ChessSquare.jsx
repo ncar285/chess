@@ -2,29 +2,24 @@
 import ChessPiece from "../ChessPiece/ChessPiece";
 import "./ChessSquare.css"
 
-function ChessSquare(squareParams) {
+function ChessSquare( {squareParams} ) {
 
     const {id, className, rankLabel, fileLabel, pieceObj} = squareParams;
     const [rank, file] = id.split("-");
 
+    // console.log({id, className, rankLabel, fileLabel, pieceObj})
     let source = "";
 
     if (pieceObj){
         const name = `${pieceObj.getColor() === "white" ? "w_" : "b_"}${pieceObj.getType()}`;
-        source = `../../assets/images/pieces/${name}.png`;
+        source = `/src/pieces/${name}.png`;
     }
     
     return (
-        <div 
-        // onClick={clickMove} 
-        id={id} className={className}>
-
-            {rankLabel &&<div className="rank square-label">{rank}</div>}
-            
+        <div id={id} className={className}>
+            {rankLabel && <div className="rank square-label">{rank}</div>}
             {fileLabel && <div className="file square-label">{file}</div>}
-
             {pieceObj && <ChessPiece pieceObj={pieceObj} source={source}/>}
-
         </div>
     )
 

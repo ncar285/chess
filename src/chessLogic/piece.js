@@ -1,4 +1,4 @@
-import { posToId, idToPos } from "../Utils/posIdConversion.js";
+import { posToId } from "../Utils/posIdConversion.js";
 import { Board } from "./board.js";
 
 export function Piece(color, square, board){

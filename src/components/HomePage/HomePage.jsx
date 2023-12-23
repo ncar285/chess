@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Board } from '../../chessLogic/board';
 import ChessBoard from '../ChessBoard/ChessBoard';
 import './HomePage.css'
 
 const HomePage = () => {
+
     const gameBoard = new Board(); // Initialize the game board
 
     return (
