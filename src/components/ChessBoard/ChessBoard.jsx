@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { posToId } from '../../Utils/posIdConversion'; 
-import { startDrag, clickMove } from "./pieceMovement";
+// import { startDrag, clickMove } from "./pieceMovement";
 import "./ChessBoard.css"
 import ChessSquare from '../ChessSquare/ChessSquare';
 
 function ChessBoard({ gameBoard }) {
-    const [pieces, setPieces] = useState([]);
 
     const [chessBoard, setChessBoard] = useState([]);
 
@@ -35,7 +34,6 @@ function ChessBoard({ gameBoard }) {
     }, [gameBoard]);
 
 
-
     function switchColor(color){
         if (color === "brown"){
             return "white";
@@ -43,52 +41,6 @@ function ChessBoard({ gameBoard }) {
             return "brown"
         }
     }
-
-
-    useEffect(() => {
-        const newPieces = [];
-        const board = gameBoard.getBoard();
-
-        board.forEach((row, a) => {
-            row.forEach((_, b) => {
-                const pieceObj = gameBoard.getPiece([a, b]);
-                if (pieceObj) {
-                    const name = `${pieceObj.getColor() === "white" ? "w_" : "b_"}${pieceObj.getType()}`;
-                    const source = `../../assets/images/pieces/${name}.png`;
-                    newPieces.push({ id: posToId([a, b]), imgSrc: source, pieceObj });
-                }
-            });
-        });
-
-        setPieces(newPieces);
-    }, [gameBoard]);
-
-
-    <div className="chess-board">
-    {pieces.map(({ id, imgSrc, pieceObj }) => (
-        <div key={id} id={id}>
-            <img 
-                src={imgSrc} 
-                className="chess-piece"
-                onMouseDown={(e) => startDrag(e, pieceObj)}
-                onTouchStart={(e) => startDrag(e, pieceObj)} 
-            />
-        </div>
-    ))}
-    {/* Render the rest of your chess board here */}
-</div>
-
-
-// .map(({ id, imgSrc, pieceObj }) => (
-//     <div key={id} id={id}>
-//         <img 
-//             src={imgSrc} 
-//             className="chess-piece"
-//             onMouseDown={(e) => startDrag(e, pieceObj)}
-//             onTouchStart={(e) => startDrag(e, pieceObj)} 
-//         />
-//     </div>
-
 
 
     return (
@@ -114,7 +66,6 @@ function ChessBoard({ gameBoard }) {
         </div>
     );
 }
-
 
 
 export default ChessBoard;

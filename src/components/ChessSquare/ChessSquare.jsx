@@ -1,4 +1,4 @@
-import { clickMove } from "../../Utils/pieceMovement";
+// import { clickMove } from "../../Utils/pieceMovement";
 import ChessPiece from "../ChessPiece/ChessPiece";
 
 function ChessSquare(squareParams) {
@@ -14,7 +14,9 @@ function ChessSquare(squareParams) {
     }
     
     return (
-        <div onClick={clickMove} id={id} className={className}>
+        <div 
+        // onClick={clickMove} 
+        id={id} className={className}>
 
             {rankLabel &&<div className="rank square-label">{rank}</div>}
             

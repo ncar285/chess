@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Switch } from 'react-router-dom';
 // import { AuthRoute, ProtectedRoute } from './components/Routes/Routes';
-import HomePage from './components/HomePage/HomePage'
+import HomePage from './components/HomePage/HomePage';
 import { Route } from 'react-router-dom/cjs/react-router-dom.min';
 
 function App() {
