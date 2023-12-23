@@ -20,7 +20,7 @@ function App() {
 
             <footer className="footer">
                 <p className='copyright'>
-                    Copyright &copy; 2023 Interview Bot
+                    &copy; Nico's Chess Game
                 </p>                
             </footer>
         </div>

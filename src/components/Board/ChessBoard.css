@@ -1,3 +1,18 @@
+.chess-board {
+    /* Set base size of the chess board */
+    width: 70vw;
+    height: 70vh;
+    /* Ensure board doesn't exceed the viewport width */
+    max-width: 70vh;
+    max-height: 70vw;
+
+    background-color: aquamarine;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    /* border: 1px solid #000; */
+    border-radius: 0.4em;
+    overflow: hidden;
+}
+
 .board-row{
     height: calc(100% / 8);
     width: 100%;
