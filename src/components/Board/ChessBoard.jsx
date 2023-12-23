@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { posToId } from '../../Utils/posIdConversion'; 
 import { startDrag, clickMove } from "./pieceMovement";
 import "./ChessBoard.css"
+import ChessSquare from '../ChessSquare/ChessSquare';
 
 function ChessBoard({ gameBoard }) {
     const [pieces, setPieces] = useState([]);
@@ -95,10 +96,8 @@ function ChessBoard({ gameBoard }) {
         <div className="chess-board">
             {boardArray().map((row, r) => {
                 <div id={`rank-${r+1}`} className={`board-row ${a+1}`} >
-                    {row.map(({id, className, rankLabel, fileLabel, color}) =>  {
-                        <div>
-                            
-                        </div>
+                    {row.map((squareParams) =>  {
+                        <ChessSquare><ChessSquare squareParams = {squareParams} />
 
                     } )
                     }
