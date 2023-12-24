@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // import { selectSquare, unSelectSquare } from "./pieceSelection";
 // import { gameState, playMove, lastHighlightedSquare } from './gameState';
 import './ChessPiece.css';
-import { receiveSelected, setSelected } from '../../store/uiReducer';
+import { receiveSelected } from '../../store/uiReducer';
 
 
 // Piece images

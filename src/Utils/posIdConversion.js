@@ -4,7 +4,7 @@ export function posToId(pos){
     const file = indexToFile(b);
     // const charCode = 'a'.charCodeAt(0) + b;
     // const file = String.fromCharCode(charCode);
-    return `${rank}-${file}`
+    return `${file}${rank}`
 }
 
 export function idToPos(id){
@@ -16,10 +16,10 @@ export function idToPos(id){
 }
 
 export function indexToFile(index){
-    const charCode = 'a'.charCodeAt(0) + index;
+    const charCode = 'A'.charCodeAt(0) + index;
     return String.fromCharCode(charCode)
 }
 
 export function fileToPos(file){
-    return file.charCodeAt(0) - 'a'.charCodeAt(0);
+    return file.charCodeAt(0) - 'A'.charCodeAt(0);
 }
