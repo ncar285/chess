@@ -8,7 +8,7 @@ import { useEffect } from "react";
 function ChessSquare( {squareParams} ) {
 
     const {id, className, rankLabel, fileLabel, pieceObj} = squareParams;
-    const [rank, file] = id.split("");
+    const [file, rank] = id.split("");
 
     const selectedSquare = useSelector(getSelected);
     let fullClassName = className;
@@ -27,7 +27,7 @@ function ChessSquare( {squareParams} ) {
     return (
         <div id={id} className={fullClassName}>
             {rankLabel && <div className="rank square-label">{rank}</div>}
-            {fileLabel && <div className="file square-label">{file}</div>}
+            {fileLabel && <div className="file square-label">{file.toLowerCase()}</div>}
             {pieceObj && <ChessPiece pieceObj={pieceObj} source={source}/>}
         </div>
     )

@@ -1,4 +1,12 @@
 :root {
     --brown: #744D2A;
     --white: #CEB07E;
+    --boardDimension: calc(min(70vw, 70vh));
+    --boardLabel: calc( 0.04 * var(--boardDimension));
+}
+
+@media (max-width: 1000px) {
+    :root {
+        --boardDimension: calc(min(90vw, 90vh));
+    }
 }

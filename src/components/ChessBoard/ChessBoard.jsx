@@ -32,7 +32,7 @@ function ChessBoard({ gameBoard }) {
                 square.className = `board-square ${color}`
                 square.pieceObj = gameBoard.getPiece([a, b]);
 
-                debugger
+                // debugger
 
                 square.rankLabel = (file === "A") ? true : false;
                 square.fileLabel = (rank === 1) ? true : false;
