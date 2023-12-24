@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import { selectSquare, unSelectSquare } from "./pieceSelection";
 // import { gameState, playMove, lastHighlightedSquare } from './gameState';
 import './ChessPiece.css';
+import { receiveSelected, setSelected } from '../../store/uiReducer';
+
 
 // Piece images
 import b_bishop from '../../pieces/b_bishop.png'
@@ -16,6 +18,8 @@ import b_queen from '../../pieces/b_queen.png'
 import w_queen from '../../pieces/w_queen.png'
 import b_rook from '../../pieces/b_rook.png'
 import w_rook from '../../pieces/w_rook.png'
+import { useDispatch } from 'react-redux';
+import { posToId } from '../../Utils/posIdConversion';
 
 const pieceImages = {
     'b_bishop': b_bishop,
@@ -32,58 +36,117 @@ const pieceImages = {
     'w_rook': w_rook
 };
 
+
+
 const ChessPiece = ({ pieceObj }) => {
+
+    const [isDragging, setIsDragging] = useState(false);
+    // const [selected, setSelected] = useState(null);
+    const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
+
+
+    const dispatch = useDispatch();
 
     const color = pieceObj.getColor();
 
     const pieceName = [color === "white" ? 'w' : 'b', pieceObj.getType()].join('_');
     const imgSource = pieceImages[pieceName]
 
-    // const handleClick = (event) => {
-    //     unSelectSquare();
-    //     selectSquare(event.target, pieceObj);
+
+    function handleClick(e){
+        e.preventDefault();
+        const imageElement = e.target;
+        const pos = pieceObj.getSquare();
+        const id = posToId(pos);
+        dispatch(receiveSelected(id));
+    }
+    // const handleDragStart = (e) => {
+
+    //     e.preventDefault();
+    //     setIsDragging(true);
+
+    //     const imageElement = e.target;
+    //     const id = imageElement.parentNode.id;
+
+    //     setSelected(id)
+
+    //     console.log("set the selected id")
+
+    //     console.log("imageElement",imageElement)
+    //     console.log("id ",id)
+    //     // setDragPosition({ x: e.clientX, y: e.clientY });
+
+    //     // Handle the coordinates for both touch and mouse events
+    //     let x, y;
+    //     if (e.type === 'touchstart' && e.touches) {
+    //         x = e.touches[0].clientX;
+    //         y = e.touches[0].clientY;
+    //     } else {
+    //         x = e.clientX;
+    //         y = e.clientY;
+    //     }
+
+    //     console.log("x,y: ",x,y)
+
+    //     setDragPosition({ x, y });
+
+    //     // const square = findChessSquareFromCoordinates(x,y);
+    //     // setSelected(square.id)
+    //     // Additional logic...
     // };
 
-    // const handleDragStart = (event) => {
-    //     if (!event.target.parentNode.classList.contains('selected')) {
-    //         unSelectSquare();
-    //         selectSquare(event.target, pieceObj);
-    //         gameState.setSelectedId(event.target.parentNode.id);
-    //     }
+    // const handleDrag = (e) => {
+    //     setDragPosition({ x: e.clientX, y: e.clientY });
+    //     // Additional logic for highlighting, etc.
     // };
 
-    // const handleDragEnd = (event) => {
-    //     event.target.style.opacity = '1'; // Show the piece again when the drag ends
-    //     document.body.style.cursor = '';
-
-    //     const validOptions = pieceObj.getMoves().options;
-    //     const validTakeOptions = pieceObj.getMoves().takeOptions;
-    //     let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-    //     if (!elemBelow.classList.contains('board-square')) {
-    //         elemBelow = elemBelow.parentNode; // Update to the parent (chess square)
-    //     }
-
-    //     // Update the piece's position in game state
-    //     if (validOptions.has(elemBelow.id) || validTakeOptions.has(elemBelow.id)) {
-    //         const [startSquare, endSquare] = [gameState.getSelectedId(), elemBelow.id];
-    //         playMove(startSquare, endSquare, pieceObj);
-    //     }
-
-    //     unSelectSquare();
-    //     if (lastHighlightedSquare) {
-    //         lastHighlightedSquare.classList.remove('highlight');
-    //     }
+    // const handleDragEnd = (e) => {
+    //     setIsDragging(false);
+    //     onMove(dragPosition); // Assuming onMove is a prop function to handle the move
+    //     // Additional logic...
     // };
+
+    // const pieceStyle = isDragging ? {
+    //     position: 'absolute',
+    //     left: `${dragPosition.x}px`,
+    //     top: `${dragPosition.y}px`
+    //     // other styles
+    // } : {};
+
+
+    // function onMove(dragPosition){
+    //     const {x, y} = dragPosition;
+    //     const square = findChessSquareFromCoordinates(x,y);
+    //     if (square !== null && square.id !== startSquare.id){
+    //         playMoveIfValid(pieceObj, startSquare, square)
+    //     }
+    // }
+    
+
+    function findChessSquareFromCoordinates(x,y){
+        let square;
+        if (isFinite(x) && isFinite(y)) {
+            square = document.elementFromPoint(x, y);
+        }
+        // Check if the element below is not a board square and update it to its parent if needed
+        if (!square.classList.contains('board-square')) {
+            square = square.parentNode;
+        }
+        return square;
+    };
+
 
     return (
         <img 
             alt={`${pieceObj.getColor()} ${pieceObj.getType()}`}
             src={imgSource} 
-            className="chess-piece"
-            // onClick={handleClick}
-            // draggable={true}
+            className={`chess-piece ${isDragging ? 'dragging' : ''}`}
+            draggable
+            onClick={handleClick}
             // onDragStart={handleDragStart}
+            // onDrag={handleDrag}
             // onDragEnd={handleDragEnd}
+            // style={pieceStyle}
         />
     );
 };

@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import configureStore from './store/store';
 
 let store = configureStore({});
+window.myReduxStore = store;
 
 function Root() {
     return (

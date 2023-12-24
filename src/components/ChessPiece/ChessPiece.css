@@ -3,12 +3,19 @@
     height: auto; 
     display: block;
     margin: auto;
-    position: relative;
+    /* position: relative;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%); */
     cursor: grab;
     z-index: 11;
 }
+
+/* .chess-piece.dragging {
+    position: 'absolute';
+    left: `${dragPosition.x}px`
+    top: `${dragPosition.y}px`
+} */
+
 .chess-piece:active {
     cursor: grabbing;
 }
