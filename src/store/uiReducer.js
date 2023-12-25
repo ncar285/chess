@@ -1,5 +1,6 @@
 // CONSTANTS
 export const RECEIVE_SELECTED = 'RECEIVE_SELECTED';
+export const REMOVE_SELECTED = 'REMOVE_SELECTED';
 
 // ACTION CREATORS
 export const receiveSelected = selectedId => {
@@ -8,6 +9,13 @@ export const receiveSelected = selectedId => {
         payload: selectedId
     };
 };
+
+export const removeSelected = () => {
+    return {
+        type: REMOVE_SELECTED
+    };
+};
+
 
 // SELECTORS
 export const getSelected = state => state.ui.selectedId;
@@ -24,6 +32,11 @@ const uiReducer = (state = initialState, action) => {
                 ...state,
                 selectedId: action.payload
             };
+        case REMOVE_SELECTED:
+            return {
+                ...state,
+                selectedId: null
+            }
         default:
             return state;
     }
