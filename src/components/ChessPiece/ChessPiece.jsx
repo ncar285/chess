@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // import { selectSquare, unSelectSquare } from "./pieceSelection";
 // import { gameState, playMove, lastHighlightedSquare } from './gameState';
 import './ChessPiece.css';
-import { receiveSelected } from '../../store/uiReducer';
+import { receiveMoveOptions, receiveSelected } from '../../store/uiReducer';
 
 
 // Piece images
@@ -59,6 +59,7 @@ const ChessPiece = ({ pieceObj }) => {
         const pos = pieceObj.getSquare();
         const id = posToId(pos);
         dispatch(receiveSelected(id));
+        dispatch(receiveMoveOptions(pieceObj.getMoves()));
     }
     // const handleDragStart = (e) => {
 

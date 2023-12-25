@@ -2,7 +2,7 @@ import React from 'react';
 import { Board } from '../../chessLogic/board';
 import ChessBoard from '../ChessBoard/ChessBoard';
 import './HomePage.css'
-import { getSelected, removeSelected } from '../../store/uiReducer';
+import { getSelected, removeMoveOptions, removeSelected } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
 
 const HomePage = () => {
@@ -19,6 +19,7 @@ const HomePage = () => {
         const isEmptySquare = e.target.classList.contains('board-square');
         if (selectedSquare && isEmptySquare || notOnBoard){
             dispatch(removeSelected());
+            dispatch(removeMoveOptions());
         }
     }
 

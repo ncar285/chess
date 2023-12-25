@@ -35,9 +35,15 @@ export const removeMoveOptions = () => {
 // SELECTORS
 export const getSelected = state => state.ui.selectedId;
 
+export const getMoveOptions = state => state.ui.validMoves;
+
+export const getTakeOptions = state => state.ui.validTakes;
+
 // REDUCER
 const initialState = {
-    selectedId: null
+    selectedId: null,
+    validMoves: null,
+    validTakes: null
 };
 
 const uiReducer = (state = initialState, action) => {
@@ -52,16 +58,11 @@ const uiReducer = (state = initialState, action) => {
                 ...state,
                 selectedId: null
             }
-        case REMOVE_MOVE_OPTIONS:
-            return {
-                ...state,
-                validMoves: action.payload.moveOptions
-            }
         case RECEIVE_MOVE_OPTIONS:
             return {
                 ...state,
-                validMoves: action.payload.validMoves,
-                validTakes: action.payload.validTakes
+                validMoves: action.payload.options,
+                validTakes: action.payload.takeOptions.size ? action.payload.takeOptions : null
             }
         case REMOVE_MOVE_OPTIONS:
             return {
