@@ -4,6 +4,8 @@
     max-width: 70vh;
     max-height: 70vw; */
 
+    position: relative;
+
     width: var(--boardDimension);
     height: var(--boardDimension);
 

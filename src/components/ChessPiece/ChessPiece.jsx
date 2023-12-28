@@ -114,6 +114,12 @@ const ChessPiece = ({ pieceObj }) => {
     //     // other styles
     // } : {};
 
+    const dragStyle = {
+        position: 'absolute',
+        left: `${dragPosition.x}px`,
+        top: `${dragPosition.y}px`
+    }
+
 
     // function onMove(dragPosition){
     //     const {x, y} = dragPosition;
@@ -122,7 +128,47 @@ const ChessPiece = ({ pieceObj }) => {
     //         playMoveIfValid(pieceObj, startSquare, square)
     //     }
     // }
-    
+
+
+    // ! STARTWITH SIMPLIFIED VERSIONS
+    function handleDragStart(e){
+        e.preventDefault();
+
+        console.log("dragg has started")
+
+        let x, y;
+        if (e.type === 'touchstart' && e.touches) {
+            x = e.touches[0].clientX;
+            y = e.touches[0].clientY;
+        } else {
+            x = e.clientX;
+            y = e.clientY;
+        }
+
+        console.log("x, y: ", x, y)
+
+        setIsDragging(true)
+
+
+        // select the dragging piece
+        const pos = pieceObj.getSquare();
+        const id = posToId(pos);
+        dispatch(receiveSelected(id));
+        dispatch(receiveMoveOptions(pieceObj.getMoves()));
+        
+        dispatch(receiveDraggingPiece(pieceObj));
+        dispatch(receiveSelected(id));
+
+
+
+    }
+
+    function handleDragEnd(e){
+        e.preventDefault();
+
+        console.log("drag has ended")
+
+    }
 
     function findChessSquareFromCoordinates(x,y){
         let square;
@@ -144,10 +190,10 @@ const ChessPiece = ({ pieceObj }) => {
             className={`chess-piece ${isDragging ? 'dragging' : ''}`}
             draggable
             onClick={handleClick}
-            // onDragStart={handleDragStart}
+            onDragStart={handleDragStart}
             // onDrag={handleDrag}
-            // onDragEnd={handleDragEnd}
-            // style={pieceStyle}
+            onDragEnd={handleDragEnd}
+            style = {isDragging ? {dragStyle} : {}}
         />
     );
 };

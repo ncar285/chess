@@ -19,3 +19,8 @@
 .chess-piece:active {
     cursor: grabbing;
 }
+
+.dragging-piece {
+    position: absolute;
+    width: calc(0.125vw * 0.65)
+}

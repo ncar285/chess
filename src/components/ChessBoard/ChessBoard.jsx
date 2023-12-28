@@ -3,13 +3,17 @@ import { posToId, indexToFile } from '../../Utils/posIdConversion';
 // import { startDrag, clickMove } from "./pieceMovement";
 import "./ChessBoard.css"
 import ChessSquare from '../ChessSquare/ChessSquare';
-import { getMoveOptions, getSelected, getTakeOptions } from '../../store/uiReducer';
+import { getDraggingPiece, getMoveOptions, getSelected, getTakeOptions } from '../../store/uiReducer';
 import { useSelector } from 'react-redux';
 // import { Board } from '../../chessLogic/board';
 
 function ChessBoard({ gameBoard }) {
 
     const [chessBoard, setChessBoard] = useState([]);
+
+    const draggingPiece = useSelector(getDraggingPiece)
+
+    console.log("draggingPiece", draggingPiece)
 
     // const selectedSquare = getSelected();
     // const selectedSquare = useSelector(getSelected);
@@ -59,6 +63,10 @@ function ChessBoard({ gameBoard }) {
 
     return (
         <div className="chess-board">
+            {
+                draggingPiece &&
+                <img className='dragging-piece' src={draggingPiece}></img>
+            }
             {chessBoard.map((row, r) => (
                 <div 
                     key={`rank-${r+1}`} 
