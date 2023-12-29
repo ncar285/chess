@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // import { selectSquare, unSelectSquare } from "./pieceSelection";
 // import { gameState, playMove, lastHighlightedSquare } from './gameState';
 import './ChessPiece.css';
-import { receiveMoveOptions, receiveSelected } from '../../store/uiReducer';
+import { receiveDraggingPiece, receiveHighlightedSquare, receiveMoveOptions, receiveSelected } from '../../store/uiReducer';
 
 
 // Piece images
@@ -132,22 +132,15 @@ const ChessPiece = ({ pieceObj }) => {
 
     // ! STARTWITH SIMPLIFIED VERSIONS
     function handleDragStart(e){
-        e.preventDefault();
+        // e.preventDefault();
 
         console.log("dragg has started")
 
-        let x, y;
-        if (e.type === 'touchstart' && e.touches) {
-            x = e.touches[0].clientX;
-            y = e.touches[0].clientY;
-        } else {
-            x = e.clientX;
-            y = e.clientY;
-        }
+        // console.log("x, y: ", x, y)
 
-        console.log("x, y: ", x, y)
-
-        setIsDragging(true)
+        setIsDragging(true);
+        const mousePosition = getMousePos(e)
+        setDragPosition(mousePosition);
 
 
         // select the dragging piece
@@ -156,11 +149,31 @@ const ChessPiece = ({ pieceObj }) => {
         dispatch(receiveSelected(id));
         dispatch(receiveMoveOptions(pieceObj.getMoves()));
         
-        dispatch(receiveDraggingPiece(pieceObj));
-        dispatch(receiveSelected(id));
+        dispatch(receiveDraggingPiece(imgSource));
+        dispatch(receiveHighlightedSquare(id))
 
 
 
+    }
+
+
+    const handleDrag = (e) => {
+        e.preventDefault();
+        const mousePosition = getMousePos(e)
+        setDragPosition(mousePosition);
+        console.log("mousePosition ", mousePosition)
+    };
+
+    function getMousePos(e){
+        let x, y;
+        if (e.type === 'touchstart' && e.touches) {
+            x = e.touches[0].clientX;
+            y = e.touches[0].clientY;
+        } else {
+            x = e.clientX;
+            y = e.clientY;
+        }
+        return { x, y };
     }
 
     function handleDragEnd(e){
@@ -191,7 +204,7 @@ const ChessPiece = ({ pieceObj }) => {
             draggable
             onClick={handleClick}
             onDragStart={handleDragStart}
-            // onDrag={handleDrag}
+            onDrag={handleDrag}
             onDragEnd={handleDragEnd}
             style = {isDragging ? {dragStyle} : {}}
         />
