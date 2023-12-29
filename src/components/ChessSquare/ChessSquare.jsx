@@ -1,7 +1,7 @@
 // import { clickMove } from "../../Utils/pieceMovement";
 import { useSelector } from "react-redux";
 import ChessPiece from "../ChessPiece/ChessPiece";
-import { getMoveOptions, getSelected, getTakeOptions } from "../../store/uiReducer";
+import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions } from "../../store/uiReducer";
 import "./ChessSquare.css"
 
 function ChessSquare( {squareParams} ) {
@@ -13,6 +13,8 @@ function ChessSquare( {squareParams} ) {
 
     const movingOptions = useSelector(getMoveOptions);
     const takingOptions = useSelector(getTakeOptions);
+
+    const highlightedSquare = useSelector(getHighlightedSquare);
 
     function handleSquareClick(e){
         const square = e.target.id;
@@ -42,7 +44,9 @@ function ChessSquare( {squareParams} ) {
     
     return (
         <div id={id} onClick={handleSquareClick}
-            className={`${className} ${(selectedSquare === id) ? 'selected' : ''}`}>
+            className={`${className} 
+            ${(selectedSquare === id) ? 'selected' : ''}
+            ${(highlightedSquare === id) ? 'highlight' : ''}`}>
             {rankLabel && <div className="rank square-label">{rank}</div>}
             {fileLabel && <div className="file square-label">{file.toLowerCase()}</div>}
             {pieceObj && <ChessPiece pieceObj={pieceObj}/>}

@@ -45,6 +45,8 @@ const ChessPiece = ({ pieceObj }) => {
     const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
 
 
+    const [lasthighlightedSquare, setLasthighlightedSquare] = useState(null);
+
     const dispatch = useDispatch();
 
     const color = pieceObj.getColor();
@@ -151,6 +153,7 @@ const ChessPiece = ({ pieceObj }) => {
         
         dispatch(receiveDraggingPiece(imgSource));
         dispatch(receiveHighlightedSquare(id))
+        setLasthighlightedSquare(id)
 
 
 
@@ -162,7 +165,25 @@ const ChessPiece = ({ pieceObj }) => {
         const mousePosition = getMousePos(e)
         setDragPosition(mousePosition);
         console.log("mousePosition ", mousePosition)
+        const squareUnderneath = getSquareUnderMouse(mousePosition)
+        if (lasthighlightedSquare !== squareUnderneath){
+
+            dispatch(receiveHighlightedSquare(squareUnderneath))
+            console.log("NEWSQUARE", squareUnderneath)
+        }
     };
+
+    function getSquareUnderMouse(pos) {
+        const element = document.elementFromPoint(pos.x, pos.y);
+        if (element && element.classList.contains('board-square')) {
+            return element.id; // Assuming your squares have IDs like 'A1', 'C4', etc.
+        } else if (element.parentElement.classList.contains('board-square')){
+            return element.parentElement.id;
+        } else{
+            console.log("couldn't find a chess square")
+        }
+        return null;
+    }
 
     function getMousePos(e){
         let x, y;

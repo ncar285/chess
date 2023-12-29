@@ -70,6 +70,8 @@ export const getTakeOptions = state => state.ui.validTakes;
 
 export const getDraggingPiece = state => state.ui.draggingPiece;
 
+export const getHighlightedSquare = state => state.ui.highlightedSquare;
+
 // REDUCER
 const initialState = {
     selectedId: null,

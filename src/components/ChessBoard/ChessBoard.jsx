@@ -3,7 +3,7 @@ import { posToId, indexToFile } from '../../Utils/posIdConversion';
 // import { startDrag, clickMove } from "./pieceMovement";
 import "./ChessBoard.css"
 import ChessSquare from '../ChessSquare/ChessSquare';
-import { getDraggingPiece, getMoveOptions, getSelected, getTakeOptions } from '../../store/uiReducer';
+import { getDraggingPiece, getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions } from '../../store/uiReducer';
 import { useSelector } from 'react-redux';
 // import { Board } from '../../chessLogic/board';
 
@@ -11,7 +11,8 @@ function ChessBoard({ gameBoard }) {
 
     const [chessBoard, setChessBoard] = useState([]);
 
-    const draggingPiece = useSelector(getDraggingPiece)
+    const draggingPiece = useSelector(getDraggingPiece);
+
 
     console.log("draggingPiece", draggingPiece)
 
