@@ -5,9 +5,10 @@ import "./ChessBoard.css"
 import ChessSquare from '../ChessSquare/ChessSquare';
 import { getDraggingPiece, getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions } from '../../store/uiReducer';
 import { useSelector } from 'react-redux';
+import { gameBoard } from '../HomePage/HomePage';
 // import { Board } from '../../chessLogic/board';
 
-function ChessBoard({ gameBoard }) {
+function ChessBoard({  }) {
 
     const [chessBoard, setChessBoard] = useState([]);
 

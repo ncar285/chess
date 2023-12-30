@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 // import { selectSquare, unSelectSquare } from "./pieceSelection";
 // import { gameState, playMove, lastHighlightedSquare } from './gameState';
 import './ChessPiece.css';
-import { receiveDraggingPiece, receiveHighlightedSquare, receiveMoveOptions, receiveSelected, removeHighlightedSquare } from '../../store/uiReducer';
-
+import { getHighlightedSquare, getSelected, receiveDraggingPiece, receiveHighlightedSquare, receiveMoveOptions, receiveSelected, removeHighlightedSquare } from '../../store/uiReducer';
+import { gameBoard } from '../HomePage/HomePage';
 
 // Piece images
 import b_bishop from '../../pieces/b_bishop.png'
@@ -18,8 +18,8 @@ import b_queen from '../../pieces/b_queen.png'
 import w_queen from '../../pieces/w_queen.png'
 import b_rook from '../../pieces/b_rook.png'
 import w_rook from '../../pieces/w_rook.png'
-import { useDispatch } from 'react-redux';
-import { posToId } from '../../Utils/posIdConversion';
+import { useDispatch, useSelector } from 'react-redux';
+import { idToPos, posToId } from '../../Utils/posIdConversion';
 
 const pieceImages = {
     'b_bishop': b_bishop,
@@ -45,16 +45,20 @@ const ChessPiece = ({ pieceObj }) => {
     const cloneRef = useRef(null);
 
     const [isDragging, setIsDragging] = useState(false);
-    const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
+    // const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
     const [lasthighlightedSquare, setLasthighlightedSquare] = useState(null);
     const color = pieceObj.getColor();
     const pieceName = [color === "white" ? 'w' : 'b', pieceObj.getType()].join('_');
     const imgSource = pieceImages[pieceName]
+    // const selectedSquare = useSelector(getSelected);
+    // const highlightedSquare = useSelector(getHighlightedSquare)
 
     const updatePosition = (clone, X, Y) => {
         clone.style.left = `${X - pieceRef.current.offsetWidth / 2}px`;
         clone.style.top = `${Y}px`;
     };
+
+    let finalSquareDuringDrag = null;
 
     const handleTouchStart = (e) => {
 
@@ -101,6 +105,7 @@ const ChessPiece = ({ pieceObj }) => {
 
         // update the last Highlighted square
         const squareUnderneath = findChessSquareFromCoordinates(touch.clientX, touch.clientY)
+        finalSquareDuringDrag = squareUnderneath;
         if (lasthighlightedSquare !== squareUnderneath){
             dispatch(receiveHighlightedSquare(squareUnderneath))
         }
@@ -119,6 +124,8 @@ const ChessPiece = ({ pieceObj }) => {
             cloneRef.current = null;
         }
 
+        playMoveIfValid();
+
         // Unhide the original piece
         pieceRef.current.style.visibility = 'visible';
 
@@ -133,6 +140,23 @@ const ChessPiece = ({ pieceObj }) => {
         // would reset the chess pieces position if the move wasn't valid...
     
     };
+
+    function playMoveIfValid(){
+        const startSquare = pieceObj.getSquareId()
+        const endSquare = finalSquareDuringDrag;
+        if (startSquare && endSquare && startSquare !== endSquare){
+            const validOptions = pieceObj.getMoves().options;
+            const validTakeOptions = pieceObj.getMoves().takeOptions;
+
+            if (validOptions.has(endSquare) || validTakeOptions.has(endSquare)){
+                const startPos = idToPos(startSquare);
+                const endPos = idToPos(endSquare);
+                gameBoard.movePiece(startPos, endPos, pieceObj);
+            }
+
+        }
+        return false;
+    }
 
 
     function findChessSquareFromCoordinates(x,y, clone){

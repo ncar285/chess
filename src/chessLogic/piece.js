@@ -19,6 +19,11 @@ Piece.prototype.setSquare = function(pos){
     this.square = pos;
 }
 
+Piece.prototype.getSquareId = function(){
+    return posToId(this.square);
+}
+
+
 Piece.prototype.getMoves = function(){
     const validMoves = this.validMoves();
     const options = new Set();

@@ -8,10 +8,12 @@ export function posToId(pos){
 }
 
 export function idToPos(id){
-    const [rank, file] = id.split('-');
+    const [file, rank] = id.split('');
+    // debugger
     // const b = file.charCodeAt(0) - 'a'.charCodeAt(0);
     const b = fileToPos(file);
     const a = parseInt(rank) - 1;
+    console.log([a,b])
     return [a,b];
 }
 
@@ -21,5 +23,6 @@ export function indexToFile(index){
 }
 
 export function fileToPos(file){
+    // debugger
     return file.charCodeAt(0) - 'A'.charCodeAt(0);
 }
