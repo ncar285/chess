@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 // import { selectSquare, unSelectSquare } from "./pieceSelection";
 // import { gameState, playMove, lastHighlightedSquare } from './gameState';
 import './ChessPiece.css';
@@ -40,19 +40,77 @@ const pieceImages = {
 
 const ChessPiece = ({ pieceObj }) => {
 
-    const [isDragging, setIsDragging] = useState(false);
-    // const [selected, setSelected] = useState(null);
-    const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
-
-
-    const [lasthighlightedSquare, setLasthighlightedSquare] = useState(null);
-
     const dispatch = useDispatch();
-
+    const pieceRef = useRef(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
+    const [lasthighlightedSquare, setLasthighlightedSquare] = useState(null);
     const color = pieceObj.getColor();
-
     const pieceName = [color === "white" ? 'w' : 'b', pieceObj.getType()].join('_');
     const imgSource = pieceImages[pieceName]
+
+    const updatePosition = (clientX, clientY) => {
+        const chessboard = pieceRef.current.closest('body');
+        const rect = chessboard.getBoundingClientRect();
+        const newX = clientX - rect.left - pieceRef.current.offsetWidth / 2;
+        const newY = clientY - rect.top - pieceRef.current.offsetHeight / 2;
+        setDragPosition({ x: newX, y: newY });
+    };
+
+    const handleTouchStart = (e) => {
+
+        e.preventDefault();
+
+        console.log("touch start!")
+
+        // update state
+        setIsDragging(true);
+
+        // move piece to under cursor
+        const touch = e.touches[0];
+        updatePosition(touch.clientX, touch.clientY);
+
+        // show visual aids
+        const pos = pieceObj.getSquare();
+        const id = posToId(pos);
+        dispatch(receiveSelected(id));
+        dispatch(receiveMoveOptions(pieceObj.getMoves()));
+
+        // wait for a potential drag
+        document.addEventListener('touchmove', handleTouchMove);
+    };
+
+
+    const handleTouchMove = (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+
+        // keep updating the position
+        const touch = e.touches[0];
+        updatePosition(touch.clientX, touch.clientY);
+
+        // update the last Highlighted square
+        const pos = {x: touch.clientX, y: touch.clientY}
+        setDragPosition(pos);
+        const squareUnderneath = getSquareUnderMouse(pos)
+        if (lasthighlightedSquare !== squareUnderneath){
+            dispatch(receiveHighlightedSquare(squareUnderneath))
+        }
+
+        // wait for drag to end
+        document.addEventListener('touchend', handleTouchEnd);
+    };
+
+    const handleTouchEnd = () => {
+        setIsDragging(false);
+        setLasthighlightedSquare(null)
+
+        console.log("drag has ended")
+
+        // would reset the chess pieces position if the move wasn't valid...
+    };
+
+
 
 
     function handleClick(e){
@@ -63,58 +121,6 @@ const ChessPiece = ({ pieceObj }) => {
         dispatch(receiveSelected(id));
         dispatch(receiveMoveOptions(pieceObj.getMoves()));
     }
-    // const handleDragStart = (e) => {
-
-    //     e.preventDefault();
-    //     setIsDragging(true);
-
-    //     const imageElement = e.target;
-    //     const id = imageElement.parentNode.id;
-
-    //     setSelected(id)
-
-    //     console.log("set the selected id")
-
-    //     console.log("imageElement",imageElement)
-    //     console.log("id ",id)
-    //     // setDragPosition({ x: e.clientX, y: e.clientY });
-
-    //     // Handle the coordinates for both touch and mouse events
-    //     let x, y;
-    //     if (e.type === 'touchstart' && e.touches) {
-    //         x = e.touches[0].clientX;
-    //         y = e.touches[0].clientY;
-    //     } else {
-    //         x = e.clientX;
-    //         y = e.clientY;
-    //     }
-
-    //     console.log("x,y: ",x,y)
-
-    //     setDragPosition({ x, y });
-
-    //     // const square = findChessSquareFromCoordinates(x,y);
-    //     // setSelected(square.id)
-    //     // Additional logic...
-    // };
-
-    // const handleDrag = (e) => {
-    //     setDragPosition({ x: e.clientX, y: e.clientY });
-    //     // Additional logic for highlighting, etc.
-    // };
-
-    // const handleDragEnd = (e) => {
-    //     setIsDragging(false);
-    //     onMove(dragPosition); // Assuming onMove is a prop function to handle the move
-    //     // Additional logic...
-    // };
-
-    // const pieceStyle = isDragging ? {
-    //     position: 'absolute',
-    //     left: `${dragPosition.x}px`,
-    //     top: `${dragPosition.y}px`
-    //     // other styles
-    // } : {};
 
     const dragStyle = {
         position: 'absolute',
@@ -132,31 +138,17 @@ const ChessPiece = ({ pieceObj }) => {
     // }
 
 
-    // ! STARTWITH SIMPLIFIED VERSIONS
     function handleDragStart(e){
-        // e.preventDefault();
-
-        console.log("dragg has started")
-
-        // console.log("x, y: ", x, y)
-
         setIsDragging(true);
         const mousePosition = getMousePos(e)
         setDragPosition(mousePosition);
-
-
-        // select the dragging piece
         const pos = pieceObj.getSquare();
         const id = posToId(pos);
         dispatch(receiveSelected(id));
         dispatch(receiveMoveOptions(pieceObj.getMoves()));
-        
         dispatch(receiveDraggingPiece(imgSource));
         dispatch(receiveHighlightedSquare(id))
         setLasthighlightedSquare(id)
-
-
-
     }
 
 
@@ -164,14 +156,22 @@ const ChessPiece = ({ pieceObj }) => {
         e.preventDefault();
         const mousePosition = getMousePos(e)
         setDragPosition(mousePosition);
-        console.log("mousePosition ", mousePosition)
         const squareUnderneath = getSquareUnderMouse(mousePosition)
         if (lasthighlightedSquare !== squareUnderneath){
-
             dispatch(receiveHighlightedSquare(squareUnderneath))
-            console.log("NEWSQUARE", squareUnderneath)
         }
     };
+
+    // const handleTouchStart = (e) => {
+    //     e.preventDefault();
+    //     setIsDragging(true);
+    //     const touch = e.touches[0];
+    //     const pos = {x: touch.clientX, y: touch.clientY}
+    //     console.log("touch pos", pos);
+
+    //     // updatePosition(touch.clientX, touch.clientY);
+    //     // ... rest of the logic
+    // };
 
     function getSquareUnderMouse(pos) {
         const element = document.elementFromPoint(pos.x, pos.y);
@@ -202,32 +202,27 @@ const ChessPiece = ({ pieceObj }) => {
 
         console.log("drag has ended")
 
-    }
+        setLasthighlightedSquare(null)
 
-    function findChessSquareFromCoordinates(x,y){
-        let square;
-        if (isFinite(x) && isFinite(y)) {
-            square = document.elementFromPoint(x, y);
-        }
-        // Check if the element below is not a board square and update it to its parent if needed
-        if (!square.classList.contains('board-square')) {
-            square = square.parentNode;
-        }
-        return square;
-    };
+    }
 
 
     return (
         <img 
             alt={`${pieceObj.getColor()} ${pieceObj.getType()}`}
             src={imgSource} 
+            ref={pieceRef}
             className={`chess-piece ${isDragging ? 'dragging' : ''}`}
             draggable
-            onClick={handleClick}
-            onDragStart={handleDragStart}
-            onDrag={handleDrag}
-            onDragEnd={handleDragEnd}
+            // onClick={handleClick}
+            // onDragStart={handleDragStart}
+            // onDrag={handleDrag}
+            // onDragEnd={handleDragEnd}
             style = {isDragging ? {dragStyle} : {}}
+            // onMouseDown={handleMouseDown}
+            // onTouchStart={handleTouchStart}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
         />
     );
 };
