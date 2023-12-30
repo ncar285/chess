@@ -53,7 +53,7 @@ const ChessPiece = ({ pieceObj }) => {
 
     const updatePosition = (clone, X, Y) => {
         clone.style.left = `${X - pieceRef.current.offsetWidth / 2}px`;
-        clone.style.top = `${Y - pieceRef.current.offsetHeight / 2}px`;
+        clone.style.top = `${Y}px`;
     };
 
     const handleTouchStart = (e) => {
@@ -67,6 +67,7 @@ const ChessPiece = ({ pieceObj }) => {
         // Create a clone and append to body and move  under cursor
         const touch = e.touches[0];
         const clone = pieceRef.current.cloneNode(true);
+        clone.classList.add('dragging');
         updatePosition(clone, touch.clientX, touch.clientY);
         clone.style.position = 'absolute';
         document.body.appendChild(clone);
@@ -99,7 +100,7 @@ const ChessPiece = ({ pieceObj }) => {
         }
 
         // update the last Highlighted square
-        const squareUnderneath = getSquareUnderMouse(touch.clientX, touch.clientY)
+        const squareUnderneath = findChessSquareFromCoordinates(touch.clientX, touch.clientY)
         if (lasthighlightedSquare !== squareUnderneath){
             dispatch(receiveHighlightedSquare(squareUnderneath))
         }
@@ -123,7 +124,8 @@ const ChessPiece = ({ pieceObj }) => {
 
 
         setIsDragging(false);
-        setLasthighlightedSquare(null)
+        setLasthighlightedSquare(null);
+        // dispatch(removeHighlightedSquare())
 
         document.removeEventListener('touchmove', handleTouchMove);
         document.removeEventListener('touchend', handleTouchEnd);
@@ -133,18 +135,36 @@ const ChessPiece = ({ pieceObj }) => {
     };
 
 
+    function findChessSquareFromCoordinates(x,y, clone){
+
+        if (cloneRef.current) { // Make the clone "click-through"
+            clone.style.pointerEvents = 'none';
+        }
+    }
 
 
-    function getSquareUnderMouse(x, y) {
+    function findChessSquareFromCoordinates(x, y) {
+
+        if (cloneRef.current) { // Make the clone "click-through"
+            cloneRef.current.style.pointerEvents = 'none';
+        }
+
         const element = document.elementFromPoint(x, y);
+        let res = null;
+
         if (element && element.classList.contains('board-square')) {
-            return element.id; // Assuming your squares have IDs like 'A1', 'C4', etc.
+            res = element.id; 
         } else if (element.parentElement.classList.contains('board-square')){
-            return element.parentElement.id;
+            res = element.parentElement.id;
         } else{
             console.log("couldn't find a chess square")
         }
-        return null;
+
+        if (cloneRef.current) { 
+            cloneRef.current.style.pointerEvents = '';
+        }
+
+        return res;
     }
 
     function getMousePos(e){

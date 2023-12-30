@@ -10,11 +10,10 @@
     z-index: 11;
 }
 
-/* .chess-piece.dragging {
-    position: 'absolute';
-    left: `${dragPosition.x}px`
-    top: `${dragPosition.y}px`
-} */
+.chess-piece.dragging {
+    width: var(--pieceWidth);
+    /* transform: translateY(-50%); */
+}
 
 .chess-piece:active {
     cursor: grabbing;

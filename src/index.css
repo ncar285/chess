@@ -3,6 +3,7 @@
     --white: #CEB07E;
     --boardDimension: calc(min(70vw, 70vh));
     --boardLabel: calc( 0.04 * var(--boardDimension));
+    --pieceWidth: calc((var(--boardDimension)/8) * 0.65);
 }
 
 @media (max-width: 1000px) {
