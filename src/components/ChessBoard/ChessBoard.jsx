@@ -14,7 +14,7 @@ function ChessBoard({ gameBoard }) {
     const draggingPiece = useSelector(getDraggingPiece);
 
 
-    console.log("draggingPiece", draggingPiece)
+    // console.log("draggingPiece", draggingPiece)
 
     // const selectedSquare = getSelected();
     // const selectedSquare = useSelector(getSelected);

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // import { selectSquare, unSelectSquare } from "./pieceSelection";
 // import { gameState, playMove, lastHighlightedSquare } from './gameState';
 import './ChessPiece.css';
@@ -42,6 +42,8 @@ const ChessPiece = ({ pieceObj }) => {
 
     const dispatch = useDispatch();
     const pieceRef = useRef(null);
+    const cloneRef = useRef(null);
+
     const [isDragging, setIsDragging] = useState(false);
     const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
     const [lasthighlightedSquare, setLasthighlightedSquare] = useState(null);
@@ -49,26 +51,29 @@ const ChessPiece = ({ pieceObj }) => {
     const pieceName = [color === "white" ? 'w' : 'b', pieceObj.getType()].join('_');
     const imgSource = pieceImages[pieceName]
 
-    const updatePosition = (clientX, clientY) => {
-        const chessboard = pieceRef.current.closest('body');
-        const rect = chessboard.getBoundingClientRect();
-        const newX = clientX - rect.left - pieceRef.current.offsetWidth / 2;
-        const newY = clientY - rect.top - pieceRef.current.offsetHeight / 2;
-        setDragPosition({ x: newX, y: newY });
+    const updatePosition = (clone, X, Y) => {
+        clone.style.left = `${X - pieceRef.current.offsetWidth / 2}px`;
+        clone.style.top = `${Y - pieceRef.current.offsetHeight / 2}px`;
     };
 
     const handleTouchStart = (e) => {
 
         e.preventDefault();
 
+        setIsDragging(true);    // update state
+
         console.log("touch start!")
 
-        // update state
-        setIsDragging(true);
-
-        // move piece to under cursor
+        // Create a clone and append to body and move  under cursor
         const touch = e.touches[0];
-        updatePosition(touch.clientX, touch.clientY);
+        const clone = pieceRef.current.cloneNode(true);
+        updatePosition(clone, touch.clientX, touch.clientY);
+        clone.style.position = 'absolute';
+        document.body.appendChild(clone);
+
+        pieceRef.current.style.visibility = 'hidden';
+
+        cloneRef.current = clone;
 
         // show visual aids
         const pos = pieceObj.getSquare();
@@ -76,105 +81,62 @@ const ChessPiece = ({ pieceObj }) => {
         dispatch(receiveSelected(id));
         dispatch(receiveMoveOptions(pieceObj.getMoves()));
 
-        // wait for a potential drag
-        document.addEventListener('touchmove', handleTouchMove);
+        // wait for a potential drag or drop
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+        document.addEventListener('touchend', handleTouchEnd, { passive: false });
     };
 
 
     const handleTouchMove = (e) => {
-        if (!isDragging) return;
         e.preventDefault();
+
+        console.log("MOVING ... ")
 
         // keep updating the position
         const touch = e.touches[0];
-        updatePosition(touch.clientX, touch.clientY);
+        if (cloneRef.current){
+            updatePosition(cloneRef.current, touch.clientX, touch.clientY);
+        }
 
         // update the last Highlighted square
-        const pos = {x: touch.clientX, y: touch.clientY}
-        setDragPosition(pos);
-        const squareUnderneath = getSquareUnderMouse(pos)
+        const squareUnderneath = getSquareUnderMouse(touch.clientX, touch.clientY)
         if (lasthighlightedSquare !== squareUnderneath){
             dispatch(receiveHighlightedSquare(squareUnderneath))
         }
 
-        // wait for drag to end
-        document.addEventListener('touchend', handleTouchEnd);
+        // // wait for drag to end
+        // document.addEventListener('touchend', handleTouchEnd, { passive: false });
     };
 
-    const handleTouchEnd = () => {
+    const handleTouchEnd = (e) => {
+        e.preventDefault();
+        console.log("drag has ended")
+
+        // Remove the clone from body
+        if (cloneRef.current) {
+            document.body.removeChild(cloneRef.current);
+            cloneRef.current = null;
+        }
+
+        // Unhide the original piece
+        pieceRef.current.style.visibility = 'visible';
+
+
         setIsDragging(false);
         setLasthighlightedSquare(null)
 
-        console.log("drag has ended")
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
 
         // would reset the chess pieces position if the move wasn't valid...
+    
     };
 
 
 
 
-    function handleClick(e){
-        e.preventDefault();
-        const imageElement = e.target;
-        const pos = pieceObj.getSquare();
-        const id = posToId(pos);
-        dispatch(receiveSelected(id));
-        dispatch(receiveMoveOptions(pieceObj.getMoves()));
-    }
-
-    const dragStyle = {
-        position: 'absolute',
-        left: `${dragPosition.x}px`,
-        top: `${dragPosition.y}px`
-    }
-
-
-    // function onMove(dragPosition){
-    //     const {x, y} = dragPosition;
-    //     const square = findChessSquareFromCoordinates(x,y);
-    //     if (square !== null && square.id !== startSquare.id){
-    //         playMoveIfValid(pieceObj, startSquare, square)
-    //     }
-    // }
-
-
-    function handleDragStart(e){
-        setIsDragging(true);
-        const mousePosition = getMousePos(e)
-        setDragPosition(mousePosition);
-        const pos = pieceObj.getSquare();
-        const id = posToId(pos);
-        dispatch(receiveSelected(id));
-        dispatch(receiveMoveOptions(pieceObj.getMoves()));
-        dispatch(receiveDraggingPiece(imgSource));
-        dispatch(receiveHighlightedSquare(id))
-        setLasthighlightedSquare(id)
-    }
-
-
-    const handleDrag = (e) => {
-        e.preventDefault();
-        const mousePosition = getMousePos(e)
-        setDragPosition(mousePosition);
-        const squareUnderneath = getSquareUnderMouse(mousePosition)
-        if (lasthighlightedSquare !== squareUnderneath){
-            dispatch(receiveHighlightedSquare(squareUnderneath))
-        }
-    };
-
-    // const handleTouchStart = (e) => {
-    //     e.preventDefault();
-    //     setIsDragging(true);
-    //     const touch = e.touches[0];
-    //     const pos = {x: touch.clientX, y: touch.clientY}
-    //     console.log("touch pos", pos);
-
-    //     // updatePosition(touch.clientX, touch.clientY);
-    //     // ... rest of the logic
-    // };
-
-    function getSquareUnderMouse(pos) {
-        const element = document.elementFromPoint(pos.x, pos.y);
+    function getSquareUnderMouse(x, y) {
+        const element = document.elementFromPoint(x, y);
         if (element && element.classList.contains('board-square')) {
             return element.id; // Assuming your squares have IDs like 'A1', 'C4', etc.
         } else if (element.parentElement.classList.contains('board-square')){
@@ -197,14 +159,22 @@ const ChessPiece = ({ pieceObj }) => {
         return { x, y };
     }
 
-    function handleDragEnd(e){
-        e.preventDefault();
 
-        console.log("drag has ended")
+    useEffect(() => {
+        const pieceElement = pieceRef.current;
+        if (pieceElement) {
+            pieceElement.addEventListener('touchstart', handleTouchStart, { passive: false });
 
-        setLasthighlightedSquare(null)
+            // Cleanup the event listener
+            return () => {
+                pieceElement.removeEventListener('touchstart', handleTouchStart, { passive: false });
+            };
+        }
+    }, []);
 
-    }
+    useEffect(()=>{
+
+    }, [isDragging])
 
 
     return (
@@ -212,17 +182,7 @@ const ChessPiece = ({ pieceObj }) => {
             alt={`${pieceObj.getColor()} ${pieceObj.getType()}`}
             src={imgSource} 
             ref={pieceRef}
-            className={`chess-piece ${isDragging ? 'dragging' : ''}`}
-            draggable
-            // onClick={handleClick}
-            // onDragStart={handleDragStart}
-            // onDrag={handleDrag}
-            // onDragEnd={handleDragEnd}
-            style = {isDragging ? {dragStyle} : {}}
-            // onMouseDown={handleMouseDown}
-            // onTouchStart={handleTouchStart}
-            onMouseDown={handleMouseDown}
-            onTouchStart={handleTouchStart}
+            className={`chess-piece`}
         />
     );
 };
