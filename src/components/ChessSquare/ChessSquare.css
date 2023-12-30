@@ -28,7 +28,7 @@
     /* font-size: 2.5vw; */
     font-size: var(--boardLabel);
     font-weight: 500;
-    padding: 0.5rem;
+    padding: calc(0.01 * var(--boardDimension));
 }
 
 .board-square.white .square-label{

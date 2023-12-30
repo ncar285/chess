@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 // import { selectSquare, unSelectSquare } from "./pieceSelection";
 // import { gameState, playMove, lastHighlightedSquare } from './gameState';
 import './ChessPiece.css';
-import { receiveDraggingPiece, receiveHighlightedSquare, receiveMoveOptions, receiveSelected } from '../../store/uiReducer';
+import { receiveDraggingPiece, receiveHighlightedSquare, receiveMoveOptions, receiveSelected, removeHighlightedSquare } from '../../store/uiReducer';
 
 
 // Piece images
@@ -125,7 +125,7 @@ const ChessPiece = ({ pieceObj }) => {
 
         setIsDragging(false);
         setLasthighlightedSquare(null);
-        // dispatch(removeHighlightedSquare())
+        dispatch(removeHighlightedSquare())
 
         document.removeEventListener('touchmove', handleTouchMove);
         document.removeEventListener('touchend', handleTouchEnd);
