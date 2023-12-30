@@ -5,10 +5,6 @@ export const REMOVE_SELECTED = 'REMOVE_SELECTED';
 export const RECEIVE_MOVE_OPTIONS = 'RECEIVE_MOVE_OPTIONS';
 export const REMOVE_MOVE_OPTIONS = 'REMOVE_MOVE_OPTIONS';
 
-export const RECEIVE_DRAGGING_PIECE = "RECEIVE_DRAGGING_PIECE"
-export const REMOVE_DRAGGING_PIECE = "REMOVE_DRAGGING_PIECE"
-
-
 export const RECEIVE_HIGHLIGHTED_SQUARE  = "RECEIVE_HIGHLIGHTED_SQUARE";
 export const REMOVE_HIGHLIGHTED_SQUARE = "REMOVE_HIGHLIGHTED_SQUARE";
 
@@ -38,22 +34,6 @@ export const removeMoveOptions = () => {
         type: REMOVE_MOVE_OPTIONS,
     };
 };
-
-
-    //actions for if a piece is being dragged  on the screen
-
-export const receiveDraggingPiece = (piece) => {
-    return {
-        type: RECEIVE_DRAGGING_PIECE,
-        payload: piece
-    }
-}
-
-export const removeDraggingPiece = () => {
-    return {
-        type: REMOVE_DRAGGING_PIECE
-    }
-}
 
 export const receiveHighlightedSquare = (squareId) => {
     return {
@@ -111,16 +91,6 @@ const uiReducer = (state = initialState, action) => {
                 ...state,
                 validMoves: null,
                 validTakes: null
-            }
-        case RECEIVE_DRAGGING_PIECE:
-            return {
-                ...state,
-                draggingPiece: action.payload
-            }
-        case REMOVE_DRAGGING_PIECE:
-            return {
-                ...state,
-                draggingPiece: null
             }
         case RECEIVE_HIGHLIGHTED_SQUARE:
             return {

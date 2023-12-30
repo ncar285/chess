@@ -4,12 +4,15 @@ import ChessBoard from '../ChessBoard/ChessBoard.jsx';
 import './HomePage.css'
 import { getSelected, removeMoveOptions, removeSelected } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
+import { getGameBoard, receiveGameBoard } from '../../store/gameReducer.js';
 
-export const gameBoard = new Board(); // Initialize the game board
+// export const gameBoard = new Board(); // Initialize the game board
 
 const HomePage = () => {
 
     const dispatch = useDispatch();
+
+    // const gameBoard = useSelector(getGameBoard);
     
     // const gameBoard = new Board(); // Initialize the game board
     

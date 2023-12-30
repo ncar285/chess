@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-// import { selectSquare, unSelectSquare } from "./pieceSelection";
-// import { gameState, playMove, lastHighlightedSquare } from './gameState';
 import './ChessPiece.css';
-import { getHighlightedSquare, getSelected, receiveDraggingPiece, receiveHighlightedSquare, receiveMoveOptions, receiveSelected, removeHighlightedSquare } from '../../store/uiReducer';
-import { gameBoard } from '../HomePage/HomePage';
+import React, { useEffect, useRef, useState } from 'react';
+import { receiveHighlightedSquare, receiveMoveOptions, receiveSelected, removeHighlightedSquare } from '../../store/uiReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { idToPos, posToId } from '../../Utils/posIdConversion';
+import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 
 // Piece images
 import b_bishop from '../../pieces/b_bishop.png'
@@ -18,8 +18,6 @@ import b_queen from '../../pieces/b_queen.png'
 import w_queen from '../../pieces/w_queen.png'
 import b_rook from '../../pieces/b_rook.png'
 import w_rook from '../../pieces/w_rook.png'
-import { useDispatch, useSelector } from 'react-redux';
-import { idToPos, posToId } from '../../Utils/posIdConversion';
 
 const pieceImages = {
     'b_bishop': b_bishop,
@@ -44,14 +42,14 @@ const ChessPiece = ({ pieceObj }) => {
     const pieceRef = useRef(null);
     const cloneRef = useRef(null);
 
+    const gameBoard = useSelector(getGameBoard);
+
     const [isDragging, setIsDragging] = useState(false);
-    // const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
     const [lasthighlightedSquare, setLasthighlightedSquare] = useState(null);
+
     const color = pieceObj.getColor();
     const pieceName = [color === "white" ? 'w' : 'b', pieceObj.getType()].join('_');
     const imgSource = pieceImages[pieceName]
-    // const selectedSquare = useSelector(getSelected);
-    // const highlightedSquare = useSelector(getHighlightedSquare)
 
     const updatePosition = (clone, X, Y) => {
         clone.style.left = `${X - pieceRef.current.offsetWidth / 2}px`;
@@ -152,6 +150,11 @@ const ChessPiece = ({ pieceObj }) => {
                 const startPos = idToPos(startSquare);
                 const endPos = idToPos(endSquare);
                 gameBoard.movePiece(startPos, endPos, pieceObj);
+
+                const updatedBoard = gameBoard;
+                updatedBoard[startPos[0]][startPos[1]] = null;
+                updatedBoard[endPos[0]][endPos[1]] = pieceObj;
+                dispatch(receiveGameBoard(updatedBoard));
             }
 
         }

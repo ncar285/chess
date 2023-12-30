@@ -3,9 +3,11 @@ import thunk from 'redux-thunk';
 // import users from './users.jsx'
 // import ui from './ui.jsx'
 import uiReducer from './uiReducer.js';
+import gameReducer from './gameReducer.js';
 
 const rootReducer = combineReducers({
-    ui: uiReducer
+    ui: uiReducer,
+    game: gameReducer
 });
 
 let enhancer;

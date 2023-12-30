@@ -1,29 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { posToId, indexToFile } from '../../Utils/posIdConversion'; 
-// import { startDrag, clickMove } from "./pieceMovement";
 import "./ChessBoard.css"
+import { posToId, indexToFile } from '../../Utils/posIdConversion'; 
 import ChessSquare from '../ChessSquare/ChessSquare';
-import { getDraggingPiece, getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions } from '../../store/uiReducer';
-import { useSelector } from 'react-redux';
-import { gameBoard } from '../HomePage/HomePage';
-// import { Board } from '../../chessLogic/board';
+import { useDispatch } from 'react-redux';
+import { receiveGameBoard } from '../../store/gameReducer';
+import { Board } from '../../chessLogic/board';
 
 function ChessBoard({  }) {
 
-    const [chessBoard, setChessBoard] = useState([]);
+    const dispatch = useDispatch();
+    const [chessBoard, setChessBoard] = useState([])
 
-    const draggingPiece = useSelector(getDraggingPiece);
-
-
-    // console.log("draggingPiece", draggingPiece)
-
-    // const selectedSquare = getSelected();
-    // const selectedSquare = useSelector(getSelected);
-    // console.log("selectedSquare", selectedSquare)
+    const gameBoard = new Board();
+    dispatch(receiveGameBoard(gameBoard));
 
 
-
-    useEffect(() => {
+    function updateBoard(){
         let color = "brown";
         const board = [];
         for (let a = 7 ; a  >= 0 ; a-- ){
@@ -39,8 +31,6 @@ function ChessBoard({  }) {
                 square.className = `board-square ${color}`
                 square.pieceObj = gameBoard.getPiece([a, b]);
 
-                // debugger
-
                 square.rankLabel = (file === "A") ? true : false;
                 square.fileLabel = (rank === 1) ? true : false;
 
@@ -50,7 +40,10 @@ function ChessBoard({  }) {
             color = switchColor(color);
         }
         setChessBoard(board)
-    }, [gameBoard]);
+    }
+
+
+    useEffect(updateBoard, [gameBoard]);
 
 
     function switchColor(color){
@@ -65,10 +58,6 @@ function ChessBoard({  }) {
 
     return (
         <div className="chess-board">
-            {
-                draggingPiece &&
-                <img className='dragging-piece' src={draggingPiece}></img>
-            }
             {chessBoard.map((row, r) => (
                 <div 
                     key={`rank-${r+1}`} 

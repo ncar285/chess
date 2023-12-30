@@ -11,6 +11,13 @@ export const receiveGameBoard = board => {
     };
 };
 
+// export const updateGameBoard = (pieceObj, startPos, endPos) => {
+//     return {
+//         type: UPDATE_GAME_BOARD,
+//         payload: {pieceObj, startPos, endPos}
+//     }
+// }
+
 
 // SELECTORS
 export const getGameBoard = state => state.ui.gameBoard;
