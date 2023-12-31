@@ -20,7 +20,7 @@ export const receiveGameBoard = board => {
 
 
 // SELECTORS
-export const getGameBoard = state => state.ui.gameBoard;
+export const getGameBoard = state => state.game.gameBoard;
 
 // REDUCER
 const initialState = {

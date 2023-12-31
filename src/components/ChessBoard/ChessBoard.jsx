@@ -2,17 +2,32 @@ import React, { useEffect, useState } from 'react';
 import "./ChessBoard.css"
 import { posToId, indexToFile } from '../../Utils/posIdConversion'; 
 import ChessSquare from '../ChessSquare/ChessSquare';
-import { useDispatch } from 'react-redux';
-import { receiveGameBoard } from '../../store/gameReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
 
 function ChessBoard({  }) {
 
     const dispatch = useDispatch();
+    const gameBoard = useSelector(getGameBoard);
     const [chessBoard, setChessBoard] = useState([])
 
-    const gameBoard = new Board();
-    dispatch(receiveGameBoard(gameBoard));
+    console.log("gameBoard from Redux:", gameBoard);
+
+    useEffect(() => {
+        if (!gameBoard) {
+            console.log("Initializing game board");
+            const newGameBoard = new Board();
+            dispatch(receiveGameBoard(newGameBoard));
+        }
+    }, [gameBoard, dispatch]);
+
+    useEffect(() => {
+        if (gameBoard) {
+            console.log("Updating local chess board state");
+            updateBoard();
+        }
+    }, [gameBoard]);
 
 
     function updateBoard(){
@@ -41,9 +56,6 @@ function ChessBoard({  }) {
         }
         setChessBoard(board)
     }
-
-
-    useEffect(updateBoard, [gameBoard]);
 
 
     function switchColor(color){
