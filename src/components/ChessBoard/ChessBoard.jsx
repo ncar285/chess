@@ -19,18 +19,45 @@ function ChessBoard({  }) {
             console.log("Initializing game board");
             const newGameBoard = new Board();
             dispatch(receiveGameBoard(newGameBoard));
+            initialiseBoard(newGameBoard)
         }
     }, [gameBoard, dispatch]);
 
-    useEffect(() => {
-        if (gameBoard) {
-            console.log("Updating local chess board state");
-            updateBoard();
-        }
-    }, [gameBoard]);
-
+    // useEffect(() => {
+    //     debugger
+    //     if (gameBoard) {
+    //         console.log("Updating local chess board state");
+    //         updateBoard();
+    //     }
+    // }, [gameBoard]);
 
     function updateBoard(){
+
+        const updatedBoard = chessBoard;
+
+        for (let a = 7 ; a  >= 0 ; a-- ){
+            // board.push([]);
+            // const rank = a + 1;
+            for (let b = 0 ; b  < 8 ; b++ ){
+                // const file = indexToFile(b);
+                // debugger
+                // updatedBoard[a][b]
+
+                // if the local state piece doesn't match the redux state
+                if (updatedBoard[a][b].pieceObj !== gameBoard.getPiece([a,b])){
+                    // debugger
+
+                }
+
+                // if (updatedBoard[a][b])
+            }
+        }
+        setChessBoard(updatedBoard)
+    }
+
+
+
+    function initialiseBoard(gameBoard){
         let color = "brown";
         const board = [];
         for (let a = 7 ; a  >= 0 ; a-- ){
@@ -82,6 +109,7 @@ function ChessBoard({  }) {
                                 key={`${posToId([r,c])}`} 
                                 // id={`${id}`} 
                                 squareParams={square} 
+                                updateBoard={updateBoard}
                             />
                         );
                     })}

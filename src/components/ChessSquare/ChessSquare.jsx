@@ -4,7 +4,7 @@ import ChessPiece from "../ChessPiece/ChessPiece";
 import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions } from "../../store/uiReducer";
 import "./ChessSquare.css"
 
-function ChessSquare( {squareParams} ) {
+function ChessSquare( {squareParams, updateBoard} ) {
 
     const {id, className, rankLabel, fileLabel, pieceObj} = squareParams;
     const [file, rank] = id.split("");
@@ -49,7 +49,7 @@ function ChessSquare( {squareParams} ) {
             ${(highlightedSquare === id) ? 'highlight' : ''}`}>
             {rankLabel && <div className="rank square-label">{rank}</div>}
             {fileLabel && <div className="file square-label">{file.toLowerCase()}</div>}
-            {pieceObj && <ChessPiece pieceObj={pieceObj}/>}
+            {pieceObj && <ChessPiece pieceObj={pieceObj} updateBoard={updateBoard}/>}
             {movingOptions && movingOptions.has(id) && 
                 <div className="suggested-square" onClick={makeMove}></div>
             }

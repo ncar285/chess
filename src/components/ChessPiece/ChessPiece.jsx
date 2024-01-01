@@ -36,7 +36,7 @@ const pieceImages = {
 
 
 
-const ChessPiece = ({ pieceObj }) => {
+const ChessPiece = ({ pieceObj, updateBoard }) => {
 
     const dispatch = useDispatch();
     const pieceRef = useRef(null);
@@ -150,11 +150,14 @@ const ChessPiece = ({ pieceObj }) => {
                 const startPos = idToPos(startSquare);
                 const endPos = idToPos(endSquare);
                 gameBoard.movePiece(startPos, endPos, pieceObj);
+                
+                updateBoard();
+                // debugger
 
-                const updatedBoard = gameBoard;
-                updatedBoard[startPos[0]][startPos[1]] = null;
-                updatedBoard[endPos[0]][endPos[1]] = pieceObj;
-                dispatch(receiveGameBoard(updatedBoard));
+                // const updatedBoard = gameBoard;
+                // updatedBoard[startPos[0]][startPos[1]] = null;
+                // updatedBoard[endPos[0]][endPos[1]] = pieceObj;
+                // dispatch(receiveGameBoard(gameBoard));
             }
 
         }
