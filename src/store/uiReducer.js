@@ -55,7 +55,7 @@ export const getMoveOptions = state => state.ui.validMoves;
 
 export const getTakeOptions = state => state.ui.validTakes;
 
-export const getDraggingPiece = state => state.ui.draggingPiece;
+// export const getDraggingPiece = state => state.ui.draggingPiece;
 
 export const getHighlightedSquare = state => state.ui.highlightedSquare;
 
@@ -64,7 +64,6 @@ const initialState = {
     selectedId: null,
     validMoves: null,
     validTakes: null,
-    draggingPiece: null,
     highlightedSquare: null
 };
 
@@ -78,7 +77,10 @@ const uiReducer = (state = initialState, action) => {
         case REMOVE_SELECTED:
             return {
                 ...state,
-                selectedId: null
+                selectedId: null,
+                validMoves: null,
+                validTakes: null,
+                highlightedSquare: null
             }
         case RECEIVE_MOVE_OPTIONS:
             return {

@@ -12,44 +12,29 @@ function ChessBoard({  }) {
     const gameBoard = useSelector(getGameBoard);
     const [chessBoard, setChessBoard] = useState([])
 
-    console.log("gameBoard from Redux:", gameBoard);
-
     useEffect(() => {
         if (!gameBoard) {
-            console.log("Initializing game board");
+            // console.log("Initializing game board");
             const newGameBoard = new Board();
             dispatch(receiveGameBoard(newGameBoard));
             initialiseBoard(newGameBoard)
         }
     }, [gameBoard, dispatch]);
 
-    // useEffect(() => {
-    //     debugger
-    //     if (gameBoard) {
-    //         console.log("Updating local chess board state");
-    //         updateBoard();
-    //     }
-    // }, [gameBoard]);
 
     function updateBoard(){
-
         const updatedBoard = chessBoard;
-
-        for (let a = 7 ; a  >= 0 ; a-- ){
-            // board.push([]);
-            // const rank = a + 1;
+        for (let a = 0 ; a  < 8 ; a++ ){
             for (let b = 0 ; b  < 8 ; b++ ){
-                // const file = indexToFile(b);
-                // debugger
-                // updatedBoard[a][b]
 
-                // if the local state piece doesn't match the redux state
-                if (updatedBoard[a][b].pieceObj !== gameBoard.getPiece([a,b])){
-                    // debugger
+                const localPiece = updatedBoard[a][b].pieceObj;
+                const reduxPiece = gameBoard.getPiece([a, b]);
 
+                if ((localPiece === null ^ reduxPiece === null) || 
+                    (localPiece && reduxPiece && localPiece.constructor !== reduxPiece.constructor)) {
+                    const screenRank = 7 - a;
+                    updatedBoard[screenRank][b].pieceObj = reduxPiece
                 }
-
-                // if (updatedBoard[a][b])
             }
         }
         setChessBoard(updatedBoard)

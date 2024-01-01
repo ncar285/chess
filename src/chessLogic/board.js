@@ -30,8 +30,6 @@ Board.prototype.getPiece = function(pos){
 Board.prototype.movePiece = function(startSquare, endSquare, piece){
     try {
 
-        // debugger
-
         if (!Board.isInsideBoard(startSquare) || !Board.isInsideBoard(endSquare)) {
             throw new Error("Move is outside the board.");
         }
@@ -62,16 +60,8 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
 }
 
 Board.prototype.isOccupied = function(pos) {
-    // debugger
-    // console.log("position: ", pos)
-    // console.log("isInsideBoard?: ", Board.isInsideBoard(pos))
     if (!Board.isInsideBoard(pos)) return false;
     const [rank,file] = pos;
-    // console.log("this.board",this.board)
-    // console.log("rank",rank)
-    // console.log("file",file)
-    // console.log("this.board[rank]",this.board[rank])
-    // console.log("this.board[rank][file]",this.board[rank][file])
     return this.board[rank][file] != null;
 };
 

@@ -1,6 +1,6 @@
 import './ChessPiece.css';
 import React, { useEffect, useRef, useState } from 'react';
-import { receiveHighlightedSquare, receiveMoveOptions, receiveSelected, removeHighlightedSquare } from '../../store/uiReducer';
+import { receiveHighlightedSquare, receiveMoveOptions, receiveSelected, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { idToPos, posToId } from '../../Utils/posIdConversion';
 import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
@@ -44,7 +44,6 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
 
     const gameBoard = useSelector(getGameBoard);
 
-    const [isDragging, setIsDragging] = useState(false);
     const [lasthighlightedSquare, setLasthighlightedSquare] = useState(null);
 
     const color = pieceObj.getColor();
@@ -58,25 +57,17 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
 
     let finalSquareDuringDrag = null;
 
+    let startTouchPos = null
+    let isTouchDragging = false; 
+
     const handleTouchStart = (e) => {
 
         e.preventDefault();
 
-        setIsDragging(true);    // update state
-
-        console.log("touch start!")
-
-        // Create a clone and append to body and move  under cursor
+        // start touch position
         const touch = e.touches[0];
-        const clone = pieceRef.current.cloneNode(true);
-        clone.classList.add('dragging');
-        updatePosition(clone, touch.clientX, touch.clientY);
-        clone.style.position = 'absolute';
-        document.body.appendChild(clone);
+        startTouchPos = [touch.clientX, touch.clientY];
 
-        pieceRef.current.style.visibility = 'hidden';
-
-        cloneRef.current = clone;
 
         // show visual aids
         const pos = pieceObj.getSquare();
@@ -84,37 +75,58 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
         dispatch(receiveSelected(id));
         dispatch(receiveMoveOptions(pieceObj.getMoves()));
 
-        // wait for a potential drag or drop
-        document.addEventListener('touchmove', handleTouchMove, { passive: false });
-        document.addEventListener('touchend', handleTouchEnd, { passive: false });
+        // wait for a potential drag 
+        document.addEventListener('touchmove', handleTouchMove, { passive: false })
     };
 
 
     const handleTouchMove = (e) => {
         e.preventDefault();
 
-        console.log("MOVING ... ")
-
-        // keep updating the position
+        // Current touch pos
         const touch = e.touches[0];
-        if (cloneRef.current){
-            updatePosition(cloneRef.current, touch.clientX, touch.clientY);
+
+        if (!isTouchDragging){
+            const currentTouchPos = [touch.clientX, touch.clientY];
+            const deltaX = currentTouchPos[0] - startTouchPos[0];
+            const deltaY = currentTouchPos[1] - startTouchPos[1];
+            const distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+
+            if (distance > 10){
+                // Create a clone and append to body and move  under cursor
+                const clone = pieceRef.current.cloneNode(true);
+                clone.classList.add('dragging');
+                updatePosition(clone, touch.clientX, touch.clientY);
+                clone.style.position = 'absolute';
+                document.body.appendChild(clone);
+                pieceRef.current.style.visibility = 'hidden';
+                cloneRef.current = clone;
+            }
         }
 
-        // update the last Highlighted square
-        const squareUnderneath = findChessSquareFromCoordinates(touch.clientX, touch.clientY)
-        finalSquareDuringDrag = squareUnderneath;
-        if (lasthighlightedSquare !== squareUnderneath){
-            dispatch(receiveHighlightedSquare(squareUnderneath))
+
+        if (isTouchDragging){
+            // keep updating the position
+            if (cloneRef.current){
+                updatePosition(cloneRef.current, touch.clientX, touch.clientY);
+            }
+    
+            // update the last Highlighted square
+            const squareUnderneath = findChessSquareFromCoordinates(touch.clientX, touch.clientY)
+            finalSquareDuringDrag = squareUnderneath;
+            if (lasthighlightedSquare !== squareUnderneath){
+                dispatch(receiveHighlightedSquare(squareUnderneath))
+            }
         }
 
-        // // wait for drag to end
-        // document.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+        // wait for a potential drop
+        document.addEventListener('touchend', handleTouchEnd, { passive: false });
+
     };
 
     const handleTouchEnd = (e) => {
         e.preventDefault();
-        console.log("drag has ended")
 
         // Remove the clone from body
         if (cloneRef.current) {
@@ -124,19 +136,15 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
 
         playMoveIfValid();
 
+        setLasthighlightedSquare(null);
+        isTouchDragging = false;
+        dispatch(removeSelected())
+
         // Unhide the original piece
         pieceRef.current.style.visibility = 'visible';
 
-
-        setIsDragging(false);
-        setLasthighlightedSquare(null);
-        dispatch(removeHighlightedSquare())
-
         document.removeEventListener('touchmove', handleTouchMove);
         document.removeEventListener('touchend', handleTouchEnd);
-
-        // would reset the chess pieces position if the move wasn't valid...
-    
     };
 
     function playMoveIfValid(){
@@ -149,15 +157,10 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
             if (validOptions.has(endSquare) || validTakeOptions.has(endSquare)){
                 const startPos = idToPos(startSquare);
                 const endPos = idToPos(endSquare);
-                gameBoard.movePiece(startPos, endPos, pieceObj);
-                
-                updateBoard();
-                // debugger
 
-                // const updatedBoard = gameBoard;
-                // updatedBoard[startPos[0]][startPos[1]] = null;
-                // updatedBoard[endPos[0]][endPos[1]] = pieceObj;
-                // dispatch(receiveGameBoard(gameBoard));
+                gameBoard.movePiece(startPos, endPos, pieceObj);
+                updateBoard();
+
             }
 
         }
@@ -222,9 +225,7 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
         }
     }, []);
 
-    useEffect(()=>{
 
-    }, [isDragging])
 
 
     return (
