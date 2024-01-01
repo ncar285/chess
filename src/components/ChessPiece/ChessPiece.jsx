@@ -92,7 +92,8 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
             const deltaY = currentTouchPos[1] - startTouchPos[1];
             const distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
-            if (distance > 10){
+            if (distance > 20){
+                isTouchDragging = true;
                 // Create a clone and append to body and move  under cursor
                 const clone = pieceRef.current.cloneNode(true);
                 clone.classList.add('dragging');
@@ -101,6 +102,9 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
                 document.body.appendChild(clone);
                 pieceRef.current.style.visibility = 'hidden';
                 cloneRef.current = clone;
+
+                // wait for a potential drop
+                document.addEventListener('touchend', handleTouchEnd, { passive: false });
             }
         }
 
@@ -119,9 +123,6 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
             }
         }
 
-
-        // wait for a potential drop
-        document.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     };
 
