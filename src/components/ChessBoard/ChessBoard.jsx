@@ -5,7 +5,7 @@ import { posToId, indexToFile } from '../../Utils/posIdConversion';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
-import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions } from '../../store/uiReducer';
+import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveMoveOptions, receiveSelected } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
 import '../ChessSquare/ChessSquare.css'
 
@@ -27,34 +27,87 @@ function ChessBoard({  }) {
     const [draggedPiece, setDraggedPiece] = useState(null);
     const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
 
+    const [startCoordinates, setStartCoordinates] = useState(null);
+    const [startSquare, setStartSquare] = useState(null);
+
     // const 
 
     let finalSquareDuringDrag = null;
 
 
     const handleTouchStart = (piece, e) => {
-        console.log("handle touch start logic")
-        // ... handle touch start logic ...
-        setDraggedPiece(piece);
-        setDraggedPiece(piece);
-        // Consider adding touchmove and touchend listeners here
+        e.preventDefault();
+
+        console.log("handle TOUCH start logic")
+        startActions(piece, e)
+
         document.addEventListener('touchmove', handleTouchMove, { passive: false });
         document.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     };
 
-    const handleTouchMove = (e) => {
-        // ... handle touch move logic ...
+    const handleClickStart = (piece, e) => {
+        e.preventDefault();
 
-        console.log("handle touch move logic ")
+        console.log("handle CLICK start logic")
+        startActions(piece, e)
+
+        document.addEventListener('touchmove', handleMouseMove, { passive: false });
+        document.addEventListener('touchend', handleMouseEnd, { passive: false });
+
     };
 
-    const handleTouchEnd = (e) => {
-        // ... handle touch end logic ...
+    const startActions = (piece, e) => {
+        setDraggedPiece(piece);
+        console.log("setDraggedPiece to : ", piece)
+
+        // const touch = e.touches[0];
+        setStartCoordinates(getMousePos(e));
+        console.log("setStartCoordinates to : ", getMousePos(e))
+
+        const startSquareId = posToId(piece.getSquare());
+        setStartSquare(startSquareId);
+        dispatch(receiveSelected(startSquareId));
+        console.log("startSquareId : ", startSquareId)
+
+        dispatch(receiveMoveOptions(piece.getMoves()));
+    }
+
+    function getMousePos(e){
+        let x, y;
+        if (e.type === 'touchstart' && e.touches) {
+            x = e.touches[0].clientX;
+            y = e.touches[0].clientY;
+        } else {
+            x = e.clientX;
+            y = e.clientY;
+        }
+        return [x, y];
+    }
+
+    function handleTouchMove (e) {
+
+        console.log("handle TOUCH move logic ")
+    };
+
+    function handleTouchEnd (e) {
         setDraggedPiece(null);
 
-        console.log("handle touch end logic  ")
+        console.log("handle TOUCH end logic  ")
     };
+
+
+    function handleMouseMove (e) {
+
+        console.log("handle MOUSE move logic ")
+    };
+
+    function handleMouseEnd (e) {
+        setDraggedPiece(null);
+
+        console.log("handle MOUSE end logic  ")
+    };
+
 
 
     useEffect(() => {
@@ -113,9 +166,9 @@ function ChessBoard({  }) {
                                     pieceObj &&
                                     <ChessPiece 
                                         pieceObj={cell.pieceObj}
-                                        onDragStart={handleTouchStart}
-                                        onDragMove={handleTouchMove}
-                                        onDragEnd={handleTouchEnd}
+                                        onTouchDragStart={handleTouchStart}
+                                        onClickDragStart={handleClickStart}
+
                                         draggedPiece={draggedPiece}
                                         // ... other props and handlers ...
                                     />

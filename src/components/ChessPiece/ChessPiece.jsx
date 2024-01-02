@@ -36,44 +36,59 @@ const PIECE_IMAGES = {
 
 
 
-const ChessPiece = ({ pieceObj, onDragStart, onDragMove, onDragEnd, draggedPiece }) => {
+const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece }) => {
 
     const pieceRef = useRef(null);
     const cloneRef = useRef(null);
 
 
     const handleTouchStart = (e) => {
-        onDragStart(pieceObj, e);
-
-        // ... create and append clone to body ...
-        const touch = e.touches[0];
-        createClone(touch.clientX,touch.clientY)
+        onTouchDragStart(pieceObj, e);
     };
 
-    function createClone(x,y){
-        const clone = pieceRef.current.cloneNode(true);
-        clone.classList.add('dragging');
-        clone.style.left = `${x - pieceRef.current.offsetWidth / 2}px`;
-        clone.style.top = `${y}px`;
-        clone.style.position = 'absolute';
-        document.body.appendChild(clone);
-
-        // ... hide the original piece
-        pieceRef.current.style.visibility = 'hidden';
-        cloneRef.current = clone;
+    const handleClickStart = (e) => {
+        onClickDragStart(pieceObj, e);
     }
+
 
     useEffect(() => {
         const pieceElement = pieceRef.current;
         if (pieceElement) {
             pieceElement.addEventListener('touchstart', handleTouchStart, { passive: false });
-            // Optionally add touchmove and touchend if needed
+            pieceElement.addEventListener('mousedown', handleClickStart, { passive: false });
+
             return () => {
                 pieceElement.removeEventListener('touchstart', handleTouchStart, { passive: false });
-                // Remove other event listeners if added
+                pieceElement.removeEventListener('mousedown', handleClickStart, { passive: false });
             };
         }
     }, []);
+
+    useEffect(() => {
+        // When this piece is the one being dragged, manage the clone
+        if (draggedPiece === pieceObj) {
+            // Create  the clone position
+            const clone = pieceRef.current.cloneNode(true);
+            clone.classList.add('dragging');
+            // (don't have access to the x and y position of the mouse here)
+            // clone.style.left = `${x - pieceRef.current.offsetWidth / 2}px`;
+            // clone.style.top = `${y}px`;
+            clone.style.position = 'absolute';
+            document.body.appendChild(clone);
+            cloneRef.current = clone;
+            // Hide the original piece
+            pieceRef.current.style.visibility = 'hidden';
+         
+        } else {
+            // Ensure the clone is removed or hidden and normal piece is visible
+            if (cloneRef.current) {
+                document.body.removeChild(cloneRef.current);
+                cloneRef.current = null;
+            }
+            // Show the original piece
+            pieceRef.current.style.visibility = '';
+        }
+    }, [draggedPiece]);
 
 
     return (
