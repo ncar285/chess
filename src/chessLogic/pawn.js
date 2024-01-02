@@ -2,7 +2,8 @@ import { inherit } from './inherit.js';
 import { Piece } from './piece.js';
 
 export function Pawn(color,square, board){
-    this.type = "pawn";
+    // this.type = "pawn";
+    this.type = color.slice(0,1) + "_pawn";
     Piece.call(this, color, square, board);
     this.firstMove = true;
 }

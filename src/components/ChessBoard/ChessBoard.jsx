@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "./ChessBoard.css"
 import { posToId, indexToFile } from '../../Utils/posIdConversion'; 
-import ChessSquare from '../ChessSquare/ChessSquare';
+// import ChessSquare from '../ChessSquare/ChessSquare';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
@@ -27,22 +27,33 @@ function ChessBoard({  }) {
     const [draggedPiece, setDraggedPiece] = useState(null);
     const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
 
+    // const 
+
     let finalSquareDuringDrag = null;
 
 
-    
     const handleTouchStart = (piece, e) => {
+        console.log("handle touch start logic")
         // ... handle touch start logic ...
         setDraggedPiece(piece);
+        setDraggedPiece(piece);
+        // Consider adding touchmove and touchend listeners here
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+        document.addEventListener('touchend', handleTouchEnd, { passive: false });
+
     };
 
     const handleTouchMove = (e) => {
         // ... handle touch move logic ...
+
+        console.log("handle touch move logic ")
     };
 
     const handleTouchEnd = (e) => {
         // ... handle touch end logic ...
         setDraggedPiece(null);
+
+        console.log("handle touch end logic  ")
     };
 
 
@@ -55,26 +66,6 @@ function ChessBoard({  }) {
     }, [gameBoard, dispatch]);
 
 
-    function updateBoard(){
-        const updatedBoard = chessBoard;
-        for (let a = 0 ; a  < 8 ; a++ ){
-            for (let b = 0 ; b  < 8 ; b++ ){
-
-                const localPiece = updatedBoard[a][b].pieceObj;
-                const reduxPiece = gameBoard.getPiece([a, b]);
-
-                if ((localPiece === null ^ reduxPiece === null) || 
-                    (localPiece && reduxPiece && localPiece.constructor !== reduxPiece.constructor)) {
-                    const screenRank = 7 - a;
-                    updatedBoard[screenRank][b].pieceObj = reduxPiece
-                }
-            }
-        }
-        setChessBoard(updatedBoard)
-    }
-
-
-
     function initialiseBoard(gameBoard){
         let color = "brown";
         const board = [];
@@ -84,15 +75,9 @@ function ChessBoard({  }) {
             for (let b = 0 ; b  < 8 ; b++ ){
                 const file = indexToFile(b);
 
-                const square = {};
-                square.file = file;
-                square.rank = rank;
-                square.color = color;
-                square.pieceObj = gameBoard.getPiece([a, b]);
-                square.rankLabel = (file === "A") ? true : false;
-                square.fileLabel = (rank === 1) ? true : false;
+                const pieceObj = gameBoard.getPiece([a, b]);
+                board[board.length -1].push({pieceObj, file, rank, color});
 
-                board[board.length -1].push(square);
                 color = switchColor(color);
             }
             color = switchColor(color);
@@ -117,7 +102,7 @@ function ChessBoard({  }) {
                 <div key={rowIndex} className="board-row">
                     {row.map((cell) => {
 
-                        const {color, rankLabel, fileLabel, pieceObj, file, rank } = cell;
+                        const {pieceObj, file, rank, color} = cell;
                     
                         const id = `${file}${rank}`;
 
@@ -137,12 +122,12 @@ function ChessBoard({  }) {
                                 }
 
                                 {   
-                                    rankLabel && 
+                                    (file === "A") && 
                                     <div className="rank square-label">{rank}</div>
                                 }
 
                                 {
-                                    fileLabel && 
+                                    (rank === 1) && 
                                     <div className="file square-label">{file.toLowerCase()}</div>
                                 }
 
@@ -163,7 +148,6 @@ function ChessBoard({  }) {
                                 }
 
                             </div>
-
 
                         )
                         

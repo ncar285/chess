@@ -19,7 +19,7 @@ import w_queen from '../../pieces/w_queen.png'
 import b_rook from '../../pieces/b_rook.png'
 import w_rook from '../../pieces/w_rook.png'
 
-const pieceImages = {
+const PIECE_IMAGES = {
     'b_bishop': b_bishop,
     'w_bishop': w_bishop,
     'b_king': b_king,
@@ -36,96 +36,50 @@ const pieceImages = {
 
 
 
-const ChessPiece = ({ pieceObj, isDragging, dragPosition }) => {
+const ChessPiece = ({ pieceObj, onDragStart, onDragMove, onDragEnd, draggedPiece }) => {
 
     const pieceRef = useRef(null);
     const cloneRef = useRef(null);
 
-    const color = pieceObj.getColor();
-    const pieceName = [color === "white" ? 'w' : 'b', pieceObj.getType()].join('_');
-    const imgSource = pieceImages[pieceName]
 
+    const handleTouchStart = (e) => {
+        onDragStart(pieceObj, e);
 
-    // useEffect(() => {
-    //     const pieceElement = pieceRef.current;
-    //     if (pieceElement) {
-    //         pieceElement.addEventListener('touchstart', handleTouchStart, { passive: false });
-    //         // Optionally add touchmove and touchend if needed
-    //         return () => {
-    //             pieceElement.removeEventListener('touchstart', handleTouchStart, { passive: false });
-    //             // Remove other event listeners if added
-    //         };
-    //     }
-    // }, []);
+        // ... create and append clone to body ...
+        const touch = e.touches[0];
+        createClone(touch.clientX,touch.clientY)
+    };
 
+    function createClone(x,y){
+        const clone = pieceRef.current.cloneNode(true);
+        clone.classList.add('dragging');
+        clone.style.left = `${x - pieceRef.current.offsetWidth / 2}px`;
+        clone.style.top = `${y}px`;
+        clone.style.position = 'absolute';
+        document.body.appendChild(clone);
+
+        // ... hide the original piece
+        pieceRef.current.style.visibility = 'hidden';
+        cloneRef.current = clone;
+    }
 
     useEffect(() => {
-        if (isDragging) {
-            // Make the piece invisible, as the clone in ChessBoard takes its place
-            pieceRef.current.style.visibility = 'hidden';
-        } else {
-            // Ensure the piece is visible
-            pieceRef.current.style.visibility = 'visible';
+        const pieceElement = pieceRef.current;
+        if (pieceElement) {
+            pieceElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+            // Optionally add touchmove and touchend if needed
+            return () => {
+                pieceElement.removeEventListener('touchstart', handleTouchStart, { passive: false });
+                // Remove other event listeners if added
+            };
         }
-    }, [isDragging]);
-
-
-
-
-    function findChessSquareFromCoordinates(x, y) {
-
-        if (cloneRef.current) { // Make the clone "click-through"
-            cloneRef.current.style.pointerEvents = 'none';
-        }
-
-        const element = document.elementFromPoint(x, y);
-        let res = null;
-
-        if (element && element.classList.contains('board-square')) {
-            res = element.id; 
-        } else if (element.parentElement.classList.contains('board-square')){
-            res = element.parentElement.id;
-        } else{
-            console.log("couldn't find a chess square")
-        }
-
-        if (cloneRef.current) { 
-            cloneRef.current.style.pointerEvents = '';
-        }
-
-        return res;
-    }
-
-    function getMousePos(e){
-        let x, y;
-        if (e.type === 'touchstart' && e.touches) {
-            x = e.touches[0].clientX;
-            y = e.touches[0].clientY;
-        } else {
-            x = e.clientX;
-            y = e.clientY;
-        }
-        return [x, y];
-    }
-
-
-    // useEffect(() => {
-    //     const pieceElement = pieceRef.current;
-    //     if (pieceElement) {
-    //         pieceElement.addEventListener('touchstart', handleTouchStart, { passive: false });
-    //         return () => {
-    //             pieceElement.removeEventListener('touchstart', handleTouchStart, { passive: false });
-    //         };
-    //     }
-    // }, []);
-
-
+    }, []);
 
 
     return (
         <img 
             alt={`${pieceObj.getColor()} ${pieceObj.getType()}`}
-            src={imgSource} 
+            src={PIECE_IMAGES[pieceObj.getType()]} 
             ref={pieceRef}
             className={`chess-piece`}
         />

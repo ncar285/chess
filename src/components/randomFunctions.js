@@ -113,3 +113,59 @@ useEffect(() => {
         document.removeEventListener('touchend', handleTouchEnd);
     };
 }, []);
+
+
+function findChessSquareFromCoordinates(x, y) {
+
+    if (cloneRef.current) { // Make the clone "click-through"
+        cloneRef.current.style.pointerEvents = 'none';
+    }
+
+    const element = document.elementFromPoint(x, y);
+    let res = null;
+
+    if (element && element.classList.contains('board-square')) {
+        res = element.id; 
+    } else if (element.parentElement.classList.contains('board-square')){
+        res = element.parentElement.id;
+    } else{
+        console.log("couldn't find a chess square")
+    }
+
+    if (cloneRef.current) { 
+        cloneRef.current.style.pointerEvents = '';
+    }
+
+    return res;
+}
+
+function getMousePos(e){
+    let x, y;
+    if (e.type === 'touchstart' && e.touches) {
+        x = e.touches[0].clientX;
+        y = e.touches[0].clientY;
+    } else {
+        x = e.clientX;
+        y = e.clientY;
+    }
+    return [x, y];
+}
+
+
+function updateBoard(){
+    const updatedBoard = chessBoard;
+    for (let a = 0 ; a  < 8 ; a++ ){
+        for (let b = 0 ; b  < 8 ; b++ ){
+
+            const localPiece = updatedBoard[a][b].pieceObj;
+            const reduxPiece = gameBoard.getPiece([a, b]);
+
+            if ((localPiece === null ^ reduxPiece === null) || 
+                (localPiece && reduxPiece && localPiece.constructor !== reduxPiece.constructor)) {
+                const screenRank = 7 - a;
+                updatedBoard[screenRank][b].pieceObj = reduxPiece
+            }
+        }
+    }
+    setChessBoard(updatedBoard)
+}
