@@ -36,134 +36,40 @@ const pieceImages = {
 
 
 
-const ChessPiece = ({ pieceObj, updateBoard }) => {
+const ChessPiece = ({ pieceObj, isDragging, dragPosition }) => {
 
-    const dispatch = useDispatch();
     const pieceRef = useRef(null);
     const cloneRef = useRef(null);
-
-    const gameBoard = useSelector(getGameBoard);
-    const selectedSquare = useSelector(getSelected)
-
-    const [lasthighlightedSquare, setLasthighlightedSquare] = useState(null);
 
     const color = pieceObj.getColor();
     const pieceName = [color === "white" ? 'w' : 'b', pieceObj.getType()].join('_');
     const imgSource = pieceImages[pieceName]
 
-    const updatePosition = (clone, X, Y) => {
-        clone.style.left = `${X - pieceRef.current.offsetWidth / 2}px`;
-        clone.style.top = `${Y}px`;
-    };
 
-    let finalSquareDuringDrag = null;
-    let startTouchPos = null
-    let isTouchDragging = false; 
-
-    const handleTouchStart = (e) => {
-        e.preventDefault();
-
-        const touch = e.touches[0];
-        startTouchPos = [touch.clientX, touch.clientY];
-
-        const pos = pieceObj.getSquare();
-        const id = posToId(pos);
-        dispatch(receiveSelected(id));
-        dispatch(receiveMoveOptions(pieceObj.getMoves()));
-
-        // Add touchmove listener here
-        document.addEventListener('touchmove', handleTouchMove, { passive: false });
-    };
+    // useEffect(() => {
+    //     const pieceElement = pieceRef.current;
+    //     if (pieceElement) {
+    //         pieceElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+    //         // Optionally add touchmove and touchend if needed
+    //         return () => {
+    //             pieceElement.removeEventListener('touchstart', handleTouchStart, { passive: false });
+    //             // Remove other event listeners if added
+    //         };
+    //     }
+    // }, []);
 
 
-    const handleTouchMove = (e) => {
-        e.preventDefault();
-
-        // Current touch pos
-        const touch = e.touches[0];
-
-        if (!isTouchDragging){
-            const currentTouchPos = [touch.clientX, touch.clientY];
-            const deltaX = currentTouchPos[0] - startTouchPos[0];
-            const deltaY = currentTouchPos[1] - startTouchPos[1];
-            const distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-
-            if (distance > 20){
-                isTouchDragging = true;
-                // Create a clone and append to body and move  under cursor
-                const clone = pieceRef.current.cloneNode(true);
-                clone.classList.add('dragging');
-                updatePosition(clone, touch.clientX, touch.clientY);
-                clone.style.position = 'absolute';
-                document.body.appendChild(clone);
-                pieceRef.current.style.visibility = 'hidden';
-                cloneRef.current = clone;
-
-                // wait for a potential drop
-                console.log("added a touchend")
-                document.addEventListener('touchend', handleTouchEnd, { passive: false });
-            }
+    useEffect(() => {
+        if (isDragging) {
+            // Make the piece invisible, as the clone in ChessBoard takes its place
+            pieceRef.current.style.visibility = 'hidden';
+        } else {
+            // Ensure the piece is visible
+            pieceRef.current.style.visibility = 'visible';
         }
+    }, [isDragging]);
 
 
-        if (isTouchDragging){
-            // keep updating the position
-            if (cloneRef.current){
-                updatePosition(cloneRef.current, touch.clientX, touch.clientY);
-            }
-    
-            // update the last Highlighted square
-            const squareUnderneath = findChessSquareFromCoordinates(touch.clientX, touch.clientY)
-            finalSquareDuringDrag = squareUnderneath;
-            if (lasthighlightedSquare !== squareUnderneath){
-                dispatch(receiveHighlightedSquare(squareUnderneath))
-            }
-        }
-
-
-    };
-
-    const handleTouchEnd = (e) => {
-        e.preventDefault();
-
-        // Remove the clone from body
-        if (cloneRef.current) {
-            document.body.removeChild(cloneRef.current);
-            cloneRef.current = null;
-        }
-
-        playMoveIfValid();
-
-        // Unhide the original piece
-        pieceRef.current.style.visibility = 'visible';
-
-        setLasthighlightedSquare(null);
-
-        isTouchDragging = false;
-        dispatch(removeSelected());
-        document.removeEventListener('touchmove', handleTouchMove);
-        document.removeEventListener('touchend', handleTouchEnd);
-    };
-
-    function playMoveIfValid(){
-        const startSquare = pieceObj.getSquareId()
-        const endSquare = finalSquareDuringDrag;
-        if (startSquare && endSquare && startSquare !== endSquare){
-            const validOptions = pieceObj.getMoves().options;
-            const validTakeOptions = pieceObj.getMoves().takeOptions;
-
-            if (validOptions.has(endSquare) || validTakeOptions.has(endSquare)){
-                const startPos = idToPos(startSquare);
-                const endPos = idToPos(endSquare);
-
-                gameBoard.movePiece(startPos, endPos, pieceObj);
-                updateBoard();
-
-            }
-
-        }
-        return false;
-    }
 
 
     function findChessSquareFromCoordinates(x, y) {
@@ -203,15 +109,15 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
     }
 
 
-    useEffect(() => {
-        const pieceElement = pieceRef.current;
-        if (pieceElement) {
-            pieceElement.addEventListener('touchstart', handleTouchStart, { passive: false });
-            return () => {
-                pieceElement.removeEventListener('touchstart', handleTouchStart, { passive: false });
-            };
-        }
-    }, []);
+    // useEffect(() => {
+    //     const pieceElement = pieceRef.current;
+    //     if (pieceElement) {
+    //         pieceElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+    //         return () => {
+    //             pieceElement.removeEventListener('touchstart', handleTouchStart, { passive: false });
+    //         };
+    //     }
+    // }, []);
 
 
 
