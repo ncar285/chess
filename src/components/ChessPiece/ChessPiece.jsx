@@ -1,6 +1,6 @@
 import './ChessPiece.css';
 import React, { useEffect, useRef, useState } from 'react';
-import { receiveHighlightedSquare, receiveMoveOptions, receiveSelected, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
+import { getSelected, receiveHighlightedSquare, receiveMoveOptions, receiveSelected, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { idToPos, posToId } from '../../Utils/posIdConversion';
 import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
@@ -43,6 +43,7 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
     const cloneRef = useRef(null);
 
     const gameBoard = useSelector(getGameBoard);
+    const selectedSquare = useSelector(getSelected)
 
     const [lasthighlightedSquare, setLasthighlightedSquare] = useState(null);
 
@@ -56,27 +57,22 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
     };
 
     let finalSquareDuringDrag = null;
-
     let startTouchPos = null
     let isTouchDragging = false; 
 
     const handleTouchStart = (e) => {
-
         e.preventDefault();
 
-        // start touch position
         const touch = e.touches[0];
         startTouchPos = [touch.clientX, touch.clientY];
 
-
-        // show visual aids
         const pos = pieceObj.getSquare();
         const id = posToId(pos);
         dispatch(receiveSelected(id));
         dispatch(receiveMoveOptions(pieceObj.getMoves()));
 
-        // wait for a potential drag 
-        document.addEventListener('touchmove', handleTouchMove, { passive: false })
+        // Add touchmove listener here
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
     };
 
 
@@ -104,6 +100,7 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
                 cloneRef.current = clone;
 
                 // wait for a potential drop
+                console.log("added a touchend")
                 document.addEventListener('touchend', handleTouchEnd, { passive: false });
             }
         }
@@ -137,13 +134,13 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
 
         playMoveIfValid();
 
-        setLasthighlightedSquare(null);
-        isTouchDragging = false;
-        dispatch(removeSelected())
-
         // Unhide the original piece
         pieceRef.current.style.visibility = 'visible';
 
+        setLasthighlightedSquare(null);
+
+        isTouchDragging = false;
+        dispatch(removeSelected());
         document.removeEventListener('touchmove', handleTouchMove);
         document.removeEventListener('touchend', handleTouchEnd);
     };
@@ -166,14 +163,6 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
 
         }
         return false;
-    }
-
-
-    function findChessSquareFromCoordinates(x,y, clone){
-
-        if (cloneRef.current) { // Make the clone "click-through"
-            clone.style.pointerEvents = 'none';
-        }
     }
 
 
@@ -210,7 +199,7 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
             x = e.clientX;
             y = e.clientY;
         }
-        return { x, y };
+        return [x, y];
     }
 
 
@@ -218,8 +207,6 @@ const ChessPiece = ({ pieceObj, updateBoard }) => {
         const pieceElement = pieceRef.current;
         if (pieceElement) {
             pieceElement.addEventListener('touchstart', handleTouchStart, { passive: false });
-
-            // Cleanup the event listener
             return () => {
                 pieceElement.removeEventListener('touchstart', handleTouchStart, { passive: false });
             };
