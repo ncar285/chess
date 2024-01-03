@@ -1,9 +1,7 @@
 import './ChessPiece.css';
-import React, { useEffect, useRef, useState } from 'react';
-import { getSelected, receiveHighlightedSquare, receiveMoveOptions, receiveSelected, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
+import React, { useEffect, useRef } from 'react';
+import { getHighlightedSquare, getSelected, receiveHighlightedSquare, removeHighlightedSquare } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { idToPos, posToId } from '../../Utils/posIdConversion';
-import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 
 // Piece images
 import b_bishop from '../../pieces/b_bishop.png'
@@ -18,6 +16,8 @@ import b_queen from '../../pieces/b_queen.png'
 import w_queen from '../../pieces/w_queen.png'
 import b_rook from '../../pieces/b_rook.png'
 import w_rook from '../../pieces/w_rook.png'
+import { idToPos } from '../../Utils/posIdConversion';
+import { getGameBoard } from '../../store/gameReducer';
 
 const PIECE_IMAGES = {
     'b_bishop': b_bishop,
@@ -40,6 +40,8 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
 
     const pieceRef = useRef(null);
     const cloneRef = useRef(null);
+
+    const highlightedSquare = useSelector(getHighlightedSquare)
 
     const dispatch = useDispatch();
 
@@ -67,24 +69,23 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
 
     useEffect(() => {
         // When this piece is the one being dragged, manage the clone
-
-        console.log("draggedPiece useEffect hit")
-
         if (draggedPiece === pieceObj) {
-            // Create  the clone position
             const clone = pieceRef.current.cloneNode(true);
             clone.classList.add('dragging');
-            // (don't have access to the x and y position of the mouse here)
+            
             if (dragPosition){
-                console.log("drag position", dragPosition)
                 clone.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
                 clone.style.top = `${dragPosition.y}px`;
-            } else {
-                console.log("can't get initial drag position")
             }
+            const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
+            if (squareBelow){
+                dispatch(receiveHighlightedSquare(squareBelow))
+            }
+
             clone.style.position = 'absolute';
             document.body.appendChild(clone);
             cloneRef.current = clone;
+
             // Hide the original piece
             pieceRef.current.style.visibility = 'hidden';
          
@@ -96,13 +97,15 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
             }
             // Show the original piece
             pieceRef.current.style.visibility = '';
+
             // remove last highlighted square
-            dispatch(removeHighlightedSquare())
+            // dispatch(removeHighlightedSquare())
         }
     }, [draggedPiece]);
 
 
-    let lasthighlightedSquare = null;
+
+    // let lasthighlightedSquare = null;
 
     useEffect(()=>{
         if (cloneRef.current){
@@ -111,7 +114,7 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
             cloneRef.current.style.top = `${dragPosition.y}px`;
 
             const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
-            if (lasthighlightedSquare !== squareBelow){
+            if (highlightedSquare !== squareBelow){
                 dispatch(receiveHighlightedSquare(squareBelow))
             }
         }
@@ -133,7 +136,8 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
         } else if (element.parentElement.classList.contains('board-square')){
             res = element.parentElement.id;
         } else{
-            console.log("couldn't find a chess square")
+            // console.log("couldn't find a chess square")
+            // add error handling
         }
     
         if (cloneRef.current) { 

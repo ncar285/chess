@@ -1,83 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import "./ChessBoard.css"
-import { posToId, indexToFile } from '../../Utils/posIdConversion'; 
-// import ChessSquare from '../ChessSquare/ChessSquare';
+import { posToId, indexToFile, idToPos } from '../../Utils/posIdConversion'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
-import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveHighlightedSquare, receiveMoveOptions, receiveSelected } from '../../store/uiReducer';
+import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveMoveOptions, receiveSelected, removeHighlightedSquare } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
 import '../ChessSquare/ChessSquare.css'
+import "./ChessBoard.css"
 
 function ChessBoard({  }) {
 
     const dispatch = useDispatch();
 
-
     const gameBoard = useSelector(getGameBoard);
     const selectedSquare = useSelector(getSelected);
     const movingOptions = useSelector(getMoveOptions);
     const takingOptions = useSelector(getTakeOptions);
-
     const highlightedSquare = useSelector(getHighlightedSquare);
 
     const [chessBoard, setChessBoard] = useState([]);
-    const [lasthighlightedSquare, setLasthighlightedSquare] = useState(null);
-
-    const [isDragging, setIsDragging] = useState(false);
     const [draggedPiece, setDraggedPiece] = useState(null);
     const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
-
-    // const [startCoordinates, setStartCoordinates] = useState(null);
-    const [startSquare, setStartSquare] = useState(null);
-
-
-    let startCoordinates = null;
-
-    // const 
-
-    let finalSquareDuringDrag = null;
 
 
     const handleTouchStart = (piece, e) => {
         e.preventDefault();
 
-        console.log("handle TOUCH start logic")
         startActions(piece, e)
 
         document.addEventListener('touchmove', handleTouchMove, { passive: false });
-        document.addEventListener('touchend', handleTouchEnd, { passive: false });
+        document.addEventListener('touchend', (e)=>handleTouchEnd(piece,e), { passive: false });
 
     };
 
     const handleClickStart = (piece, e) => {
         e.preventDefault();
 
-        console.log("handle CLICK start logic")
         startActions(piece, e)
 
         document.addEventListener('mousemove', handleMouseMove, { passive: false });
-        document.addEventListener('mouseup', handleMouseEnd, { passive: false });
+        document.addEventListener('mouseup', (e)=>handleMouseEnd(piece,e), { passive: false });
 
     };
 
     const startActions = (piece, e) => {
         setDraggedPiece(piece);
-        console.log("setDraggedPiece to : ", piece)
 
-        // const touch = e.touches[0];
-        console.log("getMousePos(e)", getMousePos(e))
         const [x, y] = getMousePos(e)
-        console.log("setDragPosition to : ", {x, y})
         setDragPosition({x, y});
 
         const startSquareId = posToId(piece.getSquare());
-        setStartSquare(startSquareId);
+  
         dispatch(receiveSelected(startSquareId));
-        console.log("startSquareId : ", startSquareId)
-
-        // const touch = e.touches[0];
-        // setDragPosition({ x: touch.clientX, y: touch.clientY });
 
         dispatch(receiveMoveOptions(piece.getMoves()));
     }
@@ -95,47 +69,95 @@ function ChessBoard({  }) {
     }
 
     function handleTouchMove (e) {
-
-        console.log("handle TOUCH move logic ")
-
-        const touch = e.touches[0];
-        setDragPosition({ x: touch.clientX, y: touch.clientY });
-        
         moveActions(e);
     };
 
     function handleMouseMove (e) {
-
-        console.log("handle MOUSE move logic ")
-
-        // Update drag position for mouse
-        setDragPosition({ x: e.clientX, y: e.clientY });
-
         moveActions(e);
     };
 
     function moveActions(e){
-        setIsDragging(true);
+
+        const [x,y] = getMousePos(e);
+        setDragPosition({x,y});
 
     }
 
-    function handleTouchEnd (e) {
-        console.log("handle TOUCH end logic  ")
-        setIsDragging(false);
-        setDraggedPiece(null);
+    function handleTouchEnd (piece, e) {
+        e.preventDefault()
+        
+        endActions(piece, e)
+
         document.removeEventListener('touchmove', handleTouchMove);
         document.removeEventListener('touchend', handleTouchEnd);
     };
 
+    function handleMouseEnd (piece, e) {
+        e.preventDefault()
 
-
-    function handleMouseEnd (e) {
-        console.log("handle MOUSE end logic  ")
-        setIsDragging(false);
-        setDraggedPiece(null);
+        endActions(piece, e)
+    
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseEnd);
     };
+
+    function endActions(piece, e) {
+
+        const [x,y] = getMousePos(e);
+        const endSquare = findSquareAtPosition(x,y);
+        const startSquare = piece.getSquareId();
+
+        playMoveIfValid(piece, startSquare, endSquare);
+
+        setDraggedPiece(null);
+
+        dispatch(removeHighlightedSquare())
+    }
+
+    
+    function findSquareAtPosition(x,y) {
+        const element = document.elementFromPoint(x, y);
+        const parent = element.parentElement;
+        if (element && element.classList.contains('board-square')) {
+            return element.id;
+        } else if (parent && parent.classList.contains('board-square')){
+            return parent.id;
+        }
+        return null;
+    }
+
+    function playMoveIfValid(piece, startSquare, endSquare){
+
+        if (startSquare && endSquare && startSquare !== endSquare){
+            const validOptions = piece.getMoves().options;
+            const validTakeOptions = piece.getMoves().takeOptions;
+            if (validOptions.has(endSquare) || validTakeOptions.has(endSquare)){
+                console.log("MOVE IS VALID");
+                const startPos = idToPos(startSquare);
+                const endPos = idToPos(endSquare);
+                gameBoard.movePiece(startPos, endPos, piece);
+                updateBoard();
+            }
+        }
+    }
+
+    function updateBoard(){
+        const updatedBoard = chessBoard;
+        for (let a = 0 ; a  < 8 ; a++ ){
+            for (let b = 0 ; b  < 8 ; b++ ){
+    
+                const localPiece = updatedBoard[a][b].pieceObj;
+                const reduxPiece = gameBoard.getPiece([a, b]);
+    
+                if ((localPiece === null ^ reduxPiece === null) || 
+                    (localPiece && reduxPiece && localPiece.constructor !== reduxPiece.constructor)) {
+                    const screenRank = 7 - a;
+                    updatedBoard[screenRank][b].pieceObj = reduxPiece
+                }
+            }
+        }
+        setChessBoard(updatedBoard)
+    }
 
 
 
@@ -201,10 +223,9 @@ function ChessBoard({  }) {
                                         pieceObj={cell.pieceObj}
                                         onTouchDragStart={handleTouchStart}
                                         onClickDragStart={handleClickStart}
-
                                         draggedPiece={draggedPiece}
                                         dragPosition={dragPosition}
-                                        // ... other props and handlers ...
+
                                     />
                                 }
 

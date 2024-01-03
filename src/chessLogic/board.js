@@ -1,3 +1,4 @@
+import { idToPos } from '../Utils/posIdConversion.js';
 import { Pawn } from './pawn.js';
 
 export function Board(){
@@ -25,6 +26,12 @@ Board.prototype.getBoard = function(){
 Board.prototype.getPiece = function(pos){
     const board = this.getBoard();
     return board[pos[0]][pos[1]];
+}
+
+Board.prototype.getPieceFromId = function(id){
+    const [r,c] = idToPos(id);
+    const board = this.getBoard();
+    return board[r][c];
 }
 
 Board.prototype.movePiece = function(startSquare, endSquare, piece){
