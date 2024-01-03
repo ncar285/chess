@@ -58,9 +58,12 @@ function ChessBoard({  }) {
 
     function getMousePos(e){
         let x, y;
-        if (e.type === 'touchstart' && e.touches) {
+        if ((e.type === 'touchstart' || e.type === 'touchmove' ) && e.touches) {
             x = e.touches[0].clientX;
-            y = e.touches[0].clientY;
+            y = e.touches[0].clientY;  
+        } else if (e.type === 'touchend' && e.changedTouches) {
+            x = e.changedTouches[0].clientX;
+            y = e.changedTouches[0].clientY;  
         } else {
             x = e.clientX;
             y = e.clientY;
@@ -132,7 +135,6 @@ function ChessBoard({  }) {
             const validOptions = piece.getMoves().options;
             const validTakeOptions = piece.getMoves().takeOptions;
             if (validOptions.has(endSquare) || validTakeOptions.has(endSquare)){
-                console.log("MOVE IS VALID");
                 const startPos = idToPos(startSquare);
                 const endPos = idToPos(endSquare);
                 gameBoard.movePiece(startPos, endPos, piece);

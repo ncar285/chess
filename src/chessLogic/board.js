@@ -57,7 +57,7 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
         piece.setSquare(endSquare);
 
         // Update pawn's firstMove property
-        if (piece.type === "pawn") {
+        if (piece.type.slice(2) === "pawn") {
             piece.firstMove = false;
         }
         

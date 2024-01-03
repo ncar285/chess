@@ -127,17 +127,21 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
         if (cloneRef.current) { // Make the clone "click-through"
             cloneRef.current.style.pointerEvents = 'none';
         }
+
+        console.log("x and y values", x, y)
     
-        const element = document.elementFromPoint(x, y);
         let res = null;
-    
-        if (element && element.classList.contains('board-square')) {
-            res = element.id; 
-        } else if (element.parentElement.classList.contains('board-square')){
-            res = element.parentElement.id;
-        } else{
-            // console.log("couldn't find a chess square")
-            // add error handling
+        let element = null;
+        if (x && y){
+            element = document.elementFromPoint(x, y);
+            if (element && element.classList.contains('board-square')) {
+                res = element.id; 
+            } else if (element.parentElement.classList.contains('board-square')){
+                res = element.parentElement.id;
+            } else{
+                // console.log("couldn't find a chess square")
+                // add error handling
+            }
         }
     
         if (cloneRef.current) { 
