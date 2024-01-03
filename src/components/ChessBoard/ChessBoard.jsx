@@ -5,7 +5,7 @@ import { posToId, indexToFile } from '../../Utils/posIdConversion';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
-import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveMoveOptions, receiveSelected } from '../../store/uiReducer';
+import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveHighlightedSquare, receiveMoveOptions, receiveSelected } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
 import '../ChessSquare/ChessSquare.css'
 
@@ -18,6 +18,7 @@ function ChessBoard({  }) {
     const selectedSquare = useSelector(getSelected);
     const movingOptions = useSelector(getMoveOptions);
     const takingOptions = useSelector(getTakeOptions);
+
     const highlightedSquare = useSelector(getHighlightedSquare);
 
     const [chessBoard, setChessBoard] = useState([]);
@@ -99,7 +100,8 @@ function ChessBoard({  }) {
 
         const touch = e.touches[0];
         setDragPosition({ x: touch.clientX, y: touch.clientY });
-        setIsDragging(true);
+        
+        moveActions(e);
     };
 
     function handleMouseMove (e) {
@@ -108,8 +110,14 @@ function ChessBoard({  }) {
 
         // Update drag position for mouse
         setDragPosition({ x: e.clientX, y: e.clientY });
-        setIsDragging(true);
+
+        moveActions(e);
     };
+
+    function moveActions(e){
+        setIsDragging(true);
+
+    }
 
     function handleTouchEnd (e) {
         console.log("handle TOUCH end logic  ")
@@ -181,9 +189,11 @@ function ChessBoard({  }) {
                         const id = `${file}${rank}`;
 
                         const selected = selectedSquare === id ? 'selected' : '';
+                        
+                        const highlighted = highlightedSquare === id ? 'highlight' : '';
 
                         return (
-                            <div className={`board-square ${color} ${selected}`} key={id} id={id}>
+                            <div className={`board-square ${color} ${selected} ${highlighted}`} key={id} id={id}>
 
                                 {
                                     pieceObj &&

@@ -41,6 +41,7 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
     const pieceRef = useRef(null);
     const cloneRef = useRef(null);
 
+    const dispatch = useDispatch();
 
     const handleTouchStart = (e) => {
         onTouchDragStart(pieceObj, e);
@@ -95,17 +96,52 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
             }
             // Show the original piece
             pieceRef.current.style.visibility = '';
+            // remove last highlighted square
+            dispatch(removeHighlightedSquare())
         }
     }, [draggedPiece]);
 
+
+    let lasthighlightedSquare = null;
 
     useEffect(()=>{
         if (cloneRef.current){
             // console.log("update clone's position")
             cloneRef.current.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
             cloneRef.current.style.top = `${dragPosition.y}px`;
+
+            const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
+            if (lasthighlightedSquare !== squareBelow){
+                dispatch(receiveHighlightedSquare(squareBelow))
+            }
         }
+
     }, [dragPosition])
+
+
+    function findChessSquareFromCoordinates(x, y) {
+
+        if (cloneRef.current) { // Make the clone "click-through"
+            cloneRef.current.style.pointerEvents = 'none';
+        }
+    
+        const element = document.elementFromPoint(x, y);
+        let res = null;
+    
+        if (element && element.classList.contains('board-square')) {
+            res = element.id; 
+        } else if (element.parentElement.classList.contains('board-square')){
+            res = element.parentElement.id;
+        } else{
+            console.log("couldn't find a chess square")
+        }
+    
+        if (cloneRef.current) { 
+            cloneRef.current.style.pointerEvents = '';
+        }
+    
+        return res;
+    }
 
     return (
         <img 
