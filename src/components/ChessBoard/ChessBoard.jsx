@@ -27,8 +27,11 @@ function ChessBoard({  }) {
     const [draggedPiece, setDraggedPiece] = useState(null);
     const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
 
-    const [startCoordinates, setStartCoordinates] = useState(null);
+    // const [startCoordinates, setStartCoordinates] = useState(null);
     const [startSquare, setStartSquare] = useState(null);
+
+
+    let startCoordinates = null;
 
     // const 
 
@@ -52,8 +55,8 @@ function ChessBoard({  }) {
         console.log("handle CLICK start logic")
         startActions(piece, e)
 
-        document.addEventListener('touchmove', handleMouseMove, { passive: false });
-        document.addEventListener('touchend', handleMouseEnd, { passive: false });
+        document.addEventListener('mousemove', handleMouseMove, { passive: false });
+        document.addEventListener('mouseup', handleMouseEnd, { passive: false });
 
     };
 
@@ -62,13 +65,18 @@ function ChessBoard({  }) {
         console.log("setDraggedPiece to : ", piece)
 
         // const touch = e.touches[0];
-        setStartCoordinates(getMousePos(e));
-        console.log("setStartCoordinates to : ", getMousePos(e))
+        console.log("getMousePos(e)", getMousePos(e))
+        const [x, y] = getMousePos(e)
+        console.log("setDragPosition to : ", {x, y})
+        setDragPosition({x, y});
 
         const startSquareId = posToId(piece.getSquare());
         setStartSquare(startSquareId);
         dispatch(receiveSelected(startSquareId));
         console.log("startSquareId : ", startSquareId)
+
+        // const touch = e.touches[0];
+        // setDragPosition({ x: touch.clientX, y: touch.clientY });
 
         dispatch(receiveMoveOptions(piece.getMoves()));
     }
@@ -88,24 +96,37 @@ function ChessBoard({  }) {
     function handleTouchMove (e) {
 
         console.log("handle TOUCH move logic ")
+
+        const touch = e.touches[0];
+        setDragPosition({ x: touch.clientX, y: touch.clientY });
+        setIsDragging(true);
     };
-
-    function handleTouchEnd (e) {
-        setDraggedPiece(null);
-
-        console.log("handle TOUCH end logic  ")
-    };
-
 
     function handleMouseMove (e) {
 
         console.log("handle MOUSE move logic ")
+
+        // Update drag position for mouse
+        setDragPosition({ x: e.clientX, y: e.clientY });
+        setIsDragging(true);
     };
 
-    function handleMouseEnd (e) {
+    function handleTouchEnd (e) {
+        console.log("handle TOUCH end logic  ")
+        setIsDragging(false);
         setDraggedPiece(null);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
+    };
 
+
+
+    function handleMouseEnd (e) {
         console.log("handle MOUSE end logic  ")
+        setIsDragging(false);
+        setDraggedPiece(null);
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseEnd);
     };
 
 
@@ -159,8 +180,10 @@ function ChessBoard({  }) {
                     
                         const id = `${file}${rank}`;
 
+                        const selected = selectedSquare === id ? 'selected' : '';
+
                         return (
-                            <div className={`board-square ${color}`} key={id} id={id}>
+                            <div className={`board-square ${color} ${selected}`} key={id} id={id}>
 
                                 {
                                     pieceObj &&
@@ -170,6 +193,7 @@ function ChessBoard({  }) {
                                         onClickDragStart={handleClickStart}
 
                                         draggedPiece={draggedPiece}
+                                        dragPosition={dragPosition}
                                         // ... other props and handlers ...
                                     />
                                 }

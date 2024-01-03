@@ -36,7 +36,7 @@ const PIECE_IMAGES = {
 
 
 
-const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece }) => {
+const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece, dragPosition }) => {
 
     const pieceRef = useRef(null);
     const cloneRef = useRef(null);
@@ -66,13 +66,21 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
 
     useEffect(() => {
         // When this piece is the one being dragged, manage the clone
+
+        console.log("draggedPiece useEffect hit")
+
         if (draggedPiece === pieceObj) {
             // Create  the clone position
             const clone = pieceRef.current.cloneNode(true);
             clone.classList.add('dragging');
             // (don't have access to the x and y position of the mouse here)
-            // clone.style.left = `${x - pieceRef.current.offsetWidth / 2}px`;
-            // clone.style.top = `${y}px`;
+            if (dragPosition){
+                console.log("drag position", dragPosition)
+                clone.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
+                clone.style.top = `${dragPosition.y}px`;
+            } else {
+                console.log("can't get initial drag position")
+            }
             clone.style.position = 'absolute';
             document.body.appendChild(clone);
             cloneRef.current = clone;
@@ -90,6 +98,14 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
         }
     }, [draggedPiece]);
 
+
+    useEffect(()=>{
+        if (cloneRef.current){
+            // console.log("update clone's position")
+            cloneRef.current.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
+            cloneRef.current.style.top = `${dragPosition.y}px`;
+        }
+    }, [dragPosition])
 
     return (
         <img 
