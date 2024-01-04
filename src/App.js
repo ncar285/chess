@@ -15,6 +15,7 @@ function App() {
         <div className="app-container">
                 
             <Switch>
+                {/* {draggingPiece && <DraggingPiece/>} */}
                 <Route exact path="/" component={HomePage} />
             </Switch>
 

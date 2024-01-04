@@ -36,10 +36,12 @@ const PIECE_IMAGES = {
 
 
 
-const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece, dragPosition, setFinalDragSquare }) => {
+const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece, dragPosition, setFinalDragSquare, isDragging }) => {
 
     const pieceRef = useRef(null);
     const cloneRef = useRef(null);
+
+    // console.log("draggedPiece",draggedPiece)
 
     const highlightedSquare = useSelector(getHighlightedSquare)
 
@@ -47,10 +49,12 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
 
     const handleTouchStart = (e) => {
         onTouchDragStart(pieceObj, e);
+        console.log("starting drag on piece: ", pieceObj.getSquareId())
     };
 
     const handleClickStart = (e) => {
         onClickDragStart(pieceObj, e);
+        console.log("starting drag on piece: ", pieceObj.getSquareId())
     }
 
 
@@ -70,17 +74,18 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
     useEffect(() => {
         // When this piece is the one being dragged, manage the clone
         if (draggedPiece === pieceObj) {
+
             const clone = pieceRef.current.cloneNode(true);
             clone.classList.add('dragging');
             
-            if (dragPosition){
-                clone.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
-                clone.style.top = `${dragPosition.y}px`;
-            }
-            const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
-            if (squareBelow){
-                dispatch(receiveHighlightedSquare(squareBelow))
-            }
+            // if (dragPosition){
+            //     clone.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
+            //     clone.style.top = `${dragPosition.y}px`;
+            // }
+            // const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
+            // if (squareBelow){
+            //     dispatch(receiveHighlightedSquare(squareBelow))
+            // }
 
             clone.style.position = 'absolute';
             document.body.appendChild(clone);
@@ -91,25 +96,61 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
          
         } else {
             // Ensure the clone is removed or hidden and normal piece is visible
+            console.log("cloneRef", cloneRef.current)
             if (cloneRef.current) {
+                // console.log(cloneRef.current)
+                // debugger
                 document.body.removeChild(cloneRef.current);
                 cloneRef.current = null;
             }
             // Show the original piece
             pieceRef.current.style.visibility = '';
 
-            // remove last highlighted square
-            // dispatch(removeHighlightedSquare())
         }
     }, [draggedPiece]);
 
 
+    // useEffect(() => {
+    //     // When this piece is the one being dragged, manage the clone
+    //     if (isDragging) {
 
-    // let lasthighlightedSquare = null;
+    //         const clone = pieceRef.current.cloneNode(true);
+    //         clone.classList.add('dragging');
+            
+    //         if (dragPosition){
+    //             clone.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
+    //             clone.style.top = `${dragPosition.y}px`;
+    //         }
+    //         const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
+    //         if (squareBelow){
+    //             dispatch(receiveHighlightedSquare(squareBelow))
+    //         }
+
+    //         clone.style.position = 'absolute';
+    //         document.body.appendChild(clone);
+    //         cloneRef.current = clone;
+
+    //         // Hide the original piece
+    //         pieceRef.current.style.visibility = 'hidden';
+         
+    //     } else {
+    //         // Ensure the clone is removed or hidden and normal piece is visible
+    //         console.log("cloneRef", cloneRef.current)
+    //         if (cloneRef.current) {
+    //             console.log(cloneRef.current)
+    //             // debugger
+    //             document.body.removeChild(cloneRef.current);
+    //             cloneRef.current = null;
+    //         }
+    //         // Show the original piece
+    //         pieceRef.current.style.visibility = '';
+
+    //     }
+    // }, [isDragging]);
+
 
     useEffect(()=>{
         if (cloneRef.current){
-            // console.log("update clone's position")
             cloneRef.current.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
             cloneRef.current.style.top = `${dragPosition.y}px`;
 
