@@ -3,7 +3,7 @@ import { posToId, indexToFile, idToPos } from '../../Utils/posIdConversion';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
-import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveMoveOptions, receiveSelected, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
+import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
 import '../ChessSquare/ChessSquare.css'
 import "./ChessBoard.css"
@@ -78,8 +78,10 @@ function ChessBoard({  }) {
     };
 
     const startActions = (piece, e) => {
-        
+
         setDraggedPiece(piece);
+
+        dispatch(receiveDraggingPiece(piece))
 
         const [x, y] = getMousePos(e)
         setDragPosition({x, y});
