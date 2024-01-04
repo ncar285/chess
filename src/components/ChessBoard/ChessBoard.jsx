@@ -8,6 +8,18 @@ import ChessPiece from '../ChessPiece/ChessPiece';
 import '../ChessSquare/ChessSquare.css'
 import "./ChessBoard.css"
 
+const STATIC_BOARD = [];
+for (let a = 7 ; a  >= 0 ; a-- ){
+    STATIC_BOARD.push([]);
+    const rank = a + 1;
+    for (let b = 0 ; b  < 8 ; b++ ){
+        const color = ((a + b) % 2 === 0) ? "white" : "brown"
+        const file = indexToFile(b);
+        const len = STATIC_BOARD.length;
+        STATIC_BOARD[len-1].push({file, rank, color});
+    }
+}
+
 function ChessBoard({  }) {
 
     const dispatch = useDispatch();
@@ -18,7 +30,6 @@ function ChessBoard({  }) {
     const takingOptions = useSelector(getTakeOptions);
     const highlightedSquare = useSelector(getHighlightedSquare);
 
-    const [chessBoard, setChessBoard] = useState([]);
     const [draggedPiece, setDraggedPiece] = useState(null);
     const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
 
@@ -60,7 +71,6 @@ function ChessBoard({  }) {
 
         dispatch(receiveMoveOptions(piece.getMoves()));
 
-        // setAttemptMove(false)
     }
 
     function getMousePos(e){
@@ -122,27 +132,7 @@ function ChessBoard({  }) {
         dispatch(removeHighlightedSquare())
     }
 
-    
-    function findSquareAtPosition(x,y) {
-        // console.log("------findSquareAtPosition-----")
-        const element = document.elementFromPoint(x, y);
-        const parent = element.parentElement;
-        // console.log("x,y",x,y)
-        // console.log("element",element)
-        // console.log("highlightedSquare",highlightedSquare)
-        // console.log("finalDragSquare",finalDragSquare)
-        if (element && element.classList.contains('board-square')) {
-            return element.id;
-        } else if (parent && parent.classList.contains('board-square')){
-            return parent.id;
-        }
-        return null;
-    }
-
     function playMoveIfValid(piece, startSquare, endSquare){
-
-        console.log("in play move if valid")
-
         if (startSquare && endSquare && startSquare !== endSquare){
             const validOptions = piece.getMoves().options;
             const validTakeOptions = piece.getMoves().takeOptions;
@@ -150,33 +140,14 @@ function ChessBoard({  }) {
                 const startPos = idToPos(startSquare);
                 const endPos = idToPos(endSquare);
                 gameBoard.movePiece(startPos, endPos, piece);
-                // updateBoard();
             }
         }
     }
-
-    function updateBoard(){
-        const updatedBoard = chessBoard.map(row => row.map(cell => ({ ...cell })));
-        for (let a = 0 ; a  < 8 ; a++ ){
-            for (let b = 0 ; b  < 8 ; b++ ){
-                const localPiece = updatedBoard[a][b].pieceObj;
-                const reduxPiece = gameBoard.getPiece([a, b]);
-                if ((localPiece === null ^ reduxPiece === null) || 
-                    (localPiece && reduxPiece && localPiece.constructor !== reduxPiece.constructor)) {
-                    const screenRank = 7 - a;
-                    updatedBoard[screenRank][b].pieceObj = reduxPiece
-                }
-            }
-        }
-        setChessBoard(updatedBoard)
-    }
-
 
     useEffect(() => {
         if (!gameBoard) {
             const newGameBoard = new Board();
             dispatch(receiveGameBoard(newGameBoard));
-            // initialiseBoard(newGameBoard)
         } 
     }, [gameBoard, dispatch]);
 
@@ -187,62 +158,9 @@ function ChessBoard({  }) {
             console.log("piece", piece)
             playMoveIfValid(piece, selectedSquare, finalDragSquare);
             setAttemptMove(false);
-
-            // updateBoard();
         }
 
     }, [attemptMove, finalDragSquare, selectedSquare, draggedPiece]);
-
-
-    // function initialiseBoard(gameBoard){
-    //     let color = "brown";
-    //     const board = [];
-    //     for (let a = 7 ; a  >= 0 ; a-- ){
-    //         board.push([]);
-    //         const rank = a + 1;
-    //         for (let b = 0 ; b  < 8 ; b++ ){
-    //             const file = indexToFile(b);
-
-    //             const pieceObj = gameBoard.getPiece([a, b]);
-    //             board[board.length -1].push({pieceObj, file, rank, color});
-
-    //             color = switchColor(color);
-    //         }
-    //         color = switchColor(color);
-    //     }
-    //     setChessBoard(board)
-
-    //     console.log("board", board)
-    // }
-    let color = "brown";
-    const STATIC_BOARD = [];
-    for (let a = 7 ; a  >= 0 ; a-- ){
-        STATIC_BOARD.push([]);
-        const rank = a + 1;
-        for (let b = 0 ; b  < 8 ; b++ ){
-            const file = indexToFile(b);
-
-            // const pieceObj = gameBoard.getPiece([a, b]);
-            const len = STATIC_BOARD.length;
-            STATIC_BOARD[len-1].push({file, rank, color});
-
-            color = switchColor(color);
-        }
-        color = switchColor(color);
-    }
-
-    // {pieceObj: null, file: 'A', rank: 8, color: 'brown'}
-
-
-    function switchColor(color){
-        if (color === "brown"){
-            return "white";
-        } else {
-            return "brown"
-        }
-    }
-
-    // console.log(gameBoard.board, "gameboard")
 
 
     return (
