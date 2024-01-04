@@ -22,6 +22,11 @@ function ChessBoard({  }) {
     const [draggedPiece, setDraggedPiece] = useState(null);
     const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
 
+    const [finalDragSquare, setFinalDragSquare] = useState(null)
+
+    const [attemptMove, setAttemptMove] = useState(false)
+
+
 
     const handleTouchStart = (piece, e) => {
         e.preventDefault();
@@ -54,6 +59,8 @@ function ChessBoard({  }) {
         dispatch(receiveSelected(startSquareId));
 
         dispatch(receiveMoveOptions(piece.getMoves()));
+
+        // setAttemptMove(false)
     }
 
     function getMousePos(e){
@@ -106,11 +113,9 @@ function ChessBoard({  }) {
 
     function endActions(piece, e) {
 
-        const [x,y] = getMousePos(e);
-        const endSquare = findSquareAtPosition(x,y);
-        const startSquare = piece.getSquareId();
+        // console.log("======END ACTIONS============")
 
-        playMoveIfValid(piece, startSquare, endSquare);
+        setAttemptMove(true);
 
         setDraggedPiece(null);
 
@@ -119,8 +124,13 @@ function ChessBoard({  }) {
 
     
     function findSquareAtPosition(x,y) {
+        // console.log("------findSquareAtPosition-----")
         const element = document.elementFromPoint(x, y);
         const parent = element.parentElement;
+        // console.log("x,y",x,y)
+        // console.log("element",element)
+        // console.log("highlightedSquare",highlightedSquare)
+        // console.log("finalDragSquare",finalDragSquare)
         if (element && element.classList.contains('board-square')) {
             return element.id;
         } else if (parent && parent.classList.contains('board-square')){
@@ -131,6 +141,8 @@ function ChessBoard({  }) {
 
     function playMoveIfValid(piece, startSquare, endSquare){
 
+        console.log("in play move if valid")
+
         if (startSquare && endSquare && startSquare !== endSquare){
             const validOptions = piece.getMoves().options;
             const validTakeOptions = piece.getMoves().takeOptions;
@@ -138,19 +150,17 @@ function ChessBoard({  }) {
                 const startPos = idToPos(startSquare);
                 const endPos = idToPos(endSquare);
                 gameBoard.movePiece(startPos, endPos, piece);
-                updateBoard();
+                // updateBoard();
             }
         }
     }
 
     function updateBoard(){
-        const updatedBoard = chessBoard;
+        const updatedBoard = chessBoard.map(row => row.map(cell => ({ ...cell })));
         for (let a = 0 ; a  < 8 ; a++ ){
             for (let b = 0 ; b  < 8 ; b++ ){
-    
                 const localPiece = updatedBoard[a][b].pieceObj;
                 const reduxPiece = gameBoard.getPiece([a, b]);
-    
                 if ((localPiece === null ^ reduxPiece === null) || 
                     (localPiece && reduxPiece && localPiece.constructor !== reduxPiece.constructor)) {
                     const screenRank = 7 - a;
@@ -162,34 +172,66 @@ function ChessBoard({  }) {
     }
 
 
-
     useEffect(() => {
         if (!gameBoard) {
             const newGameBoard = new Board();
             dispatch(receiveGameBoard(newGameBoard));
-            initialiseBoard(newGameBoard)
-        }
+            // initialiseBoard(newGameBoard)
+        } 
     }, [gameBoard, dispatch]);
 
+    useEffect(() => {
 
-    function initialiseBoard(gameBoard){
-        let color = "brown";
-        const board = [];
-        for (let a = 7 ; a  >= 0 ; a-- ){
-            board.push([]);
-            const rank = a + 1;
-            for (let b = 0 ; b  < 8 ; b++ ){
-                const file = indexToFile(b);
+        if (attemptMove){
+            const piece = gameBoard.getPieceFromId(selectedSquare);
+            console.log("piece", piece)
+            playMoveIfValid(piece, selectedSquare, finalDragSquare);
+            setAttemptMove(false);
 
-                const pieceObj = gameBoard.getPiece([a, b]);
-                board[board.length -1].push({pieceObj, file, rank, color});
+            // updateBoard();
+        }
 
-                color = switchColor(color);
-            }
+    }, [attemptMove, finalDragSquare, selectedSquare, draggedPiece]);
+
+
+    // function initialiseBoard(gameBoard){
+    //     let color = "brown";
+    //     const board = [];
+    //     for (let a = 7 ; a  >= 0 ; a-- ){
+    //         board.push([]);
+    //         const rank = a + 1;
+    //         for (let b = 0 ; b  < 8 ; b++ ){
+    //             const file = indexToFile(b);
+
+    //             const pieceObj = gameBoard.getPiece([a, b]);
+    //             board[board.length -1].push({pieceObj, file, rank, color});
+
+    //             color = switchColor(color);
+    //         }
+    //         color = switchColor(color);
+    //     }
+    //     setChessBoard(board)
+
+    //     console.log("board", board)
+    // }
+    let color = "brown";
+    const STATIC_BOARD = [];
+    for (let a = 7 ; a  >= 0 ; a-- ){
+        STATIC_BOARD.push([]);
+        const rank = a + 1;
+        for (let b = 0 ; b  < 8 ; b++ ){
+            const file = indexToFile(b);
+
+            // const pieceObj = gameBoard.getPiece([a, b]);
+            const len = STATIC_BOARD.length;
+            STATIC_BOARD[len-1].push({file, rank, color});
+
             color = switchColor(color);
         }
-        setChessBoard(board)
+        color = switchColor(color);
     }
+
+    // {pieceObj: null, file: 'A', rank: 8, color: 'brown'}
 
 
     function switchColor(color){
@@ -200,33 +242,33 @@ function ChessBoard({  }) {
         }
     }
 
+    // console.log(gameBoard.board, "gameboard")
+
 
     return (
         <div className="chess-board">
-            {/* render your chess board and pieces */}
-            {chessBoard.map((row, rowIndex) => (
+            {gameBoard && [...gameBoard.board].reverse().map((row, rowIndex) => (
                 <div key={rowIndex} className="board-row">
-                    {row.map((cell) => {
-
-                        const {pieceObj, file, rank, color} = cell;
-                    
+                    {row.map((piece, colIndex) => {
+                        const squareInfo = STATIC_BOARD[rowIndex][colIndex]
+                        const {file, rank, color} = squareInfo;
                         const id = `${file}${rank}`;
-
                         const selected = selectedSquare === id ? 'selected' : '';
-                        
                         const highlighted = highlightedSquare === id ? 'highlight' : '';
 
                         return (
                             <div className={`board-square ${color} ${selected} ${highlighted}`} key={id} id={id}>
 
                                 {
-                                    pieceObj &&
+                                    piece &&
                                     <ChessPiece 
-                                        pieceObj={cell.pieceObj}
+                                        pieceObj={piece}
                                         onTouchDragStart={handleTouchStart}
                                         onClickDragStart={handleClickStart}
                                         draggedPiece={draggedPiece}
                                         dragPosition={dragPosition}
+
+                                        setFinalDragSquare={setFinalDragSquare}
 
                                     />
                                 }

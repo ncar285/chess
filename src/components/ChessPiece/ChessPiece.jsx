@@ -36,7 +36,7 @@ const PIECE_IMAGES = {
 
 
 
-const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece, dragPosition }) => {
+const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece, dragPosition, setFinalDragSquare }) => {
 
     const pieceRef = useRef(null);
     const cloneRef = useRef(null);
@@ -116,6 +116,9 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
             const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
             if (highlightedSquare !== squareBelow){
                 dispatch(receiveHighlightedSquare(squareBelow))
+                if (squareBelow){
+                    setFinalDragSquare(squareBelow);
+                }
             }
         }
 
@@ -127,8 +130,6 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
         if (cloneRef.current) { // Make the clone "click-through"
             cloneRef.current.style.pointerEvents = 'none';
         }
-
-        console.log("x and y values", x, y)
     
         let res = null;
         let element = null;

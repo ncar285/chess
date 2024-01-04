@@ -2,18 +2,13 @@ export function posToId(pos){
     const [a,b] =  pos;
     const rank = a + 1;
     const file = indexToFile(b);
-    // const charCode = 'a'.charCodeAt(0) + b;
-    // const file = String.fromCharCode(charCode);
     return `${file}${rank}`
 }
 
 export function idToPos(id){
     const [file, rank] = id.split('');
-    // debugger
-    // const b = file.charCodeAt(0) - 'a'.charCodeAt(0);
     const b = fileToPos(file);
     const a = parseInt(rank) - 1;
-    console.log([a,b])
     return [a,b];
 }
 
@@ -23,6 +18,5 @@ export function indexToFile(index){
 }
 
 export function fileToPos(file){
-    // debugger
     return file.charCodeAt(0) - 'A'.charCodeAt(0);
 }
