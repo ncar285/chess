@@ -11,6 +11,9 @@ export const REMOVE_HIGHLIGHTED_SQUARE = "REMOVE_HIGHLIGHTED_SQUARE";
 export const RECEIVE_DRAGGING_PIECE = "RECEIVE_DRAGGING_PIECE"
 export const REMOVE_DRAGGING_PIECE = "REMOVE_DRAGGING_PIECE"
 
+export const RECEIVE_DRAG_POSITION = "RECEIVE_DRAG_POSITION"
+export const REMOVE_DRAG_POSITION = "REMOVE_DRAG_POSITION"
+
 // ACTION CREATORS
 export const receiveSelected = selectedId => {
     return {
@@ -65,6 +68,19 @@ export const removeDraggingPiece = () => {
     }
 }
 
+export const receiveDragPosition = (pos) => {
+    return {
+        type: RECEIVE_DRAG_POSITION,
+        payload: pos
+    }
+}
+
+export const removeDragPosition = () => {
+    return {
+        type: REMOVE_DRAG_POSITION,
+    }
+}
+
 // SELECTORS
 export const getSelected = state => state.ui.selectedId;
 
@@ -72,9 +88,11 @@ export const getMoveOptions = state => state.ui.validMoves;
 
 export const getTakeOptions = state => state.ui.validTakes;
 
-// export const getDraggingPiece = state => state.ui.draggingPiece;
-
 export const getHighlightedSquare = state => state.ui.highlightedSquare;
+
+export const getDraggingPiece = state => state.ui.draggingPiece;
+
+export const getDragPosition = state => state.ui.dragPosition;
 
 // REDUCER
 const initialState = {
@@ -82,7 +100,8 @@ const initialState = {
     validMoves: null,
     validTakes: null,
     highlightedSquare: null,
-    draggingPiece: null
+    draggingPiece: null,
+    dragPosition: null
 };
 
 const uiReducer = (state = initialState, action) => {
@@ -131,6 +150,16 @@ const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 draggingPiece: null
+            }
+        case RECEIVE_DRAG_POSITION:
+            return {
+                ...state,
+                dragPosition: action.payload
+            }
+        case REMOVE_DRAG_POSITION:
+            return {
+                ...state,
+                dragPosition: null
             }
         default:
             return state;

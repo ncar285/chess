@@ -34,7 +34,7 @@ const PIECE_IMAGES = {
 
 
 
-function DragClone(pieceObj){
+function DragClone(piece){
 
     const cloneRef = useRef(null);
 
@@ -90,8 +90,8 @@ function DragClone(pieceObj){
 
     return (
         <img 
-            alt={`${pieceObj.getColor()} ${pieceObj.getType()}`}
-            src={PIECE_IMAGES[pieceObj.getType()]} 
+            alt={`${piece.getColor()} ${piece.getType()}`}
+            src={PIECE_IMAGES[piece.getType()]} 
             ref={cloneRef}
             className={`chess-piece dragging`}
         />
