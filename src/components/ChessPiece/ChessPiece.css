@@ -11,8 +11,9 @@
 }
 
 .chess-piece.dragging {
+    position: absolute;
     width: var(--pieceWidth);
-    transform: none;
+    transform: translateY(-50%) translateX(-50%);
 }
 
 .chess-piece:active {

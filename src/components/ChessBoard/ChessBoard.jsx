@@ -3,7 +3,7 @@ import { posToId, indexToFile, idToPos } from '../../Utils/posIdConversion';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
-import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveDragPosition, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDraggingPiece, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
+import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveDragPosition, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDragPosition, removeDraggingPiece, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
 // import '../ChessSquare/ChessSquare.css'
 import "./ChessBoard.css"
@@ -31,7 +31,7 @@ function ChessBoard({  }) {
     const highlightedSquare = useSelector(getHighlightedSquare);
 
     const [draggedPiece, setDraggedPiece] = useState(null);
-    const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
+    const [dragPosition, setDragPosition] = useState(null);
 
     const [finalDragSquare, setFinalDragSquare] = useState(null)
 
@@ -154,17 +154,14 @@ function ChessBoard({  }) {
         // console.log("end square", finalDragSquareRef.current )
         // console.log("piece", piece)\\
 
-        setIsDragging(false)
-
+        setIsDragging(false);
         playMoveIfValid(piece, selectedSquareRef.current, finalDragSquareRef.current)
-
         setAttemptMove(true);
-
         setDraggedPiece(null);
+        setDragPosition(null);
 
-
+        dispatch(removeDragPosition())
         dispatch(removeDraggingPiece());
-
         dispatch(removeHighlightedSquare());
         dispatch(removeSelected());
     }

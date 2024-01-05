@@ -4,11 +4,12 @@ import { Switch } from 'react-router-dom';
 import HomePage from './components/HomePage/HomePage';
 import { Route } from 'react-router-dom/cjs/react-router-dom.min';
 import { useSelector } from 'react-redux';
-import { getDraggingPiece } from './store/uiReducer';
+import { getDragPosition, getDraggingPiece } from './store/uiReducer';
 import DragClone from './components/DragClone/DragClone';
 
 function App() {
     const draggingPiece = useSelector(getDraggingPiece)
+    const dragPosition = useSelector(getDragPosition)
     console.log("in APP.js")
     console.log("draggingPiece", draggingPiece)
 
@@ -16,7 +17,10 @@ function App() {
         <div className="app-container">
                 
             <Switch>
-                {draggingPiece && <DragClone piece={draggingPiece}/>}
+                {
+                    (draggingPiece && dragPosition) && 
+                    <DragClone piece={draggingPiece} position={dragPosition}/>
+                }
                 <Route exact path="/" component={HomePage} />
             </Switch>
 

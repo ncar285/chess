@@ -34,27 +34,26 @@ const PIECE_IMAGES = {
 
 
 
-function DragClone( piece ){
+function DragClone( {piece, position} ){
 
     const cloneRef = useRef(null);
 
     const highlightedSquare = useSelector(getHighlightedSquare)
-    const dragPosition = useSelector(getDragPosition)
 
     const dispatch = useDispatch();
 
 
     console.log("in DRAD CLONE.js")
-    console.log("piece", piece.piece)
+    console.log("piece", piece)
     console.log("cloneRef.current", cloneRef.current)
-    console.log("dragPosition", dragPosition)
+    console.log("dragPosition", position)
 
     useEffect(()=>{
-        if (cloneRef.current && dragPosition){
-            cloneRef.current.style.left = `${dragPosition.x - cloneRef.current.offsetWidth / 2}px`;
-            cloneRef.current.style.top = `${dragPosition.y}px`;
+        if (cloneRef.current && position){
+            cloneRef.current.style.left = `${position.x}px`;
+            cloneRef.current.style.top = `${position.y}px`;
 
-            const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
+            const squareBelow = findChessSquareFromCoordinates(position.x, position.y)
             if (highlightedSquare !== squareBelow){
                 dispatch(receiveHighlightedSquare(squareBelow))
                 // if (squareBelow){
@@ -63,7 +62,7 @@ function DragClone( piece ){
             }
         }
 
-    }, [dragPosition])
+    }, [position])
 
 
     function findChessSquareFromCoordinates(x, y) {
@@ -95,8 +94,8 @@ function DragClone( piece ){
 
     return (
         <img 
-            alt={`${piece.piece.getColor()} ${piece.piece.getType()}`}
-            src={PIECE_IMAGES[piece.piece.getType()]} 
+            alt={`${piece.getColor()} ${piece.getType()}`}
+            src={PIECE_IMAGES[piece.getType()]} 
             ref={cloneRef}
             className={`chess-piece dragging`}
         />
