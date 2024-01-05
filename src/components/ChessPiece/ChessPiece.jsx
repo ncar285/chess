@@ -1,6 +1,6 @@
 import './ChessPiece.css';
 import React, { useEffect, useRef } from 'react';
-import { getHighlightedSquare, getSelected, receiveHighlightedSquare, removeHighlightedSquare } from '../../store/uiReducer';
+import { getDraggingPiece, getHighlightedSquare, getSelected, receiveHighlightedSquare, removeHighlightedSquare } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Piece images
@@ -39,9 +39,11 @@ const PIECE_IMAGES = {
 const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece, dragPosition, setFinalDragSquare, isDragging }) => {
 
     const pieceRef = useRef(null);
-    const cloneRef = useRef(null);
+    // const cloneRef = useRef(null);
 
     // console.log("draggedPiece",draggedPiece)
+
+    const draggingPiece = useSelector(getDraggingPiece)
 
     const highlightedSquare = useSelector(getHighlightedSquare)
 
@@ -56,6 +58,15 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
         onClickDragStart(pieceObj, e);
         console.log("starting drag on piece: ", pieceObj.getSquareId())
     }
+
+    useEffect(()=>{
+        if (draggingPiece === pieceObj){
+            pieceRef.current.style.visibility = 'hidden';
+        } else {
+            pieceRef.current.style.visibility = '';
+        }
+
+    }, [draggingPiece])
 
 
     useEffect(() => {
@@ -149,49 +160,49 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
     // }, [isDragging]);
 
 
-    useEffect(()=>{
-        if (cloneRef.current){
-            cloneRef.current.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
-            cloneRef.current.style.top = `${dragPosition.y}px`;
+    // useEffect(()=>{
+    //     if (cloneRef.current){
+    //         cloneRef.current.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
+    //         cloneRef.current.style.top = `${dragPosition.y}px`;
 
-            const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
-            if (highlightedSquare !== squareBelow){
-                dispatch(receiveHighlightedSquare(squareBelow))
-                if (squareBelow){
-                    setFinalDragSquare(squareBelow);
-                }
-            }
-        }
+    //         const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
+    //         if (highlightedSquare !== squareBelow){
+    //             dispatch(receiveHighlightedSquare(squareBelow))
+    //             if (squareBelow){
+    //                 setFinalDragSquare(squareBelow);
+    //             }
+    //         }
+    //     }
 
-    }, [dragPosition])
+    // }, [dragPosition])
 
 
-    function findChessSquareFromCoordinates(x, y) {
+    // function findChessSquareFromCoordinates(x, y) {
 
-        if (cloneRef.current) { // Make the clone "click-through"
-            cloneRef.current.style.pointerEvents = 'none';
-        }
+    //     if (cloneRef.current) { // Make the clone "click-through"
+    //         cloneRef.current.style.pointerEvents = 'none';
+    //     }
     
-        let res = null;
-        let element = null;
-        if (x && y){
-            element = document.elementFromPoint(x, y);
-            if (element && element.classList.contains('board-square')) {
-                res = element.id; 
-            } else if (element.parentElement.classList.contains('board-square')){
-                res = element.parentElement.id;
-            } else{
-                // console.log("couldn't find a chess square")
-                // add error handling
-            }
-        }
+    //     let res = null;
+    //     let element = null;
+    //     if (x && y){
+    //         element = document.elementFromPoint(x, y);
+    //         if (element && element.classList.contains('board-square')) {
+    //             res = element.id; 
+    //         } else if (element.parentElement.classList.contains('board-square')){
+    //             res = element.parentElement.id;
+    //         } else{
+    //             // console.log("couldn't find a chess square")
+    //             // add error handling
+    //         }
+    //     }
     
-        if (cloneRef.current) { 
-            cloneRef.current.style.pointerEvents = '';
-        }
+    //     if (cloneRef.current) { 
+    //         cloneRef.current.style.pointerEvents = '';
+    //     }
     
-        return res;
-    }
+    //     return res;
+    // }
 
     return (
         <img 

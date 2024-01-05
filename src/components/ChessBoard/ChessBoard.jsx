@@ -82,9 +82,10 @@ function ChessBoard({  }) {
         setDraggedPiece(piece);
 
         dispatch(receiveDraggingPiece(piece))
-
+        
         const [x, y] = getMousePos(e)
         setDragPosition({x, y});
+        dispatch(receiveDragPosition({x,y}));
 
         setIsDragging(true)
 
@@ -123,6 +124,10 @@ function ChessBoard({  }) {
 
         const [x,y] = getMousePos(e);
         setDragPosition({x,y});
+        // if (y > 800){
+        //   debugger  
+        //   console.log("Y value is: ", y)
+        // }
 
         dispatch(receiveDragPosition({x,y}));
 

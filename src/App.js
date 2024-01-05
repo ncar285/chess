@@ -10,17 +10,13 @@ import DragClone from './components/DragClone/DragClone';
 function App() {
     const draggingPiece = useSelector(getDraggingPiece)
     const dragPosition = useSelector(getDragPosition)
-    console.log("in APP.js")
-    console.log("draggingPiece", draggingPiece)
+    // console.log("in APP.js")
+    // console.log("draggingPiece", draggingPiece)
 
     return (
         <div className="app-container">
-                
+            {draggingPiece && dragPosition && <DragClone piece={draggingPiece} position={dragPosition}/>}
             <Switch>
-                {
-                    (draggingPiece && dragPosition) && 
-                    <DragClone piece={draggingPiece} position={dragPosition}/>
-                }
                 <Route exact path="/" component={HomePage} />
             </Switch>
 
