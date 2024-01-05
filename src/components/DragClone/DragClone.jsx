@@ -16,6 +16,8 @@ import b_queen from '../../pieces/b_queen.png'
 import w_queen from '../../pieces/w_queen.png'
 import b_rook from '../../pieces/b_rook.png'
 import w_rook from '../../pieces/w_rook.png'
+import { idToPos, posToId } from '../../Utils/posIdConversion';
+import { getGameBoard } from '../../store/gameReducer';
 
 const PIECE_IMAGES = {
     'b_bishop': b_bishop,
@@ -33,36 +35,36 @@ const PIECE_IMAGES = {
 };
 
 
-
 function DragClone( {piece, position} ){
 
     const cloneRef = useRef(null);
-
     const highlightedSquare = useSelector(getHighlightedSquare)
-
+    const gameBoard = useSelector(getGameBoard);
     const dispatch = useDispatch();
-
-
-    console.log("in DRAD CLONE.js")
-    console.log("piece", piece)
-    console.log("cloneRef.current", cloneRef.current)
-    console.log("dragPosition", position)
 
     useEffect(()=>{
         if (cloneRef.current && position){
             cloneRef.current.style.left = `${position.x}px`;
             cloneRef.current.style.top = `${position.y}px`;
-
             const squareBelow = findChessSquareFromCoordinates(position.x, position.y)
             if (highlightedSquare !== squareBelow){
                 dispatch(receiveHighlightedSquare(squareBelow))
-                // if (squareBelow){
-                //     setFinalDragSquare(squareBelow);
-                // }
             }
         }
 
     }, [position])
+
+    // cleanup useEffect to play move
+    // useEffect(() => {
+    //     return () => {
+    //         const endSquare = highlightedSquare;
+    //         if (piece && endSquare) {
+    //             playMoveIfValid(piece, endSquare)
+    //         }
+    //     };
+    // }, [piece, position, highlightedSquare, dispatch]);
+
+
 
 
     function findChessSquareFromCoordinates(x, y) {

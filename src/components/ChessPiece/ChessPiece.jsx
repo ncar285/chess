@@ -39,15 +39,8 @@ const PIECE_IMAGES = {
 const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece, dragPosition, setFinalDragSquare, isDragging }) => {
 
     const pieceRef = useRef(null);
-    // const cloneRef = useRef(null);
-
-    // console.log("draggedPiece",draggedPiece)
-
     const draggingPiece = useSelector(getDraggingPiece)
 
-    const highlightedSquare = useSelector(getHighlightedSquare)
-
-    const dispatch = useDispatch();
 
     const handleTouchStart = (e) => {
         onTouchDragStart(pieceObj, e);
@@ -82,127 +75,6 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
         }
     }, []);
 
-    // useEffect(() => {
-    //     // When this piece is the one being dragged, manage the clone
-    //     if (draggedPiece === pieceObj) {
-
-    //         const clone = pieceRef.current.cloneNode(true);
-    //         clone.classList.add('dragging');
-            
-    //         // if (dragPosition){
-    //         //     clone.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
-    //         //     clone.style.top = `${dragPosition.y}px`;
-    //         // }
-    //         // const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
-    //         // if (squareBelow){
-    //         //     dispatch(receiveHighlightedSquare(squareBelow))
-    //         // }
-
-    //         clone.style.position = 'absolute';
-    //         document.body.appendChild(clone);
-    //         cloneRef.current = clone;
-
-    //         // Hide the original piece
-    //         pieceRef.current.style.visibility = 'hidden';
-         
-    //     } else {
-    //         // Ensure the clone is removed or hidden and normal piece is visible
-    //         console.log("cloneRef", cloneRef.current)
-    //         if (cloneRef.current) {
-    //             // console.log(cloneRef.current)
-    //             // debugger
-    //             document.body.removeChild(cloneRef.current);
-    //             cloneRef.current = null;
-    //         }
-    //         // Show the original piece
-    //         pieceRef.current.style.visibility = '';
-
-    //     }
-    // }, [draggedPiece]);
-
-
-    // useEffect(() => {
-    //     // When this piece is the one being dragged, manage the clone
-    //     if (isDragging) {
-
-    //         const clone = pieceRef.current.cloneNode(true);
-    //         clone.classList.add('dragging');
-            
-    //         if (dragPosition){
-    //             clone.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
-    //             clone.style.top = `${dragPosition.y}px`;
-    //         }
-    //         const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
-    //         if (squareBelow){
-    //             dispatch(receiveHighlightedSquare(squareBelow))
-    //         }
-
-    //         clone.style.position = 'absolute';
-    //         document.body.appendChild(clone);
-    //         cloneRef.current = clone;
-
-    //         // Hide the original piece
-    //         pieceRef.current.style.visibility = 'hidden';
-         
-    //     } else {
-    //         // Ensure the clone is removed or hidden and normal piece is visible
-    //         console.log("cloneRef", cloneRef.current)
-    //         if (cloneRef.current) {
-    //             console.log(cloneRef.current)
-    //             // debugger
-    //             document.body.removeChild(cloneRef.current);
-    //             cloneRef.current = null;
-    //         }
-    //         // Show the original piece
-    //         pieceRef.current.style.visibility = '';
-
-    //     }
-    // }, [isDragging]);
-
-
-    // useEffect(()=>{
-    //     if (cloneRef.current){
-    //         cloneRef.current.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
-    //         cloneRef.current.style.top = `${dragPosition.y}px`;
-
-    //         const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
-    //         if (highlightedSquare !== squareBelow){
-    //             dispatch(receiveHighlightedSquare(squareBelow))
-    //             if (squareBelow){
-    //                 setFinalDragSquare(squareBelow);
-    //             }
-    //         }
-    //     }
-
-    // }, [dragPosition])
-
-
-    // function findChessSquareFromCoordinates(x, y) {
-
-    //     if (cloneRef.current) { // Make the clone "click-through"
-    //         cloneRef.current.style.pointerEvents = 'none';
-    //     }
-    
-    //     let res = null;
-    //     let element = null;
-    //     if (x && y){
-    //         element = document.elementFromPoint(x, y);
-    //         if (element && element.classList.contains('board-square')) {
-    //             res = element.id; 
-    //         } else if (element.parentElement.classList.contains('board-square')){
-    //             res = element.parentElement.id;
-    //         } else{
-    //             // console.log("couldn't find a chess square")
-    //             // add error handling
-    //         }
-    //     }
-    
-    //     if (cloneRef.current) { 
-    //         cloneRef.current.style.pointerEvents = '';
-    //     }
-    
-    //     return res;
-    // }
 
     return (
         <img 

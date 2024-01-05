@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { posToId, indexToFile, idToPos } from '../../Utils/posIdConversion'; 
+import { posToId, indexToFile} from '../../Utils/posIdConversion'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
 import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveDragPosition, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDragPosition, removeDraggingPiece, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
-// import '../ChessSquare/ChessSquare.css'
+import { playMoveIfValid } from '../../Utils/playMoveIfValid';
 import "./ChessBoard.css"
 
 const STATIC_BOARD = [];
@@ -32,22 +32,20 @@ function ChessBoard({  }) {
 
     const [draggedPiece, setDraggedPiece] = useState(null);
     const [dragPosition, setDragPosition] = useState(null);
-
     const [finalDragSquare, setFinalDragSquare] = useState(null)
-
-    const [attemptMove, setAttemptMove] = useState(false)
-
     const [isDragging, setIsDragging] = useState(false)
 
     // Define refs to track current values of selectedSquare and finalDragSquare
-    const selectedSquareRef = useRef(null);
+    // const selectedSquareRef = useRef(null);
     const finalDragSquareRef = useRef(null);
 
     // Update refs whenever the related state changes
     useEffect(() => {
-        selectedSquareRef.current = selectedSquare;
-        finalDragSquareRef.current = finalDragSquare;
-    }, [selectedSquare, finalDragSquare]);
+        if (highlightedSquare){
+            finalDragSquareRef.current = highlightedSquare;
+        }
+        // selectedSquareRef.current = selectedSquare;
+    }, [highlightedSquare]);
 
     useEffect(() => {
         if (!gameBoard) {
@@ -78,23 +76,15 @@ function ChessBoard({  }) {
     };
 
     const startActions = (piece, e) => {
-
         setDraggedPiece(piece);
-
-        dispatch(receiveDraggingPiece(piece))
-        
+        dispatch(receiveDraggingPiece(piece));
         const [x, y] = getMousePos(e)
         setDragPosition({x, y});
         dispatch(receiveDragPosition({x,y}));
-
         setIsDragging(true)
-
         const startSquareId = posToId(piece.getSquare());
-  
         dispatch(receiveSelected(startSquareId));
-
         dispatch(receiveMoveOptions(piece.getMoves()));
-
     }
 
     function getMousePos(e){
@@ -124,10 +114,6 @@ function ChessBoard({  }) {
 
         const [x,y] = getMousePos(e);
         setDragPosition({x,y});
-        // if (y > 800){
-        //   debugger  
-        //   console.log("Y value is: ", y)
-        // }
 
         dispatch(receiveDragPosition({x,y}));
 
@@ -153,15 +139,13 @@ function ChessBoard({  }) {
 
     function endActions(piece, e) {
 
-        // console.log("======END ACTIONS============")
-
-        // console.log("start square", selectedSquareRef.current )
-        // console.log("end square", finalDragSquareRef.current )
-        // console.log("piece", piece)\\
+        const endSquare = finalDragSquareRef.current;
+        // console.log("end square used in play move:", finalDragSquareRef.current)
+        if (endSquare){
+            playMoveIfValid(piece, gameBoard, endSquare)
+        }
 
         setIsDragging(false);
-        playMoveIfValid(piece, selectedSquareRef.current, finalDragSquareRef.current)
-        setAttemptMove(true);
         setDraggedPiece(null);
         setDragPosition(null);
 
@@ -171,33 +155,6 @@ function ChessBoard({  }) {
         dispatch(removeSelected());
     }
 
-    function playMoveIfValid(piece, startSquare, endSquare){
-        if (startSquare && endSquare && startSquare !== endSquare){
-            const validOptions = piece.getMoves().options;
-            const validTakeOptions = piece.getMoves().takeOptions;
-
-            console.log("==============")
-            console.log("piece",piece.getSquare())
-            console.log("startSquare", startSquare)
-            console.log("endSquare", endSquare)
-            console.log("validOptions",validOptions)
-            console.log("validTakeOptions",validTakeOptions)
-
-
-            if (validOptions.has(endSquare) || validTakeOptions.has(endSquare)){
-                const startPos = idToPos(startSquare);
-                const endPos = idToPos(endSquare);
-                gameBoard.movePiece(startPos, endPos, piece);
-
-                // console.log("startPos", startPos)
-                // console.log("endPos", endPos)
-
-                console.log("VALID MOVE")
-            } else {
-                console.log("NOT A VALID MOVE")
-            }
-        }
-    }
 
 
     return (
