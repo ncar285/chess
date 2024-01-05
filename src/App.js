@@ -8,13 +8,9 @@ import { getDraggingPiece } from './store/uiReducer';
 import DragClone from './components/DragClone/DragClone';
 
 function App() {
-
-    // const [loaded, setLoaded] = useState(false);
-    // check if page is loaded...
-    // setLoaded(true)
-    // return loaded && (
-
     const draggingPiece = useSelector(getDraggingPiece)
+    console.log("in APP.js")
+    console.log("draggingPiece", draggingPiece)
 
     return (
         <div className="app-container">

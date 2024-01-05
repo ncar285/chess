@@ -71,43 +71,43 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
         }
     }, []);
 
-    useEffect(() => {
-        // When this piece is the one being dragged, manage the clone
-        if (draggedPiece === pieceObj) {
+    // useEffect(() => {
+    //     // When this piece is the one being dragged, manage the clone
+    //     if (draggedPiece === pieceObj) {
 
-            const clone = pieceRef.current.cloneNode(true);
-            clone.classList.add('dragging');
+    //         const clone = pieceRef.current.cloneNode(true);
+    //         clone.classList.add('dragging');
             
-            // if (dragPosition){
-            //     clone.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
-            //     clone.style.top = `${dragPosition.y}px`;
-            // }
-            // const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
-            // if (squareBelow){
-            //     dispatch(receiveHighlightedSquare(squareBelow))
-            // }
+    //         // if (dragPosition){
+    //         //     clone.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
+    //         //     clone.style.top = `${dragPosition.y}px`;
+    //         // }
+    //         // const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
+    //         // if (squareBelow){
+    //         //     dispatch(receiveHighlightedSquare(squareBelow))
+    //         // }
 
-            clone.style.position = 'absolute';
-            document.body.appendChild(clone);
-            cloneRef.current = clone;
+    //         clone.style.position = 'absolute';
+    //         document.body.appendChild(clone);
+    //         cloneRef.current = clone;
 
-            // Hide the original piece
-            pieceRef.current.style.visibility = 'hidden';
+    //         // Hide the original piece
+    //         pieceRef.current.style.visibility = 'hidden';
          
-        } else {
-            // Ensure the clone is removed or hidden and normal piece is visible
-            console.log("cloneRef", cloneRef.current)
-            if (cloneRef.current) {
-                // console.log(cloneRef.current)
-                // debugger
-                document.body.removeChild(cloneRef.current);
-                cloneRef.current = null;
-            }
-            // Show the original piece
-            pieceRef.current.style.visibility = '';
+    //     } else {
+    //         // Ensure the clone is removed or hidden and normal piece is visible
+    //         console.log("cloneRef", cloneRef.current)
+    //         if (cloneRef.current) {
+    //             // console.log(cloneRef.current)
+    //             // debugger
+    //             document.body.removeChild(cloneRef.current);
+    //             cloneRef.current = null;
+    //         }
+    //         // Show the original piece
+    //         pieceRef.current.style.visibility = '';
 
-        }
-    }, [draggedPiece]);
+    //     }
+    // }, [draggedPiece]);
 
 
     // useEffect(() => {

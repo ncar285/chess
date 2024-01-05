@@ -3,9 +3,9 @@ import { posToId, indexToFile, idToPos } from '../../Utils/posIdConversion';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
-import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveDragPosition, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
+import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveDragPosition, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDraggingPiece, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
-import '../ChessSquare/ChessSquare.css'
+// import '../ChessSquare/ChessSquare.css'
 import "./ChessBoard.css"
 
 const STATIC_BOARD = [];
@@ -161,6 +161,9 @@ function ChessBoard({  }) {
         setAttemptMove(true);
 
         setDraggedPiece(null);
+
+
+        dispatch(removeDraggingPiece());
 
         dispatch(removeHighlightedSquare());
         dispatch(removeSelected());

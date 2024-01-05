@@ -1,6 +1,6 @@
 import '../ChessPiece/ChessPiece.css';
 import React, { useEffect, useRef } from 'react';
-import { getHighlightedSquare, getSelected, receiveHighlightedSquare, removeHighlightedSquare } from '../../store/uiReducer';
+import { getDragPosition, getHighlightedSquare, getSelected, receiveHighlightedSquare, removeHighlightedSquare } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Piece images
@@ -34,27 +34,32 @@ const PIECE_IMAGES = {
 
 
 
-function DragClone(piece){
+function DragClone( piece ){
 
     const cloneRef = useRef(null);
 
     const highlightedSquare = useSelector(getHighlightedSquare)
+    const dragPosition = useSelector(getDragPosition)
 
     const dispatch = useDispatch();
 
 
+    console.log("in DRAD CLONE.js")
+    console.log("piece", piece.piece)
+    console.log("cloneRef.current", cloneRef.current)
+    console.log("dragPosition", dragPosition)
 
     useEffect(()=>{
-        if (cloneRef.current){
-            cloneRef.current.style.left = `${dragPosition.x - pieceRef.current.offsetWidth / 2}px`;
+        if (cloneRef.current && dragPosition){
+            cloneRef.current.style.left = `${dragPosition.x - cloneRef.current.offsetWidth / 2}px`;
             cloneRef.current.style.top = `${dragPosition.y}px`;
 
             const squareBelow = findChessSquareFromCoordinates(dragPosition.x, dragPosition.y)
             if (highlightedSquare !== squareBelow){
                 dispatch(receiveHighlightedSquare(squareBelow))
-                if (squareBelow){
-                    setFinalDragSquare(squareBelow);
-                }
+                // if (squareBelow){
+                //     setFinalDragSquare(squareBelow);
+                // }
             }
         }
 
@@ -73,7 +78,7 @@ function DragClone(piece){
             element = document.elementFromPoint(x, y);
             if (element && element.classList.contains('board-square')) {
                 res = element.id; 
-            } else if (element.parentElement.classList.contains('board-square')){
+            } else if (element.parentElement && element.parentElement.classList.contains('board-square')){
                 res = element.parentElement.id;
             } else{
                 // console.log("couldn't find a chess square")
@@ -90,8 +95,8 @@ function DragClone(piece){
 
     return (
         <img 
-            alt={`${piece.getColor()} ${piece.getType()}`}
-            src={PIECE_IMAGES[piece.getType()]} 
+            alt={`${piece.piece.getColor()} ${piece.piece.getType()}`}
+            src={PIECE_IMAGES[piece.piece.getType()]} 
             ref={cloneRef}
             className={`chess-piece dragging`}
         />
