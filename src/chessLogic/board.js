@@ -1,4 +1,4 @@
-import { logBoardArray } from '../Utils/printBoard.js';
+import { printBoard } from '../Utils/printBoard.js';
 import { idToPos } from '../Utils/posIdConversion.js';
 import { Pawn } from './pawn.js';
 
@@ -6,6 +6,7 @@ export function Board(){
     this.board = 
     Array(8).fill(null).map(() => Array(8).fill(null));
     this.placePieces()
+    this.takenPieces = new Set();
 }
 
 Board.prototype.placePieces = function() {
@@ -18,7 +19,6 @@ Board.prototype.placePieces = function() {
         this.board[6][file] = new Pawn("black", [6, file], this);
     }
 }
-
 
 Board.prototype.getBoard = function(){
     return this.board;
@@ -35,6 +35,15 @@ Board.prototype.getPieceFromId = function(id){
     return board[r][c];
 }
 
+Board.prototype.addTakenPiece = function(piece){
+    this.takenPieces.add(piece);
+    return this.takenPieces;
+}
+
+Board.prototype.getTakenPieces = function(){
+    return this.takenPieces;
+}
+
 Board.prototype.movePiece = function(startSquare, endSquare, piece){
     try {
 
@@ -49,23 +58,17 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
         // store captured piece if there is one
         const capturedPiece = this.getPiece(endSquare);
 
-
-        // Move the piece
+        // Update the moved piece
         this.board[startSquare[0]][startSquare[1]] = null;
         this.board[endSquare[0]][endSquare[1]] = piece;
         piece.setSquare(endSquare);
 
-
-        // captured piece has no square
+        // Update a captured piece
         if (capturedPiece) {
             capturedPiece.setSquare(null);
+            this.addTakenPiece(capturedPiece);
+            capturedPiece.taken = true;
         }
-
-        console.log("capturedPiece",capturedPiece)
-        console.log("board", this.board)
-
-        // piece.setBoard(this.board)
-
 
         // Update a pawn's firstMove property
         if (piece.type.slice(2) === "pawn") {
@@ -74,13 +77,6 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
 
         const boardPrinted = printBoard(this.board);
         console.log("boardHash",boardPrinted)
-        console.log("how the piece sees the board", piece.getBoard())
-        if (JSON.stringify(this.board) !== JSON.stringify(piece.getBoard())) {
-            throw new Error("Piece's board doesn't match game state");
-        }
-        // if (this.board !== piece.getBoard()) {
-        //     throw new Error("Piece's board doesn't match game state");
-        // }
         
     } catch (error) {
         console.error(error.message);

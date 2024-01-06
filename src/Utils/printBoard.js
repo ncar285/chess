@@ -15,7 +15,9 @@ const PIECE_KEYS = {
 
 export function printBoard(boardArray){
     const hash = [...boardArray].reverse().map(row => "        |" + getRowHash(row) + "|")
-    return '\n \n' + hash.join('\n \n');
+    const topLine = "\n \n         _______________________________________________________________\n";
+    const bottomLine = "\n         ---------------------------------------------------------------\n";
+    return topLine + hash.join('\n \n') + bottomLine;
 }
 
 function getRowHash(row){

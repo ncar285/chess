@@ -1,4 +1,5 @@
 export function posToId(pos){
+    // console.log
     const [a,b] =  pos;
     const rank = a + 1;
     const file = indexToFile(b);

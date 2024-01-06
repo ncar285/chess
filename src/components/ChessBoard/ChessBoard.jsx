@@ -69,7 +69,6 @@ function ChessBoard({  }) {
 
     const startActions = (piece, e) => {
 
-        
         console.log("==================")
         console.log("starting with piece", piece)
 

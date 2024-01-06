@@ -5,6 +5,7 @@ export function Piece(color, square, board){
     this.color = color;
     this.square = square;
     this.board = board;
+    this.taken = false
 }
 
 Piece.prototype.getColor = function(){
@@ -30,6 +31,12 @@ Piece.prototype.setBoard = function(board){
 Piece.prototype.getBoard = function(){
     return this.board.board;
 }
+
+Piece.prototype.isTaken = function(){
+    return this.taken;
+}
+
+
 
 // Piece.prototype.setBoard = function(board){
 //     this.board = board;
