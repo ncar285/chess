@@ -1,4 +1,5 @@
 import './DragClone.css';
+import '../ChessPiece/ChessPiece.css';
 import React, { useEffect, useRef } from 'react';
 import { getHighlightedSquare, receiveHighlightedSquare } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +10,7 @@ function DragClone( {piece, position} ){
     const cloneRef = useRef(null);
     const highlightedSquare = useSelector(getHighlightedSquare)
     const dispatch = useDispatch();
+    const pieceType = piece.getType().slice(2);
 
     useEffect(()=>{
         if (cloneRef.current && position){
@@ -54,7 +56,7 @@ function DragClone( {piece, position} ){
             alt={`${piece.getColor()} ${piece.getType()}`}
             src={PIECE_IMAGES[piece.getType()]} 
             ref={cloneRef}
-            className={`chess-piece dragging`}
+            className={`chess-piece dragging ${pieceType}`}
         />
     );
 

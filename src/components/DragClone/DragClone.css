@@ -1,10 +1,34 @@
 .chess-piece.dragging {
     position: absolute;
-    width: var(--pieceWidth);
-    transform: translateY(-50%) translateX(-50%);
+    transform: translateY(-50%) translateX(-50%) scale(1.5);
     cursor: grabbing;
 }
 
 .chess-piece:active {
     cursor: grabbing;
+}
+
+.chess-piece.pawn{
+    height: var(--pawnHeight);
+    width: auto;
+}
+.chess-piece.knight{
+    height: var(--knightHeight);
+    width: auto;
+}
+.chess-piece.rook{
+    height: var(--rookHeight);
+    width: auto;
+}
+.chess-piece.bishop{
+    height: var(--bishopHeight);
+    width: auto;
+}
+.chess-piece.king{
+    height: var(--kingHeight);
+    width: auto;
+}
+.chess-piece.queen{
+    height: var(--queenHeight);
+    width: auto;
 }

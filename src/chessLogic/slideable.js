@@ -11,6 +11,7 @@ export class Slideable {
 
         const moves = [];
         const takes = [];
+
         dirs.forEach(dir=>{
             const dX = dir[0];
             const dY = dir[1];
