@@ -3,6 +3,7 @@ import { idToPos } from '../Utils/posIdConversion.js';
 import { King } from './king.js';
 import { Knight } from './knight.js';
 import { Pawn } from './pawn.js';
+import { Rook } from './rook.js';
 
 export function Board(){
     this.board = 
@@ -31,6 +32,13 @@ Board.prototype.placePieces = function() {
     this.board[0][4] = new King("white", [0,4], this);
     // Place black king
     this.board[7][4] = new King("black", [0,4], this);
+
+    // Place white rooks
+    this.board[0][0] = new Rook("white", [0,0], this);
+    this.board[0][7] = new Rook("white", [0,7], this);
+    // Place black rooks
+    this.board[7][0] = new Rook("black", [7,0], this);
+    this.board[7][7] = new Rook("black", [7,7], this);
 
 }
 
