@@ -5,7 +5,7 @@
     --boardLabel: calc( 0.04 * var(--boardDimension));
     --highlightWidth: calc((var(--boardDimension)/8) * 0.075);
 
-    --pieceWidth: calc((var(--boardDimension)/8) * 0.65);
+    /* --pieceWidth: calc((var(--boardDimension)/8) * 0.65); */
 
     --pawnHeight: calc((var(--boardDimension)/8) * 0.7);
     --knightHeight: calc((var(--boardDimension)/8) * 0.8);
@@ -13,6 +13,11 @@
     --bishopHeight: calc((var(--boardDimension)/8) * 0.8);
     --kingHeight: calc((var(--boardDimension)/8) * 0.95);
     --queenHeight: calc((var(--boardDimension)/8) * 0.95);
+
+    --piecePlacement: calc((var(--boardDimension)/8) * 0.05);
+
+    --touchHighlight: calc((var(--boardDimension)/8) * 3.606);
+    --touchCircleOffset: 130%;
 }
 
 @media (max-width: 1000px) {

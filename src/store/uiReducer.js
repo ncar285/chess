@@ -8,11 +8,17 @@ export const REMOVE_MOVE_OPTIONS = 'REMOVE_MOVE_OPTIONS';
 export const RECEIVE_HIGHLIGHTED_SQUARE  = "RECEIVE_HIGHLIGHTED_SQUARE";
 export const REMOVE_HIGHLIGHTED_SQUARE = "REMOVE_HIGHLIGHTED_SQUARE";
 
+export const RECEIVE_TOUCH_HIGHLIGHTED_SQUARE  = "RECEIVE_TOUCH_HIGHLIGHTED_SQUARE";
+export const REMOVE_TOUCH_HIGHLIGHTED_SQUARE = "REMOVE_TOUCH_HIGHLIGHTED_SQUARE";
+
 export const RECEIVE_DRAGGING_PIECE = "RECEIVE_DRAGGING_PIECE"
 export const REMOVE_DRAGGING_PIECE = "REMOVE_DRAGGING_PIECE"
 
 export const RECEIVE_DRAG_POSITION = "RECEIVE_DRAG_POSITION"
 export const REMOVE_DRAG_POSITION = "REMOVE_DRAG_POSITION"
+
+export const RECEIVE_DRAG_TYPE = "RECEIVE_DRAG_TYPE"
+export const REMOVE_DRAG_TYPE = "REMOVE_DRAG_TYPE"
 
 // ACTION CREATORS
 export const receiveSelected = selectedId => {
@@ -55,6 +61,20 @@ export const removeHighlightedSquare  = () => {
 }
 
 
+export const receiveTouchHighlightedSquare = (squareId) => {
+    return {
+        type: RECEIVE_TOUCH_HIGHLIGHTED_SQUARE,
+        payload: squareId
+    }
+}
+
+export const removeTouchHighlightedSquare  = () => {
+    return {
+        type: REMOVE_TOUCH_HIGHLIGHTED_SQUARE
+    }
+}
+
+
 export const receiveDraggingPiece = (piece) => {
     return {
         type: RECEIVE_DRAGGING_PIECE,
@@ -81,6 +101,19 @@ export const removeDragPosition = () => {
     }
 }
 
+export const receiveDragType = (type) => {
+    return {
+        type: RECEIVE_DRAG_TYPE,
+        payload: type
+    }
+}
+
+export const removeDragType = () => {
+    return {
+        type: REMOVE_DRAG_TYPE,
+    }
+}
+
 // SELECTORS
 export const getSelected = state => state.ui.selectedId;
 
@@ -90,9 +123,13 @@ export const getTakeOptions = state => state.ui.validTakes;
 
 export const getHighlightedSquare = state => state.ui.highlightedSquare;
 
+export const getTouchHighlightedSquare = state => state.ui.touchHighlightedSquare;
+
 export const getDraggingPiece = state => state.ui.draggingPiece;
 
 export const getDragPosition = state => state.ui.dragPosition;
+
+export const getDragType = state => state.ui.dragType;
 
 // REDUCER
 const initialState = {
@@ -100,8 +137,10 @@ const initialState = {
     validMoves: null,
     validTakes: null,
     highlightedSquare: null,
+    touchHighlightedSquare: null,
     draggingPiece: null,
-    dragPosition: null
+    dragPosition: null,
+    dragType: null
 };
 
 const uiReducer = (state = initialState, action) => {
@@ -141,6 +180,16 @@ const uiReducer = (state = initialState, action) => {
                 ...state,
                 highlightedSquare: null
             }
+        case RECEIVE_TOUCH_HIGHLIGHTED_SQUARE:
+            return {
+                ...state,
+                touchHighlightedSquare: action.payload
+            }
+        case REMOVE_TOUCH_HIGHLIGHTED_SQUARE:
+            return {
+                ...state,
+                touchHighlightedSquare: null
+            }
         case RECEIVE_DRAGGING_PIECE:
             return {
                 ...state,
@@ -160,6 +209,16 @@ const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 dragPosition: null
+            }
+        case RECEIVE_DRAG_TYPE:
+            return {
+                ...state,
+                dragType: action.payload
+            }
+        case REMOVE_DRAG_TYPE:
+            return {
+                ...state,
+                dragType: null
             }
         default:
             return state;

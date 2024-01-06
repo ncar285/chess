@@ -3,7 +3,7 @@ import { posToId, indexToFile} from '../../Utils/posIdConversion';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGame, getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
-import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveDragPosition, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDragPosition, removeDraggingPiece, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
+import { getDragType, getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, getTouchHighlightedSquare, receiveDragPosition, receiveDragType, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDragPosition, removeDraggingPiece, removeHighlightedSquare, removeSelected, removeTouchHighlightedSquare } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
 import { playMoveIfValid } from '../../Utils/playMoveIfValid';
 import "./ChessBoard.css"
@@ -29,7 +29,10 @@ function ChessBoard({  }) {
     const selectedSquare = useSelector(getSelected);
     const movingOptions = useSelector(getMoveOptions);
     const takingOptions = useSelector(getTakeOptions);
+
     const highlightedSquare = useSelector(getHighlightedSquare);
+    const touchHighlightedSquare = useSelector(getTouchHighlightedSquare);
+    const dragType = useSelector(getDragType);
 
     const finalDragSquareRef = useRef(null);
     const selectedPiece = useRef(null);
@@ -48,9 +51,17 @@ function ChessBoard({  }) {
         }
     }, [highlightedSquare]);
 
+    useEffect(() => {
+        if (touchHighlightedSquare){
+            finalDragSquareRef.current = touchHighlightedSquare;
+        }
+    }, [touchHighlightedSquare]);
+
 
     const handleTouchStart = (piece, e) => {
         e.preventDefault();
+
+        dispatch(receiveDragType('touch'))
 
         startActions(piece, e)
 
@@ -60,6 +71,8 @@ function ChessBoard({  }) {
 
     const handleClickStart = (piece, e) => {
         e.preventDefault();
+
+        dispatch(receiveDragType('mouse'))
 
         startActions(piece, e)
 
@@ -133,12 +146,13 @@ function ChessBoard({  }) {
             selectedPiece.current = null;
         }
 
+        dispatch(removeTouchHighlightedSquare())
+        dispatch(removeHighlightedSquare());
+
         dispatch(removeDragPosition());
         dispatch(removeDraggingPiece());
-        dispatch(removeHighlightedSquare());
         dispatch(removeSelected());
     }
-
 
 
     return (
@@ -150,10 +164,15 @@ function ChessBoard({  }) {
                         const {file, rank, color} = squareInfo;
                         const id = `${file}${rank}`;
                         const selected = selectedSquare === id ? 'selected' : '';
-                        const highlighted = highlightedSquare === id ? 'highlight' : '';
+                        let hightlight = '';
+                        if (highlightedSquare === id){
+                            hightlight = 'highlight';
+                        } else if (touchHighlightedSquare === id){
+                            hightlight = 'touchHighlight';
+                        }
 
                         return (
-                            <div className={`board-square ${color} ${selected} ${highlighted}`} key={id} id={id}>
+                            <div className={`board-square ${color} ${selected} ${hightlight} `} key={id} id={id}>
 
                                 {
                                     piece &&

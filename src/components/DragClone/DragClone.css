@@ -1,7 +1,11 @@
 .chess-piece.dragging {
     position: absolute;
-    transform: translateY(-50%) translateX(-50%) scale(1.5);
+    transform: translateY(-50%) translateX(-50%);
     cursor: grabbing;
+}
+
+.chess-piece.dragging.touchHighlight {
+    transform: translateY(-100%) translateX(-50%) scale(2);
 }
 
 .chess-piece:active {
