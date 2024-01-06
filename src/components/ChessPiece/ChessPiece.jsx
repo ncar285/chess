@@ -10,6 +10,7 @@ const ChessPiece = ({ piece, onTouchDragStart, onClickDragStart }) => {
     const pieceRef = useRef(null);
     const draggingPiece = useSelector(getDraggingPiece);
     const takenPieces = useSelector(getTakenPieces);
+    const pieceType = piece.getType().slice(2);
 
     const handleTouchStart = (e) => {
         onTouchDragStart(piece, e);
@@ -57,7 +58,7 @@ const ChessPiece = ({ piece, onTouchDragStart, onClickDragStart }) => {
             alt={`${piece.getColor()} ${piece.getType()}`}
             src={PIECE_IMAGES[piece.getType()]} 
             ref={pieceRef}
-            className={`chess-piece`}
+            className={`chess-piece ${pieceType}`}
         />
     );
 };

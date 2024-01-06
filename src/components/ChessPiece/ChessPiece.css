@@ -9,3 +9,18 @@
     cursor: grab;
     z-index: 11;
 }
+
+.chess-piece.knight{
+    height: 80%;
+    width: auto;
+}
+
+.chess-piece.king{
+    height: 95%;
+    width: auto;
+}
+
+.chess-piece.pawn{
+    height: 70%;
+    width: auto;
+}
