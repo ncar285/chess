@@ -4,6 +4,7 @@
     --boardDimension: calc(min(70vw, 70vh));
     --boardLabel: calc( 0.04 * var(--boardDimension));
     --pieceWidth: calc((var(--boardDimension)/8) * 0.65);
+    --highlightWidth: calc((var(--boardDimension)/8) * 0.075);
 }
 
 @media (max-width: 1000px) {

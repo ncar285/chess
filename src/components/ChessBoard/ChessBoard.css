@@ -21,8 +21,8 @@
 }
 
 .board-square.highlight {
-    outline: 0.5vw solid rgba(255, 255, 255, 0.7);
-    outline-offset: -0.5vw;
+    outline: var(--highlightWidth) solid rgba(255, 255, 255, 0.7);
+    outline-offset: calc(-1 * var(--highlightWidth));
 }
 
 .board-square.selected{
