@@ -14,11 +14,8 @@ import w_rook from '../../pieces/w_rook.png'
 
 import './ChessPiece.css';
 import React, { useEffect, useRef } from 'react';
-import { getDraggingPiece, getHighlightedSquare, getSelected, receiveHighlightedSquare, removeHighlightedSquare } from '../../store/uiReducer';
-import { useDispatch, useSelector } from 'react-redux';
-
-// import { idToPos } from '../../Utils/posIdConversion';
-// import { getGameBoard } from '../../store/gameReducer';
+import { getDraggingPiece } from '../../store/uiReducer';
+import { useSelector } from 'react-redux';
 
 const PIECE_IMAGES = {
     'b_bishop': b_bishop,
@@ -37,24 +34,22 @@ const PIECE_IMAGES = {
 
 
 
-const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece, dragPosition, setFinalDragSquare, isDragging }) => {
+const ChessPiece = ({ piece, onTouchDragStart, onClickDragStart }) => {
 
     const pieceRef = useRef(null);
     const draggingPiece = useSelector(getDraggingPiece)
 
 
     const handleTouchStart = (e) => {
-        onTouchDragStart(pieceObj, e);
-        console.log("starting drag on piece: ", pieceObj.getSquareId())
+        onTouchDragStart(piece, e);
     };
 
     const handleClickStart = (e) => {
-        onClickDragStart(pieceObj, e);
-        console.log("starting drag on piece: ", pieceObj.getSquareId())
+        onClickDragStart(piece, e);
     }
 
     useEffect(()=>{
-        if (draggingPiece === pieceObj){
+        if (draggingPiece === piece){
             pieceRef.current.style.visibility = 'hidden';
         } else {
             pieceRef.current.style.visibility = '';
@@ -79,8 +74,8 @@ const ChessPiece = ({ pieceObj, onTouchDragStart, onClickDragStart, draggedPiece
 
     return (
         <img 
-            alt={`${pieceObj.getColor()} ${pieceObj.getType()}`}
-            src={PIECE_IMAGES[pieceObj.getType()]} 
+            alt={`${piece.getColor()} ${piece.getType()}`}
+            src={PIECE_IMAGES[piece.getType()]} 
             ref={pieceRef}
             className={`chess-piece`}
         />

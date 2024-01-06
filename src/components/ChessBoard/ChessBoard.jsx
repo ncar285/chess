@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { posToId, indexToFile} from '../../Utils/posIdConversion'; 
 import { useDispatch, useSelector } from 'react-redux';
-import { getGameBoard, receiveGameBoard } from '../../store/gameReducer';
+import { getGame, getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
 import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, receiveDragPosition, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDragPosition, removeDraggingPiece, removeHighlightedSquare, removeSelected } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
@@ -25,27 +25,15 @@ function ChessBoard({  }) {
     const dispatch = useDispatch();
 
     const gameBoard = useSelector(getGameBoard);
+    const game = useSelector(getGame)
     const selectedSquare = useSelector(getSelected);
     const movingOptions = useSelector(getMoveOptions);
     const takingOptions = useSelector(getTakeOptions);
     const highlightedSquare = useSelector(getHighlightedSquare);
 
-    const [draggedPiece, setDraggedPiece] = useState(null);
-    const [dragPosition, setDragPosition] = useState(null);
-    const [finalDragSquare, setFinalDragSquare] = useState(null)
-    const [isDragging, setIsDragging] = useState(false)
-
-    // Define refs to track current values of selectedSquare and finalDragSquare
-    // const selectedSquareRef = useRef(null);
     const finalDragSquareRef = useRef(null);
+    const selectedPiece = useRef(null);
 
-    // Update refs whenever the related state changes
-    useEffect(() => {
-        if (highlightedSquare){
-            finalDragSquareRef.current = highlightedSquare;
-        }
-        // selectedSquareRef.current = selectedSquare;
-    }, [highlightedSquare]);
 
     useEffect(() => {
         if (!gameBoard) {
@@ -53,6 +41,12 @@ function ChessBoard({  }) {
             dispatch(receiveGameBoard(newGameBoard));
         } 
     }, [gameBoard, dispatch]);
+    
+    useEffect(() => {
+        if (highlightedSquare){
+            finalDragSquareRef.current = highlightedSquare;
+        }
+    }, [highlightedSquare]);
 
 
     const handleTouchStart = (piece, e) => {
@@ -61,8 +55,7 @@ function ChessBoard({  }) {
         startActions(piece, e)
 
         document.addEventListener('touchmove', handleTouchMove, { passive: false });
-        document.addEventListener('touchend', (e)=>handleTouchEnd(piece,e), { passive: false });
-
+        document.addEventListener('touchend', handleTouchEnd, { passive: false });
     };
 
     const handleClickStart = (piece, e) => {
@@ -71,18 +64,17 @@ function ChessBoard({  }) {
         startActions(piece, e)
 
         document.addEventListener('mousemove', handleMouseMove, { passive: false });
-        document.addEventListener('mouseup', (e)=>handleMouseEnd(piece,e), { passive: false });
-
+        document.addEventListener('mouseup', handleMouseEnd, { passive: false });
     };
 
     const startActions = (piece, e) => {
-        setDraggedPiece(piece);
-        dispatch(receiveDraggingPiece(piece));
-        const [x, y] = getMousePos(e)
-        setDragPosition({x, y});
-        dispatch(receiveDragPosition({x,y}));
-        setIsDragging(true)
+        const [x, y] = getMousePos(e);
         const startSquareId = posToId(piece.getSquare());
+
+        selectedPiece.current = piece;
+
+        dispatch(receiveDraggingPiece(piece));
+        dispatch(receiveDragPosition({x,y}));
         dispatch(receiveSelected(startSquareId));
         dispatch(receiveMoveOptions(piece.getMoves()));
     }
@@ -111,45 +103,38 @@ function ChessBoard({  }) {
     };
 
     function moveActions(e){
-
         const [x,y] = getMousePos(e);
-        setDragPosition({x,y});
-
         dispatch(receiveDragPosition({x,y}));
-
     }
 
-    function handleTouchEnd (piece, e) {
+    function handleTouchEnd (e) {
         e.preventDefault()
         
-        endActions(piece, e)
+        endActions();
 
         document.removeEventListener('touchmove', handleTouchMove);
         document.removeEventListener('touchend', handleTouchEnd);
     };
 
-    function handleMouseEnd (piece, e) {
+    function handleMouseEnd (e) {
         e.preventDefault()
 
-        endActions(piece, e)
+        endActions();
     
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseEnd);
     };
 
-    function endActions(piece, e) {
-
+    function endActions() {
         const endSquare = finalDragSquareRef.current;
-        // console.log("end square used in play move:", finalDragSquareRef.current)
+        const piece = selectedPiece.current;
         if (endSquare){
-            playMoveIfValid(piece, gameBoard, endSquare)
+            playMoveIfValid(piece, game, endSquare);
+            finalDragSquareRef.current = null;
+            selectedPiece.current = null;
         }
 
-        setIsDragging(false);
-        setDraggedPiece(null);
-        setDragPosition(null);
-
-        dispatch(removeDragPosition())
+        dispatch(removeDragPosition());
         dispatch(removeDraggingPiece());
         dispatch(removeHighlightedSquare());
         dispatch(removeSelected());
@@ -159,7 +144,7 @@ function ChessBoard({  }) {
 
     return (
         <div className="chess-board">
-            {gameBoard && [...gameBoard.board].reverse().map((row, rowIndex) => (
+            {gameBoard && [...gameBoard].reverse().map((row, rowIndex) => (
                 <div key={rowIndex} className="board-row">
                     {row.map((piece, colIndex) => {
                         const squareInfo = STATIC_BOARD[rowIndex][colIndex]
@@ -174,16 +159,9 @@ function ChessBoard({  }) {
                                 {
                                     piece &&
                                     <ChessPiece 
-                                        pieceObj={piece}
+                                        piece={piece}
                                         onTouchDragStart={handleTouchStart}
                                         onClickDragStart={handleClickStart}
-                                        draggedPiece={draggedPiece}
-                                        dragPosition={dragPosition}
-
-                                        setFinalDragSquare={setFinalDragSquare}
-
-                                        isDragging={isDragging}
-
                                     />
                                 }
 
