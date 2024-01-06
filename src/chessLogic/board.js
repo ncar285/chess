@@ -1,5 +1,6 @@
-import { printBoard } from '../Utils/printBoard.js';
+// import { printBoard } from '../Utils/printBoard.js';
 import { idToPos } from '../Utils/posIdConversion.js';
+import { Knight } from './knight.js';
 import { Pawn } from './pawn.js';
 
 export function Board(){
@@ -18,6 +19,13 @@ Board.prototype.placePieces = function() {
     for (let file = 0; file < 8; file++) {
         this.board[6][file] = new Pawn("black", [6, file], this);
     }
+    // Place white knights
+    this.board[0][1] = new Knight("white", [0,1], this);
+    this.board[0][6] = new Knight("white", [0,6], this);
+    // Place black knights
+    this.board[7][1] = new Knight("black", [7,1], this);
+    this.board[7][6] = new Knight("black", [7,6], this);
+
 }
 
 Board.prototype.getBoard = function(){

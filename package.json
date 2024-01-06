@@ -1,4 +1,5 @@
 {
+    "homepage": "https://ncar285.github.io/chess/",
     "name": "frontend",
     "version": "0.1.0",
     "private": true,
