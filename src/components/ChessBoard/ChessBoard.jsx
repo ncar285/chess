@@ -68,8 +68,18 @@ function ChessBoard({  }) {
     };
 
     const startActions = (piece, e) => {
+
+        
+        console.log("==================")
+        console.log("starting with piece", piece)
+
         const [x, y] = getMousePos(e);
+
+        console.log("starting with x, y", x, y)
+
         const startSquareId = posToId(piece.getSquare());
+
+        console.log("starting with startSquareId", startSquareId)
 
         selectedPiece.current = piece;
 

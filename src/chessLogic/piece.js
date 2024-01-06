@@ -23,6 +23,18 @@ Piece.prototype.getSquareId = function(){
     return posToId(this.square);
 }
 
+Piece.prototype.setBoard = function(board){
+    this.board = board;
+}
+
+Piece.prototype.getBoard = function(){
+    return this.board.board;
+}
+
+// Piece.prototype.setBoard = function(board){
+//     this.board = board;
+// }
+
 
 Piece.prototype.getMoves = function(){
     const validMoves = this.validMoves();

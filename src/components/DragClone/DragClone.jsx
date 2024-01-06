@@ -1,4 +1,4 @@
-import '../ChessPiece/ChessPiece.css';
+import './DragClone.css';
 import React, { useEffect, useRef } from 'react';
 import { getHighlightedSquare, receiveHighlightedSquare } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';

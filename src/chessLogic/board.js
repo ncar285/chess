@@ -1,3 +1,4 @@
+import { logBoardArray } from '../Utils/printBoard.js';
 import { idToPos } from '../Utils/posIdConversion.js';
 import { Pawn } from './pawn.js';
 
@@ -45,21 +46,41 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
             throw new Error("No piece at the start square.");
         }
 
-        // Capture logic
+        // store captured piece if there is one
         const capturedPiece = this.getPiece(endSquare);
-        if (capturedPiece) {
-            capturedPiece.setSquare(null);
-        }
+
 
         // Move the piece
         this.board[startSquare[0]][startSquare[1]] = null;
         this.board[endSquare[0]][endSquare[1]] = piece;
         piece.setSquare(endSquare);
 
-        // Update pawn's firstMove property
+
+        // captured piece has no square
+        if (capturedPiece) {
+            capturedPiece.setSquare(null);
+        }
+
+        console.log("capturedPiece",capturedPiece)
+        console.log("board", this.board)
+
+        // piece.setBoard(this.board)
+
+
+        // Update a pawn's firstMove property
         if (piece.type.slice(2) === "pawn") {
             piece.firstMove = false;
         }
+
+        const boardPrinted = printBoard(this.board);
+        console.log("boardHash",boardPrinted)
+        console.log("how the piece sees the board", piece.getBoard())
+        if (JSON.stringify(this.board) !== JSON.stringify(piece.getBoard())) {
+            throw new Error("Piece's board doesn't match game state");
+        }
+        // if (this.board !== piece.getBoard()) {
+        //     throw new Error("Piece's board doesn't match game state");
+        // }
         
     } catch (error) {
         console.error(error.message);
