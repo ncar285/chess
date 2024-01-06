@@ -1,8 +1,3 @@
-import './ChessPiece.css';
-import React, { useEffect, useRef } from 'react';
-import { getDraggingPiece, getHighlightedSquare, getSelected, receiveHighlightedSquare, removeHighlightedSquare } from '../../store/uiReducer';
-import { useDispatch, useSelector } from 'react-redux';
-
 // Piece images
 import b_bishop from '../../pieces/b_bishop.png'
 import w_bishop from '../../pieces/w_bishop.png'
@@ -16,8 +11,14 @@ import b_queen from '../../pieces/b_queen.png'
 import w_queen from '../../pieces/w_queen.png'
 import b_rook from '../../pieces/b_rook.png'
 import w_rook from '../../pieces/w_rook.png'
-import { idToPos } from '../../Utils/posIdConversion';
-import { getGameBoard } from '../../store/gameReducer';
+
+import './ChessPiece.css';
+import React, { useEffect, useRef } from 'react';
+import { getDraggingPiece, getHighlightedSquare, getSelected, receiveHighlightedSquare, removeHighlightedSquare } from '../../store/uiReducer';
+import { useDispatch, useSelector } from 'react-redux';
+
+// import { idToPos } from '../../Utils/posIdConversion';
+// import { getGameBoard } from '../../store/gameReducer';
 
 const PIECE_IMAGES = {
     'b_bishop': b_bishop,
