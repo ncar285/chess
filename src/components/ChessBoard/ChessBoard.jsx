@@ -13,7 +13,7 @@ for (let a = 7 ; a  >= 0 ; a-- ){
     STATIC_BOARD.push([]);
     const rank = a + 1;
     for (let b = 0 ; b  < 8 ; b++ ){
-        const color = ((a + b) % 2 === 0) ? "white" : "brown"
+        const color = ((a + b) % 2 === 0) ? "brown" : "white"
         const file = indexToFile(b);
         const len = STATIC_BOARD.length;
         STATIC_BOARD[len-1].push({file, rank, color});
