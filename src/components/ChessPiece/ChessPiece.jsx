@@ -11,13 +11,8 @@ const ChessPiece = ({ piece, onTouchDragStart, onClickDragStart }) => {
     const draggingPiece = useSelector(getDraggingPiece);
     const takenPieces = useSelector(getTakenPieces);
 
-    // console.log("takenPieces", takenPieces)
-
-
     const handleTouchStart = (e) => {
         onTouchDragStart(piece, e);
-        console.log("handling touch of piece ===")
-        console.log("piece: ", piece)
     };
 
     const handleClickStart = (e) => {
@@ -42,7 +37,6 @@ const ChessPiece = ({ piece, onTouchDragStart, onClickDragStart }) => {
                     pieceElement.addEventListener('touchstart', handleTouchStart, { passive: false });
                     pieceElement.addEventListener('mousedown', handleClickStart, { passive: false });
                 } else {
-                    console.log("REMOVING THE EVENT LISTENERS FROM:", piece)
                     pieceElement.removeEventListener('touchstart', handleTouchStart, { passive: false });
                     pieceElement.removeEventListener('mousedown', handleClickStart, { passive: false });
                 }
@@ -56,16 +50,6 @@ const ChessPiece = ({ piece, onTouchDragStart, onClickDragStart }) => {
             };
         }
     }, [piece, takenPieces]);
-
-    // useEffect(() => {
-    //     const pieceElement = pieceRef.current;
-    //     if (takenPieces.has(piece)) {
-    //         console.log("removing the event listener from...")
-    //         console.log("piece: ", piece)
-    //         pieceElement.removeEventListener('touchstart', handleTouchStart, { passive: false });
-    //         pieceElement.removeEventListener('mousedown', handleClickStart, { passive: false });
-    //     }
-    // }, [takenPieces]);
 
 
     return (

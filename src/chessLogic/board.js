@@ -75,8 +75,8 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
             piece.firstMove = false;
         }
 
-        const boardPrinted = printBoard(this.board);
-        console.log("boardHash",boardPrinted)
+        // const boardPrinted = printBoard(this.board);
+        // console.log("boardHash",boardPrinted)
         
     } catch (error) {
         console.error(error.message);
