@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { getDragType, getHighlightedSquare, getTouchHighlightedSquare, receiveHighlightedSquare, receiveTouchHighlightedSquare } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { PIECE_IMAGES } from '../../Utils/chessPieces'
+import { findChessSquareFromCoordinates } from '../../Utils/findChessSquare';
 
 function DragClone( {piece, position} ){
 
@@ -20,7 +21,8 @@ function DragClone( {piece, position} ){
         if (cloneRef.current && position){
             cloneRef.current.style.left = `${position.x}px`;
             cloneRef.current.style.top = `${position.y}px`;
-            const squareBelow = findChessSquareFromCoordinates(position.x, position.y)
+            const squareBelow = findChessSquareFromCoordinates(position.x, position.y, cloneRef.current)
+            // const squareBelow = findChessSquareFromCoordinates(position.x, position.y)
             if (dragType === 'touch'){
                 if (touchHighlightedSquare !== squareBelow){
                     dispatch(receiveTouchHighlightedSquare(squareBelow))
@@ -34,30 +36,32 @@ function DragClone( {piece, position} ){
 
     }, [position])
 
-    function findChessSquareFromCoordinates(x, y) {
+    // findChessSquareFromCoordinates(x, y, cloneRef)
 
-        if (cloneRef.current) { // Make the clone "click-through"
-            cloneRef.current.style.pointerEvents = 'none';
-        }
-    
-        let res = null;
-        let element = null;
-        if (x && y){
-            element = document.elementFromPoint(x, y);
+    // function findChessSquareFromCoordinates(x, y) {
 
-            if (element && element.classList.contains('board-square')) {
-                res = element.id; 
-            } else if (element.parentElement && element.parentElement.classList.contains('board-square')){
-                res = element.parentElement.id;
-            } 
-        }
+    //     if (cloneRef.current) { // Make the clone "click-through"
+    //         cloneRef.current.style.pointerEvents = 'none';
+    //     }
     
-        if (cloneRef.current) { 
-            cloneRef.current.style.pointerEvents = '';
-        }
+    //     let res = null;
+    //     let element = null;
+    //     if (x && y){
+    //         element = document.elementFromPoint(x, y);
+
+    //         if (element && element.classList.contains('board-square')) {
+    //             res = element.id; 
+    //         } else if (element.parentElement && element.parentElement.classList.contains('board-square')){
+    //             res = element.parentElement.id;
+    //         } 
+    //     }
     
-        return res;
-    }
+    //     if (cloneRef.current) { 
+    //         cloneRef.current.style.pointerEvents = '';
+    //     }
+    
+    //     return res;
+    // }
 
     const touchDrag = dragType === 'touch' ? 'touchHighlight' : '';
 

@@ -1,6 +1,7 @@
 .chess-piece {
-    /* width: 65%; */
+    width: var(--pieceWidth);
     height: auto; 
+
     display: block;
     margin: auto;
     position: relative;
@@ -10,7 +11,7 @@
     z-index: 11;
 }
 
-.chess-piece.pawn{
+/* .chess-piece.pawn{
     height: var(--pawnHeight);
     width: auto;
 }
@@ -33,4 +34,4 @@
 .chess-piece.queen{
     height: var(--queenHeight);
     width: auto;
-}
+} */

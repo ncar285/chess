@@ -11,6 +11,7 @@ const ChessPiece = ({ piece, onTouchDragStart, onClickDragStart }) => {
     const draggingPiece = useSelector(getDraggingPiece);
     const takenPieces = useSelector(getTakenPieces);
     const pieceType = piece.getType().slice(2);
+    console.log("pieceType =>",pieceType)
 
     const handleTouchStart = (e) => {
         onTouchDragStart(piece, e);

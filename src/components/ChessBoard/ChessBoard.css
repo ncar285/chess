@@ -2,7 +2,7 @@
     position: relative;
     width: var(--boardDimension);
     height: var(--boardDimension);
-    background-color: aquamarine;
+    background-color: #f7f7f7;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border-radius: calc(0.01 * var(--boardDimension));
     overflow: hidden;
@@ -41,7 +41,7 @@
 
 .board-square.highlight {
     outline: var(--highlightWidth) solid rgba(255, 255, 255, 0.7);
-    outline-offset: calc(-1 * var(--highlightWidth));
+    outline-offset: calc(-0.99 * var(--highlightWidth));
 }
 
 .board-square.selected{
@@ -68,10 +68,12 @@
 
 .board-square.white .square-label{
     color: var(--brown);
+    pointer-events: none;
 }
 
 .board-square.brown .square-label{
     color: var(--white);
+    pointer-events: none;
 }
 
 .square-label.file {
@@ -95,6 +97,7 @@
     border-radius: 50%;
     background-color: rgba(0,0,0,0.1);
     z-index: 11;
+    pointer-events: none;
 }
 
 .suggested-capture {
@@ -107,4 +110,5 @@
     border-radius: 50%;
     outline: 0.6vw solid rgba(0,0,0,0.1);
     z-index: 11;
+    pointer-events: none;
 }

@@ -5,14 +5,28 @@
     --boardLabel: calc( 0.04 * var(--boardDimension));
     --highlightWidth: calc((var(--boardDimension)/8) * 0.075);
 
-    /* --pieceWidth: calc((var(--boardDimension)/8) * 0.65); */
+    --pieceWidth: calc((var(--boardDimension)/8) * 0.65);
 
-    --pawnHeight: calc((var(--boardDimension)/8) * 0.7);
+    --touchMovePieceWidth: calc((var(--boardDimension)/8) * 0.65 * 2);
+
+    /* --pawnHeight: calc((var(--boardDimension)/8) * 0.7);
     --knightHeight: calc((var(--boardDimension)/8) * 0.8);
     --rookHeight: calc((var(--boardDimension)/8) * 0.7);
     --bishopHeight: calc((var(--boardDimension)/8) * 0.8);
     --kingHeight: calc((var(--boardDimension)/8) * 0.95);
-    --queenHeight: calc((var(--boardDimension)/8) * 0.95);
+    --queenHeight: calc((var(--boardDimension)/8) * 0.95); */
+
+    /* --pawnHeight: calc((var(--boardDimension)/8) * 0.7);
+    --knightHeight: calc((var(--boardDimension)/8) * 0.9);
+    --rookHeight: calc((var(--boardDimension)/8) * 0.7);
+    --bishopHeight: calc((var(--boardDimension)/8) * 0.9);
+    --kingHeight: calc((var(--boardDimension)/8) * 1);
+    --queenHeight: calc((var(--boardDimension)/8) * 0.95); */
+
+    --pawnHeight: calc((var(--boardDimension)/8) * 0.7);
+    --rookHeight: calc((var(--boardDimension)/8) * 0.7);
+    /* --queenHeight: calc((var(--boardDimension)/8) * 1.5); */
+    --kingHeight: calc((var(--boardDimension)/8) * 1);
 
     --piecePlacement: calc((var(--boardDimension)/8) * 0.05);
 
