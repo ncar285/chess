@@ -1,5 +1,6 @@
 // import { printBoard } from '../Utils/printBoard.js';
 import { idToPos } from '../Utils/posIdConversion.js';
+import { Bishop } from './bishop.js';
 import { King } from './king.js';
 import { Knight } from './knight.js';
 import { Pawn } from './pawn.js';
@@ -44,6 +45,14 @@ Board.prototype.placePieces = function() {
     // place queen
     this.board[0][3] = new Queen("white", [0,3], this);
     this.board[7][3] = new Queen("black", [7,3], this);
+
+    // place white bishops
+    this.board[0][2] = new Bishop("white", [0,2], this);
+    this.board[0][5] = new Bishop("white", [0,5], this);
+
+    // place black bishops
+    this.board[7][2] = new Bishop("black", [7,2], this);
+    this.board[7][5] = new Bishop("black", [7,5], this);
 
 }
 
