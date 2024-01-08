@@ -69,17 +69,17 @@
     /* font-size: 2.5vw; */
     font-size: var(--boardLabel);
     font-weight: 500;
-    padding: calc(0.01 * var(--boardDimension));
+    padding: calc(0.007 * var(--boardDimension));
+    pointer-events: none;
 }
 
 .board-square.white .square-label{
     color: var(--brown);
-    pointer-events: none;
 }
 
 .board-square.brown .square-label{
     color: var(--white);
-    pointer-events: none;
+    /* pointer-events: none; */
 }
 
 .square-label.file {
@@ -114,7 +114,7 @@
     width: 80%;
     height: 80%;
     border-radius: 50%;
-    outline: 0.6vw solid rgba(0,0,0,0.1);
+    outline: var(--suggestedCaptureThickness) solid rgba(0,0,0,0.1);
     z-index: 11;
     pointer-events: none;
 }

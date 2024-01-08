@@ -4,6 +4,7 @@
     --boardDimension: calc(min(70vw, 70vh));
     --boardLabel: calc( 0.04 * var(--boardDimension));
     --highlightWidth: calc((var(--boardDimension)/8) * 0.075);
+    --suggestedCaptureThickness: calc((var(--boardDimension)/8) * 0.1);
 
     --pieceWidth: calc((var(--boardDimension)/8) * 0.65);
 

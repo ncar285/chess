@@ -12,14 +12,10 @@ export class Slideable {
         const moves = [];
         const takes = [];
 
-        // debugger
-
         dirs.forEach((dir) => {
             const dX = dir[0];
             const dY = dir[1];
             let newPos = [pos[0]+dX,pos[1]+dY];
-
-            // debugger
 
             while (Board.isInsideBoard(newPos) && !this.board.isOccupiedByColor(newPos,color)){
                 if (!this.board.isOccupied(newPos)){    // square is empty
