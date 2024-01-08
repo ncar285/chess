@@ -7,6 +7,15 @@ import { Pawn } from './pawn.js';
 import { Queen } from './queen.js';
 import { Rook } from './rook.js';
 
+const pieceClasses = {
+    "pawn": Pawn,
+    "rook": Rook,
+    "knight": Knight,
+    "bishop": Bishop,
+    "queen": Queen,
+    "king": King
+};
+
 export function Board(){
     this.board = 
     Array(8).fill(null).map(() => Array(8).fill(null));
@@ -15,45 +24,18 @@ export function Board(){
 }
 
 Board.prototype.placePieces = function() {
-    // Place white pawns
-    for (let file = 0; file < 8; file++) {
-        this.board[1][file] = new Pawn("white", [1, file], this);
+
+    const backRank = ["rook","knight","bishop","queen","king","queen","knight","rook"];
+
+    backRank.forEach((pieceName, i)=>{
+        const PieceClass = pieceClasses[pieceName];
+        this.board[0][i] = new PieceClass("white", [0, i], this);
+        this.board[7][i] = new PieceClass("black", [7, i], this);
+    })
+    for (let i = 0; i < 8 ; i++){
+        this.board[1][i] = new Pawn("white", [1, i], this);
+        this.board[6][i] = new Pawn("black", [6, i], this);
     }
-    // Place black pawns
-    for (let file = 0; file < 8; file++) {
-        this.board[6][file] = new Pawn("black", [6, file], this);
-    }
-    // Place white knights
-    this.board[0][1] = new Knight("white", [0,1], this);
-    this.board[0][6] = new Knight("white", [0,6], this);
-    // Place black knights
-    this.board[7][1] = new Knight("black", [7,1], this);
-    this.board[7][6] = new Knight("black", [7,6], this);
-
-    // Place white king
-    this.board[0][4] = new King("white", [0,4], this);
-    // Place black king
-    this.board[7][4] = new King("black", [0,4], this);
-
-    // Place white rooks
-    this.board[0][0] = new Rook("white", [0,0], this);
-    this.board[0][7] = new Rook("white", [0,7], this);
-    // Place black rooks
-    this.board[7][0] = new Rook("black", [7,0], this);
-    this.board[7][7] = new Rook("black", [7,7], this);
-
-    // place queen
-    this.board[0][3] = new Queen("white", [0,3], this);
-    this.board[7][3] = new Queen("black", [7,3], this);
-
-    // place white bishops
-    this.board[0][2] = new Bishop("white", [0,2], this);
-    this.board[0][5] = new Bishop("white", [0,5], this);
-
-    // place black bishops
-    this.board[7][2] = new Bishop("black", [7,2], this);
-    this.board[7][5] = new Bishop("black", [7,5], this);
-
 }
 
 Board.prototype.getBoard = function(){
