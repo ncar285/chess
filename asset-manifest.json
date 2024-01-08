@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/chess/static/css/main.191ec6e7.css",
-    "main.js": "/chess/static/js/main.0d4da2d7.js",
-    "static/media/w_knight.png": "/chess/static/media/w_knight.49909b9127be696ea0a2.png",
-    "static/media/b_knight.png": "/chess/static/media/b_knight.c12560d6bae5d7fbfbc0.png",
-    "static/media/w_queen.png": "/chess/static/media/w_queen.4ed2abd0864b0c55bfa8.png",
-    "static/media/w_pawn.png": "/chess/static/media/w_pawn.a2061d5b2db2d3d0db65.png",
-    "static/media/b_queen.png": "/chess/static/media/b_queen.92fe12b3f79ba41b86f7.png",
-    "static/media/b_pawn.png": "/chess/static/media/b_pawn.59357ddb9d69d2a87fc2.png",
-    "static/media/b_bishop.png": "/chess/static/media/b_bishop.21d46fdcc7f97641f8b7.png",
-    "static/media/b_king.png": "/chess/static/media/b_king.ebec6f494fab1a6958a6.png",
-    "static/media/w_rook.png": "/chess/static/media/w_rook.708f6ae3806880a9a872.png",
-    "static/media/b_rook.png": "/chess/static/media/b_rook.fafea4c0225ec830378c.png",
-    "static/media/w_bishop.png": "/chess/static/media/w_bishop.173ed13e3f5a3dfe5df3.png",
-    "static/media/w_king.png": "/chess/static/media/w_king.d1ba9c9cf495fc04c13a.png",
+    "main.css": "/chess/static/css/main.a4c90404.css",
+    "main.js": "/chess/static/js/main.33291910.js",
+    "static/media/w_queen.png": "/chess/static/media/w_queen.882619c3947a71f326d8.png",
+    "static/media/b_queen.png": "/chess/static/media/b_queen.cffac0ff379b5a992b28.png",
+    "static/media/w_king.png": "/chess/static/media/w_king.18d68c3408a5595c6536.png",
+    "static/media/w_bishop.png": "/chess/static/media/w_bishop.16b25be80402e8aab0f5.png",
+    "static/media/b_king.png": "/chess/static/media/b_king.1c5d23f6d0962febf937.png",
+    "static/media/b_bishop.png": "/chess/static/media/b_bishop.25145dfbe969e33036c7.png",
+    "static/media/w_knight.png": "/chess/static/media/w_knight.f4306ae232f60361ecc0.png",
+    "static/media/b_knight.png": "/chess/static/media/b_knight.55937ba6eb5e84ef658c.png",
+    "static/media/w_pawn.png": "/chess/static/media/w_pawn.a1d402c7ef7a87682c72.png",
+    "static/media/b_pawn.png": "/chess/static/media/b_pawn.9c3bfef3042486c9cd12.png",
+    "static/media/w_rook.png": "/chess/static/media/w_rook.2b4828a33fb8168d6ee8.png",
+    "static/media/b_rook.png": "/chess/static/media/b_rook.aa1b4e2183931adb8f3f.png",
     "index.html": "/chess/index.html",
-    "main.191ec6e7.css.map": "/chess/static/css/main.191ec6e7.css.map",
-    "main.0d4da2d7.js.map": "/chess/static/js/main.0d4da2d7.js.map"
+    "main.a4c90404.css.map": "/chess/static/css/main.a4c90404.css.map",
+    "main.33291910.js.map": "/chess/static/js/main.33291910.js.map"
   },
   "entrypoints": [
-    "static/css/main.191ec6e7.css",
-    "static/js/main.0d4da2d7.js"
+    "static/css/main.a4c90404.css",
+    "static/js/main.33291910.js"
   ]
 }
