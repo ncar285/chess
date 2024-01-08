@@ -8,6 +8,7 @@ import ChessPiece from '../ChessPiece/ChessPiece';
 import { playMoveIfValid } from '../../Utils/playMoveIfValid';
 import "./ChessBoard.css"
 import { getMousePos } from '../../Utils/getMousePos';
+import { findChessSquareFromCoordinates } from '../../Utils/findChessSquare';
 
 const STATIC_BOARD = [];
 for (let a = 7 ; a  >= 0 ; a-- ){
@@ -58,6 +59,12 @@ function ChessBoard({  }) {
         }
     }, [touchHighlightedSquare]);
 
+    useEffect(() => {
+        if (!selectedSquare){
+            selectedPiece.current = null;
+        }
+    }, [selectedSquare]);
+
 
     const handleTouchStart = (piece, e) => {
         e.preventDefault();
@@ -68,6 +75,7 @@ function ChessBoard({  }) {
 
         document.addEventListener('touchmove', handleTouchMove, { passive: false });
         document.addEventListener('touchend', handleTouchEnd, { passive: false });
+
     };
 
     const handleClickStart = (piece, e) => {
@@ -93,10 +101,12 @@ function ChessBoard({  }) {
     }
 
     function handleTouchMove (e) {
+        e.preventDefault();
         moveActions(e);
     };
 
     function handleMouseMove (e) {
+        e.preventDefault();
         moveActions(e);
     };
 
@@ -131,7 +141,7 @@ function ChessBoard({  }) {
                 dispatch(removeSelected())
             }
             finalDragSquareRef.current = null;
-            selectedPiece.current = null;
+            // selectedPiece.current = null;
         }
 
         dispatch(removeTouchHighlightedSquare())
@@ -140,6 +150,15 @@ function ChessBoard({  }) {
         dispatch(removeDragPosition());
         dispatch(removeDraggingPiece());
 
+    }
+
+    function handleSquareClick(e){
+        e.preventDefault();
+        if (selectedPiece.current){
+            const [x, y] = getMousePos(e);
+            const squareId = findChessSquareFromCoordinates(x,y);
+            playMoveIfValid(selectedPiece.current, game, squareId)
+        }
     }
 
 
@@ -160,7 +179,8 @@ function ChessBoard({  }) {
                         }
 
                         return (
-                            <div className={`board-square ${color} ${selected} ${hightlight} `} key={id} id={id}>
+                            <div className={`board-square ${color} ${selected} ${hightlight} `} key={id} id={id}
+                                onClick={handleSquareClick}>
 
                                 {
                                     piece &&
