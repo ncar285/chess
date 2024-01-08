@@ -12,21 +12,24 @@ export class Slideable {
         const moves = [];
         const takes = [];
 
-        dirs.forEach(dir=>{
+        // debugger
+
+        dirs.forEach((dir) => {
             const dX = dir[0];
             const dY = dir[1];
-            let newPos = [pos[0],pos[1]];
-            newPos = [newPos[0]+dX,newPos+dY];
+            let newPos = [pos[0]+dX,pos[1]+dY];
+
+            // debugger
 
             while (Board.isInsideBoard(newPos) && !this.board.isOccupiedByColor(newPos,color)){
-                if (!this.board.isOccupiedByColor(newPos,opponentColor)){
+                if (!this.board.isOccupied(newPos)){    // square is empty
                     moves.push(newPos);
-                } else {
+                } else if (this.board.isOccupiedByColor(newPos,opponentColor)){ // opponent on square
                     takes.push(newPos);
                     break;
                 }
 
-                newPos = [newPos[0]+dX,newPos+dY];
+                newPos = [newPos[0]+dX,newPos[1]+dY];
             }
 
         })

@@ -8,6 +8,12 @@
     overflow: hidden;
 }
 
+@media (max-width: 650px) {
+    .chess-board {
+        border-radius: 0;
+    }
+}
+
 .board-row{
     height: calc(100% / 8);
     width: 100%;

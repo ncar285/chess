@@ -34,8 +34,20 @@
     --touchCircleOffset: 130%;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 9000px) {
+    :root {
+        --boardDimension: calc(min(80vw, 80vh));
+    }
+}
+
+@media (max-width: 800px) {
     :root {
         --boardDimension: calc(min(90vw, 90vh));
+    }
+}
+
+@media (max-width: 650px) {
+    :root {
+        --boardDimension: 100vw;
     }
 }
