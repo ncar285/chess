@@ -25,7 +25,7 @@ export function Board(){
 
 Board.prototype.placePieces = function() {
 
-    const backRank = ["rook","knight","bishop","queen","king","queen","knight","rook"];
+    const backRank = ["rook","knight","bishop","queen","king","bishop","knight","rook"];
 
     backRank.forEach((pieceName, i)=>{
         const PieceClass = pieceClasses[pieceName];

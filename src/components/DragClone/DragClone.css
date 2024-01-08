@@ -7,7 +7,7 @@
     height: auto; 
 }
 
-.chess-piece.dragging.touchHighlight {
+.chess-piece.enlarged.touchHighlight {
     transform: translateY(-130%) translateX(-50%);
     width: var(--touchMovePieceWidth);
     height: auto; 

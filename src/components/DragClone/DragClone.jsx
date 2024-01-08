@@ -1,6 +1,6 @@
 import './DragClone.css';
 import '../ChessPiece/ChessPiece.css';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getDragType, getHighlightedSquare, getTouchHighlightedSquare, receiveHighlightedSquare, receiveTouchHighlightedSquare } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { PIECE_IMAGES } from '../../Utils/chessPieces'
@@ -17,6 +17,8 @@ function DragClone( {piece, position} ){
     const pieceType = piece.getType().slice(2);
     const dragType = useSelector(getDragType);
 
+    const [enlarged, setEnlarged] = useState('');
+
     useEffect(()=>{
         if (cloneRef.current && position){
             cloneRef.current.style.left = `${position.x}px`;
@@ -25,7 +27,14 @@ function DragClone( {piece, position} ){
             // const squareBelow = findChessSquareFromCoordinates(position.x, position.y)
             if (dragType === 'touch'){
                 if (touchHighlightedSquare !== squareBelow){
-                    dispatch(receiveTouchHighlightedSquare(squareBelow))
+                    dispatch(receiveTouchHighlightedSquare(squareBelow));
+
+                    // fist time we leave original square, add dragging class to ele 
+                    if (touchHighlightedSquare){
+                        setEnlarged('enlarged');
+                    }
+                    // console.log("touchHighlightedSquare", touchHighlightedSquare)
+                    // console.log("squareBelow", squareBelow)
                 }
             } else {
                 if (highlightedSquare !== squareBelow){
@@ -36,41 +45,17 @@ function DragClone( {piece, position} ){
 
     }, [position])
 
-    // findChessSquareFromCoordinates(x, y, cloneRef)
-
-    // function findChessSquareFromCoordinates(x, y) {
-
-    //     if (cloneRef.current) { // Make the clone "click-through"
-    //         cloneRef.current.style.pointerEvents = 'none';
-    //     }
-    
-    //     let res = null;
-    //     let element = null;
-    //     if (x && y){
-    //         element = document.elementFromPoint(x, y);
-
-    //         if (element && element.classList.contains('board-square')) {
-    //             res = element.id; 
-    //         } else if (element.parentElement && element.parentElement.classList.contains('board-square')){
-    //             res = element.parentElement.id;
-    //         } 
-    //     }
-    
-    //     if (cloneRef.current) { 
-    //         cloneRef.current.style.pointerEvents = '';
-    //     }
-    
-    //     return res;
-    // }
-
     const touchDrag = dragType === 'touch' ? 'touchHighlight' : '';
+    // only add dragging once a touch drag has left it's square
+    // const dragging = dragType === 'mouse' ? 'dragging' : 
+        
 
     return (
         <img 
             alt={`${piece.getColor()} ${piece.getType()}`}
             src={PIECE_IMAGES[piece.getType()]} 
             ref={cloneRef}
-            className={`chess-piece dragging ${pieceType} ${touchDrag}`}
+            className={`chess-piece dragging ${pieceType} ${touchDrag} ${enlarged}`}
         />
     );
 

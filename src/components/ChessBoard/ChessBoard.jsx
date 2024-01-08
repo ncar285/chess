@@ -7,6 +7,7 @@ import { getDragType, getHighlightedSquare, getMoveOptions, getSelected, getTake
 import ChessPiece from '../ChessPiece/ChessPiece';
 import { playMoveIfValid } from '../../Utils/playMoveIfValid';
 import "./ChessBoard.css"
+import { getMousePos } from '../../Utils/getMousePos';
 
 const STATIC_BOARD = [];
 for (let a = 7 ; a  >= 0 ; a-- ){
@@ -32,7 +33,7 @@ function ChessBoard({  }) {
 
     const highlightedSquare = useSelector(getHighlightedSquare);
     const touchHighlightedSquare = useSelector(getTouchHighlightedSquare);
-    const dragType = useSelector(getDragType);
+    // const dragType = useSelector(getDragType);
 
     const finalDragSquareRef = useRef(null);
     const selectedPiece = useRef(null);
@@ -91,21 +92,6 @@ function ChessBoard({  }) {
         dispatch(receiveMoveOptions(piece.getMoves()));
     }
 
-    function getMousePos(e){
-        let x, y;
-        if ((e.type === 'touchstart' || e.type === 'touchmove' ) && e.touches) {
-            x = e.touches[0].clientX;
-            y = e.touches[0].clientY;  
-        } else if (e.type === 'touchend' && e.changedTouches) {
-            x = e.changedTouches[0].clientX;
-            y = e.changedTouches[0].clientY;  
-        } else {
-            x = e.clientX;
-            y = e.clientY;
-        }
-        return [x, y];
-    }
-
     function handleTouchMove (e) {
         moveActions(e);
     };
@@ -141,7 +127,9 @@ function ChessBoard({  }) {
         const endSquare = finalDragSquareRef.current;
         const piece = selectedPiece.current;
         if (endSquare){
-            playMoveIfValid(piece, game, endSquare);
+            if (playMoveIfValid(piece, game, endSquare)){
+                dispatch(removeSelected())
+            }
             finalDragSquareRef.current = null;
             selectedPiece.current = null;
         }
@@ -151,7 +139,7 @@ function ChessBoard({  }) {
 
         dispatch(removeDragPosition());
         dispatch(removeDraggingPiece());
-        dispatch(removeSelected());
+
     }
 
 

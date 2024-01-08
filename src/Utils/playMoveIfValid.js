@@ -9,8 +9,10 @@ export function playMoveIfValid(piece, game, endSquare){
         const validTakeOptions = piece.getMoves().takeOptions;
         if (validOptions.has(endSquare) || validTakeOptions.has(endSquare)){
             game.movePiece(startPos, endPos, piece);
+            return true;
             // console.log("VALID MOVE")
         } else {
+            return false;
             // console.log("NOT A VALID MOVE")
         }
     }
