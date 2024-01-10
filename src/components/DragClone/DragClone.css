@@ -8,7 +8,7 @@
 }
 
 .chess-piece.enlarged.touchHighlight {
-    transform: translateY(-130%) translateX(-50%);
+    transform: translateY(-100%) translateX(-50%);
     width: var(--touchMovePieceWidth);
     height: auto; 
 }
