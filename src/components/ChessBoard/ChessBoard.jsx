@@ -69,24 +69,33 @@ function ChessBoard({  }) {
     const handleTouchStart = (piece, e) => {
         e.preventDefault();
 
-        dispatch(receiveDragType('touch'))
+        const isClickMove = playClickMove(e);
 
-        startActions(piece, e)
-
-        document.addEventListener('touchmove', handleTouchMove, { passive: false });
-        document.addEventListener('touchend', handleTouchEnd, { passive: false });
+        if (isClickMove){
+            dispatch(removeSelected());
+        } else {
+            dispatch(receiveDragType('touch'))
+            startActions(piece, e)
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            document.addEventListener('touchend', handleTouchEnd, { passive: false });
+        }
 
     };
 
     const handleClickStart = (piece, e) => {
         e.preventDefault();
 
-        dispatch(receiveDragType('mouse'))
+        const isClickMove = playClickMove(e);
 
-        startActions(piece, e)
+        if (isClickMove){
+            dispatch(removeSelected());
+        } else {
+            dispatch(receiveDragType('mouse'))
+            startActions(piece, e)
+            document.addEventListener('mousemove', handleMouseMove, { passive: false });
+            document.addEventListener('mouseup', handleMouseEnd, { passive: false });
+        }
 
-        document.addEventListener('mousemove', handleMouseMove, { passive: false });
-        document.addEventListener('mouseup', handleMouseEnd, { passive: false });
     };
 
     const startActions = (piece, e) => {
@@ -154,11 +163,16 @@ function ChessBoard({  }) {
 
     function handleSquareClick(e){
         e.preventDefault();
+        playClickMove(e);
+    }
+
+    function playClickMove(e){
         if (selectedPiece.current){
             const [x, y] = getMousePos(e);
             const squareId = findChessSquareFromCoordinates(x,y);
-            playMoveIfValid(selectedPiece.current, game, squareId)
+            return playMoveIfValid(selectedPiece.current, game, squareId);
         }
+        return false
     }
 
 

@@ -17,3 +17,6 @@ export function playMoveIfValid(piece, game, endSquare){
         }
     }
 }
+
+
+
