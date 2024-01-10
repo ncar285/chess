@@ -16,6 +16,14 @@ Piece.prototype.getSquare = function(){
     return this.square;
 }
 
+Piece.prototype.getType = function(){
+    return this.type;
+}
+
+Piece.prototype.getPieceName = function(){
+    return this.pieceName;
+}
+
 Piece.prototype.setSquare = function(pos){
     this.square = pos;
 }

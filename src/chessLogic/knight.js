@@ -4,7 +4,8 @@ import { Piece } from './piece.js';
 const L_STEPS = [[2,1],[1,2],[-2,1],[1,-2],[-2,-1],[-1,-2],[2,-1],[-1,2]]
 
 export function Knight(color,square, board){
-    this.type = color.slice(0,1) + "_knight";
+    this.pieceName = "knight";
+    this.type = color.slice(0,1) + "_" + this.pieceName;
     Piece.call(this, color, square, board);
 }
 

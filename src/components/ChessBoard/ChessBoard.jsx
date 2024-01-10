@@ -3,12 +3,12 @@ import { posToId, indexToFile} from '../../Utils/posIdConversion';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGame, getGameBoard, receiveGameBoard } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
-import { getDragType, getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, getTouchHighlightedSquare, receiveDragPosition, receiveDragType, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDragPosition, removeDraggingPiece, removeHighlightedSquare, removeSelected, removeTouchHighlightedSquare } from '../../store/uiReducer';
+import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, getTouchHighlightedSquare, receiveDragPosition, receiveDragType, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDragPosition, removeDraggingPiece, removeHighlightedSquare, removeSelected, removeTouchHighlightedSquare } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
 import { playMoveIfValid } from '../../Utils/playMoveIfValid';
-import "./ChessBoard.css"
 import { getMousePos } from '../../Utils/getMousePos';
 import { findChessSquareFromCoordinates } from '../../Utils/findChessSquare';
+import "./ChessBoard.css"
 
 const STATIC_BOARD = [];
 for (let a = 7 ; a  >= 0 ; a-- ){
@@ -22,7 +22,7 @@ for (let a = 7 ; a  >= 0 ; a-- ){
     }
 }
 
-function ChessBoard({  }) {
+function ChessBoard() {
 
     const dispatch = useDispatch();
 
@@ -31,21 +31,59 @@ function ChessBoard({  }) {
     const selectedSquare = useSelector(getSelected);
     const movingOptions = useSelector(getMoveOptions);
     const takingOptions = useSelector(getTakeOptions);
-
     const highlightedSquare = useSelector(getHighlightedSquare);
     const touchHighlightedSquare = useSelector(getTouchHighlightedSquare);
-    // const dragType = useSelector(getDragType);
 
     const finalDragSquareRef = useRef(null);
     const selectedPiece = useRef(null);
 
 
+    // const resetBoard = () => {
+    //     const newGameBoard = new Board();
+    //     dispatch(receiveGameBoard(newGameBoard));
+    //     sessionStorage.setItem("game",JSON.stringify(newGameBoard));
+    // }
+
+    const resetBoard = () => {
+        const newGameBoard = new Board();
+        dispatch(receiveGameBoard(newGameBoard));
+        sessionStorage.setItem("game", JSON.stringify(newGameBoard.toData())); // Assuming toData() method returns serializable data
+    }
+
     useEffect(() => {
-        if (!gameBoard) {
-            const newGameBoard = new Board();
-            dispatch(receiveGameBoard(newGameBoard));
-        } 
-    }, [gameBoard, dispatch]);
+        try {
+            const ongoingGameData = sessionStorage.getItem("game");
+            if (ongoingGameData) {
+                const ongoingGame = JSON.parse(ongoingGameData);
+                // If Board has methods, re-instantiate it with the parsed data
+                const gameBoard = new Board(ongoingGame);
+                dispatch(receiveGameBoard(gameBoard));
+            } else {
+                resetBoard();
+            }
+        } catch (error) {
+            console.error("Error loading game from sessionStorage:", error);
+            resetBoard();
+        }
+    }, []);
+
+    // useEffect(()=>{
+    //     const ongoingGame = JSON.parse(sessionStorage.getItem("game"));
+    //     if (ongoingGame){
+    //         dispatch(receiveGameBoard(ongoingGame));
+    //         sessionStorage.setItem("game", JSON.stringify(ongoingGame));
+    //     } else {
+    //         resetBoard()
+    //     }
+    // }, [])
+
+
+    // useEffect(() => {
+    //     if (!gameBoard) {
+    //         const newGameBoard = new Board();
+    //         dispatch(receiveGameBoard(newGameBoard));
+    //     } 
+    // }, [gameBoard, dispatch]);
     
     useEffect(() => {
         if (highlightedSquare){
@@ -150,15 +188,12 @@ function ChessBoard({  }) {
                 dispatch(removeSelected())
             }
             finalDragSquareRef.current = null;
-            // selectedPiece.current = null;
         }
 
-        dispatch(removeTouchHighlightedSquare())
+        dispatch(removeTouchHighlightedSquare());
         dispatch(removeHighlightedSquare());
-
         dispatch(removeDragPosition());
         dispatch(removeDraggingPiece());
-
     }
 
     function handleSquareClick(e){
@@ -217,25 +252,16 @@ function ChessBoard({  }) {
 
                                 {   
                                     movingOptions && movingOptions.has(id) && 
-                                    <div className="suggested-square" 
-                                    // onClick={makeMove}
-                                    >
-
-                                    </div>
+                                    <div className="suggested-square"></div>
                                 }
 
                                 {
                                     takingOptions && takingOptions.has(id) && 
-                                    <div className="suggested-capture" 
-                                    // onClick={makeMove}
-                                    ></div>
+                                    <div className="suggested-capture" ></div>
                                 }
 
                             </div>
-
                         )
-                        
-
                     })}
                 </div>
             ))}

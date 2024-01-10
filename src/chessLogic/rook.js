@@ -5,7 +5,8 @@ import { Slideable } from './slideable.js';
 const DIRS = [[1,0],[0,1],[-1,0],[0,-1]];
 
 export function Rook(color,square, board){
-    this.type = color.slice(0,1) + "_rook";
+    this.pieceName = "rook";
+    this.type = color.slice(0,1) + "_" + this.pieceName;
     Piece.call(this, color, square, board);
     this.slideable = new Slideable(board);
 }

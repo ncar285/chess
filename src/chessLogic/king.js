@@ -4,7 +4,8 @@ import { Piece } from './piece.js';
 const DIRS = [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]];
 
 export function King(color, square, board){
-    this.type = color.slice(0,1) + "_king";
+    this.pieceName = "king";
+    this.type = color.slice(0,1) + "_" + this.pieceName;
     Piece.call(this, color, square, board);
 }
 

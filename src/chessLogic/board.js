@@ -62,6 +62,33 @@ Board.prototype.getTakenPieces = function(){
     return this.takenPieces;
 }
 
+Board.prototype.getBoardHash = function() {
+    return this.board.map(row => 
+        row.map(square => {
+            if (square) {
+                return `${square.getPieceName()}-${square.getColor()}`;
+            }
+            return "empty";
+        }).join("_")
+    ).join("|");
+}
+
+Board.prototype.setBoardTo = function(boardHash){
+    boardHash.split("|").forEach((row, r) => {
+        row.split("_").forEach((square, c) => {
+            const [pieceName, color] = square.split("-");
+            const PieceClass = pieceClasses[pieceName] || false;
+            if (PieceClass){
+                this.board[r][c] = new PieceClass(color, [r,c], this);
+            } else {
+                this.board[r][c] = null;
+            }
+        })
+    })
+}
+
+
+
 Board.prototype.movePiece = function(startSquare, endSquare, piece){
     try {
 
