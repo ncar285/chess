@@ -37,53 +37,24 @@ function ChessBoard() {
     const finalDragSquareRef = useRef(null);
     const selectedPiece = useRef(null);
 
-
-    // const resetBoard = () => {
-    //     const newGameBoard = new Board();
-    //     dispatch(receiveGameBoard(newGameBoard));
-    //     sessionStorage.setItem("game",JSON.stringify(newGameBoard));
-    // }
-
-    const resetBoard = () => {
-        const newGameBoard = new Board();
-        dispatch(receiveGameBoard(newGameBoard));
-        sessionStorage.setItem("game", JSON.stringify(newGameBoard.toData())); // Assuming toData() method returns serializable data
-    }
-
     useEffect(() => {
         try {
-            const ongoingGameData = sessionStorage.getItem("game");
-            if (ongoingGameData) {
-                const ongoingGame = JSON.parse(ongoingGameData);
-                // If Board has methods, re-instantiate it with the parsed data
-                const gameBoard = new Board(ongoingGame);
-                dispatch(receiveGameBoard(gameBoard));
+            const boardHash = JSON.parse(sessionStorage.getItem("ongoingGame"));
+            console.log("boardHash",boardHash)
+            if (boardHash) {
+                const ongoingGame = Board.createBoardFromHash(boardHash);
+                console.log("ongoingGame",ongoingGame)
+                dispatch(receiveGameBoard(ongoingGame));
             } else {
-                resetBoard();
+                const newGameBoard = new Board();
+                dispatch(receiveGameBoard(newGameBoard));
+                console.log("newGameBoard",newGameBoard)
+                sessionStorage.setItem("ongoingGame", JSON.stringify(newGameBoard.getBoardHash()));
             }
         } catch (error) {
-            console.error("Error loading game from sessionStorage:", error);
-            resetBoard();
+            console.error("Error loading game:", error);
         }
-    }, []);
-
-    // useEffect(()=>{
-    //     const ongoingGame = JSON.parse(sessionStorage.getItem("game"));
-    //     if (ongoingGame){
-    //         dispatch(receiveGameBoard(ongoingGame));
-    //         sessionStorage.setItem("game", JSON.stringify(ongoingGame));
-    //     } else {
-    //         resetBoard()
-    //     }
-    // }, [])
-
-
-    // useEffect(() => {
-    //     if (!gameBoard) {
-    //         const newGameBoard = new Board();
-    //         dispatch(receiveGameBoard(newGameBoard));
-    //     } 
-    // }, [gameBoard, dispatch]);
+    }, [dispatch]);
     
     useEffect(() => {
         if (highlightedSquare){

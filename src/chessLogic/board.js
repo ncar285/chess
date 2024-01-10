@@ -1,4 +1,3 @@
-// import { printBoard } from '../Utils/printBoard.js';
 import { idToPos } from '../Utils/posIdConversion.js';
 import { Bishop } from './bishop.js';
 import { King } from './king.js';
@@ -76,30 +75,25 @@ Board.prototype.getBoardHash = function() {
 Board.prototype.setBoardTo = function(boardHash){
     boardHash.split("|").forEach((row, r) => {
         row.split("_").forEach((square, c) => {
-            const [pieceName, color] = square.split("-");
-            const PieceClass = pieceClasses[pieceName] || false;
-            if (PieceClass){
-                this.board[r][c] = new PieceClass(color, [r,c], this);
-            } else {
+            if (square === "empty"){
                 this.board[r][c] = null;
+            } else {
+                const [pieceName, color] = square.split("-");
+                const PieceClass = pieceClasses[pieceName];
+                this.board[r][c] = new PieceClass(color, [r,c], this);
             }
         })
     })
 }
 
-
-
 Board.prototype.movePiece = function(startSquare, endSquare, piece){
     try {
-
         if (!Board.isInsideBoard(startSquare) || !Board.isInsideBoard(endSquare)) {
             throw new Error("Move is outside the board.");
         }
-
         if (!this.isOccupied(startSquare)) {
             throw new Error("No piece at the start square.");
         }
-
         // store captured piece if there is one
         const capturedPiece = this.getPiece(endSquare);
 
@@ -119,10 +113,6 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
         if (piece.type.slice(2) === "pawn") {
             piece.firstMove = false;
         }
-
-        // const boardPrinted = printBoard(this.board);
-        // console.log("boardHash",boardPrinted)
-        
     } catch (error) {
         console.error(error.message);
     }
@@ -145,5 +135,8 @@ Board.isInsideBoard = function(pos) {
     return rank >= 0 && rank < 8 && file >= 0 && file < 8;
 };
 
-
-// export const gameBoard = new Board();
+Board.createBoardFromHash = function(boardHash) {
+    const board = new Board();
+    board.setBoardTo(boardHash);
+    return board;
+};
