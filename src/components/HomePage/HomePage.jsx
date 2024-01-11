@@ -3,6 +3,7 @@ import ChessBoard from '../ChessBoard/ChessBoard.jsx';
 import './HomePage.css'
 import { getSelected, removeMoveOptions, removeSelected } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
+import ActiveChessBoard from '../ActiveChessBoard/ActiveChessBoard.jsx';
 
 const HomePage = () => {
 
@@ -22,7 +23,8 @@ const HomePage = () => {
 
     return (
         <div id="game" onClick={handleClick}>
-            <ChessBoard />
+            {/* <ChessBoard /> */}
+            <ActiveChessBoard/>
         </div>
     );
 };

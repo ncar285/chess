@@ -37,21 +37,28 @@ function ChessBoard() {
     const finalDragSquareRef = useRef(null);
     const selectedPiece = useRef(null);
 
+    // useEffect(() => {
+    //     try {
+    //         const boardHash = JSON.parse(sessionStorage.getItem("ongoingGame"));
+    //         if (boardHash) {
+    //             const ongoingGame = Board.createBoardFromHash(boardHash);
+    //             dispatch(receiveGameBoard(ongoingGame));
+    //         } else {
+    //             const newGameBoard = new Board();
+    //             dispatch(receiveGameBoard(newGameBoard));
+    //             sessionStorage.setItem("ongoingGame", JSON.stringify(newGameBoard.getBoardHash()));
+    //         }
+    //     } catch (error) {
+    //         console.error("Error loading game:", error);
+    //     }
+    // }, [dispatch]);
+
     useEffect(() => {
-        try {
-            const boardHash = JSON.parse(sessionStorage.getItem("ongoingGame"));
-            if (boardHash) {
-                const ongoingGame = Board.createBoardFromHash(boardHash);
-                dispatch(receiveGameBoard(ongoingGame));
-            } else {
-                const newGameBoard = new Board();
-                dispatch(receiveGameBoard(newGameBoard));
-                sessionStorage.setItem("ongoingGame", JSON.stringify(newGameBoard.getBoardHash()));
-            }
-        } catch (error) {
-            console.error("Error loading game:", error);
-        }
-    }, [dispatch]);
+        if (!gameBoard) {
+            const newGameBoard = new Board();
+            dispatch(receiveGameBoard(newGameBoard));
+        } 
+    }, [gameBoard, dispatch]);
     
     useEffect(() => {
         if (highlightedSquare){
