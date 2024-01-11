@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { posToId, indexToFile} from '../../Utils/posIdConversion'; 
 import { useDispatch, useSelector } from 'react-redux';
-import { getGame, getGameBoard, receiveGameBoard } from '../../store/gameReducer';
+import { getGame, getGameBoard, getGameType, receiveGameBoard, receiveGameType } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
 import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, getTouchHighlightedSquare, receiveDragPosition, receiveDragType, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDragPosition, removeDraggingPiece, removeHighlightedSquare, removeSelected, removeTouchHighlightedSquare } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
 import { playMoveIfValid } from '../../Utils/playMoveIfValid';
 import { getMousePos } from '../../Utils/getMousePos';
 import { findChessSquareFromCoordinates } from '../../Utils/findChessSquare';
+import { useGame } from '../GameContext.jsx';
 import "./ChessBoard.css"
 
 const STATIC_BOARD = [];
@@ -22,9 +23,16 @@ for (let a = 7 ; a  >= 0 ; a-- ){
     }
 }
 
+
 function ChessBoard() {
 
     const dispatch = useDispatch();
+
+    // dispatch(receiveGameType(gameType));
+
+    const { isActive } = useGame();
+
+    // console.log("gameType", gameType)
 
     const gameBoard = useSelector(getGameBoard);
     const game = useSelector(getGame)
@@ -36,22 +44,6 @@ function ChessBoard() {
 
     const finalDragSquareRef = useRef(null);
     const selectedPiece = useRef(null);
-
-    // useEffect(() => {
-    //     try {
-    //         const boardHash = JSON.parse(sessionStorage.getItem("ongoingGame"));
-    //         if (boardHash) {
-    //             const ongoingGame = Board.createBoardFromHash(boardHash);
-    //             dispatch(receiveGameBoard(ongoingGame));
-    //         } else {
-    //             const newGameBoard = new Board();
-    //             dispatch(receiveGameBoard(newGameBoard));
-    //             sessionStorage.setItem("ongoingGame", JSON.stringify(newGameBoard.getBoardHash()));
-    //         }
-    //     } catch (error) {
-    //         console.error("Error loading game:", error);
-    //     }
-    // }, [dispatch]);
 
     useEffect(() => {
         if (!gameBoard) {
@@ -180,7 +172,7 @@ function ChessBoard() {
         if (selectedPiece.current){
             const [x, y] = getMousePos(e);
             const squareId = findChessSquareFromCoordinates(x,y);
-            return playMoveIfValid(selectedPiece.current, game, squareId);
+            return playMoveIfValid(selectedPiece.current, game, squareId, isActive);
         }
         return false
     }

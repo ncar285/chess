@@ -3,7 +3,8 @@ import ChessBoard from '../ChessBoard/ChessBoard.jsx';
 import './ActiveChessBoard.css'
 import { useDispatch } from 'react-redux';
 import { Board } from '../../chessLogic/board.js';
-import { receiveGameBoard } from '../../store/gameReducer.js';
+import { receiveGameBoard, receiveGameType } from '../../store/gameReducer.js';
+import { useGame } from '../GameContext.jsx';
 
 export const SESSION_GAME_KEY = 'ongoingGame';
 
@@ -11,6 +12,11 @@ const ActiveChessBoard = () => {
 
     const dispatch = useDispatch();
 
+    const { isActive, setIsActive } = useGame();
+
+    useEffect(() => {
+        setIsActive(true);
+    }, [setIsActive]);
 
 
     useEffect(() => {
@@ -32,7 +38,7 @@ const ActiveChessBoard = () => {
 
 
     return (
-        <ChessBoard />
+        <ChessBoard/>
     );
 };
 

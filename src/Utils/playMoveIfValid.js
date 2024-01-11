@@ -1,6 +1,6 @@
 import { idToPos, posToId } from "./posIdConversion";
 
-export function playMoveIfValid(piece, game, endSquare){
+export function playMoveIfValid(piece, game, endSquare, isActive){
     const startPos = piece.getSquare()
     const startSquare = posToId(startPos);
     const endPos = idToPos(endSquare);
@@ -9,7 +9,9 @@ export function playMoveIfValid(piece, game, endSquare){
         const validTakeOptions = piece.getMoves().takeOptions;
         if (validOptions.has(endSquare) || validTakeOptions.has(endSquare)){
             game.movePiece(startPos, endPos, piece);
-            sessionStorage.setItem("ongoingGame", JSON.stringify(game.getBoardHash()));
+            if (isActive){
+                sessionStorage.setItem("ongoingGame", JSON.stringify(game.getBoardHash()));
+            }
             return true;
         } else {
             return false;

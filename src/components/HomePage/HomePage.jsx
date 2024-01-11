@@ -23,8 +23,8 @@ const HomePage = () => {
 
     return (
         <div id="game" onClick={handleClick}>
-            {/* <ChessBoard /> */}
-            <ActiveChessBoard/>
+            <ChessBoard />
+            {/* <ActiveChessBoard/> */}
         </div>
     );
 };
