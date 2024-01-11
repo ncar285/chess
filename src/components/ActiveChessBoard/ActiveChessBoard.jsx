@@ -12,7 +12,7 @@ const ActiveChessBoard = () => {
 
     const dispatch = useDispatch();
 
-    const { isActive, setIsActive } = useGame();
+    const { setIsActive } = useGame();
 
     useEffect(() => {
         setIsActive(true);

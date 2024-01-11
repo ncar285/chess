@@ -3,7 +3,8 @@ import HomePage from './components/HomePage/HomePage';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDragPosition, getDraggingPiece } from './store/uiReducer';
 import DragClone from './components/DragClone/DragClone';
-import { GameProvider } from './components/GameContext';
+import { GameProvider, useGame } from './components/GameContext';
+import { useState } from 'react';
 
 function App() {
     const draggingPiece = useSelector(getDraggingPiece)

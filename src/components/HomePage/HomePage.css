@@ -1,8 +1,4 @@
-.is-preload .chess-board {
-    background-color: #cccc;
-}
-
-#game {
+#home-page {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,4 +7,49 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+:root {
+    --boardDimension: calc(min(55vw, 100vh) - 40px); /* Adjust for padding and ensure square aspect ratio */
+}
+
+.desktop-homepage {
+    display: flex;
+    width: 90vw; /* Adjusted for total available width */
+    max-width: 1200px; /* Optional, for very wide screens */
+    height: 100vh;
+}
+
+.desktop-practice-board, .desktop-play-options {
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.desktop-practice-board {
+    background-color: rgb(163, 236, 163);
+    width: 55vw; /* Width of the practice board */
+    height: 100%;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.desktop-play-options {
+    background-color: rgb(168, 158, 158);
+    flex-grow: 1; /* Take remaining space */
+    display: flex; /* For inner content alignment */
+    align-items: center; /* Center vertically */
+}
+
+.phone-homepage {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.temp-chessBoard {
+    width: var(--boardDimension);
+    height: var(--boardDimension); /* Maintain square aspect ratio */
+    background-color: aqua;
+    /* No need for margin auto since flexbox is centering it */
 }
