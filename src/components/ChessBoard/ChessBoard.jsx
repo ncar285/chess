@@ -40,15 +40,12 @@ function ChessBoard() {
     useEffect(() => {
         try {
             const boardHash = JSON.parse(sessionStorage.getItem("ongoingGame"));
-            console.log("boardHash",boardHash)
             if (boardHash) {
                 const ongoingGame = Board.createBoardFromHash(boardHash);
-                console.log("ongoingGame",ongoingGame)
                 dispatch(receiveGameBoard(ongoingGame));
             } else {
                 const newGameBoard = new Board();
                 dispatch(receiveGameBoard(newGameBoard));
-                console.log("newGameBoard",newGameBoard)
                 sessionStorage.setItem("ongoingGame", JSON.stringify(newGameBoard.getBoardHash()));
             }
         } catch (error) {
