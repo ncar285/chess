@@ -43,7 +43,8 @@
 
 .phone-homepage {
     width: 100%;
-    padding: 20px;
+    height: 100%;
+    display: flex;
     box-sizing: border-box;
 }
 
