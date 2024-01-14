@@ -5,10 +5,13 @@ import { getDragPosition, getDraggingPiece } from './store/uiReducer';
 import DragClone from './components/DragClone/DragClone';
 import { GameProvider, useGame } from './components/GameContext';
 import { useState } from 'react';
+import ChessBoard from './components/ChessBoard/ChessBoard';
+import ActiveChessBoard from './components/ActiveChessBoard/ActiveChessBoard';
 
 function App() {
     const draggingPiece = useSelector(getDraggingPiece)
     const dragPosition = useSelector(getDragPosition)
+
 
     return (
         <HashRouter>
@@ -19,6 +22,10 @@ function App() {
 
                     <Switch>
                         <Route exact path="/" component={HomePage} />
+                    </Switch>
+
+                    <Switch>
+                        <Route exact path="/play" component={ActiveChessBoard} />
                     </Switch>
 
                     <footer className="footer">

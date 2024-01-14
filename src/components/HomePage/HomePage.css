@@ -13,6 +13,13 @@
     --boardDimension: calc(min(55vw, 100vh) - 40px); /* Adjust for padding and ensure square aspect ratio */
 }
 
+/* ! CHANGE THIIS    */
+@media (max-width: 800px) {
+    :root {
+        --boardDimension: 100vw;
+    }
+}
+
 .desktop-homepage {
     display: flex;
     width: 90vw; /* Adjusted for total available width */

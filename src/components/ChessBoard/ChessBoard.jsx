@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import { posToId, indexToFile} from '../../Utils/posIdConversion'; 
+import { posToId, indexToFile, idToPos} from '../../Utils/posIdConversion'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { getGame, getGameBoard, getGameType, receiveGameBoard, receiveGameType } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
 import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, getTouchHighlightedSquare, receiveDragPosition, receiveDragType, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDragPosition, removeDraggingPiece, removeHighlightedSquare, removeSelected, removeTouchHighlightedSquare } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
-import { playMoveIfValid } from '../../Utils/playMoveIfValid';
+// import { playMoveIfValid } from '../../Utils/playMoveIfValid';
 import { getMousePos } from '../../Utils/getMousePos';
 import { findChessSquareFromCoordinates } from '../../Utils/findChessSquare';
 import { useGame } from '../GameContext.jsx';
@@ -33,6 +33,8 @@ function ChessBoard() {
     const { isActive } = useGame();
 
     // console.log("gameType", gameType)
+
+    const {isDesktop} = useGame();
 
     const gameBoard = useSelector(getGameBoard);
     const game = useSelector(getGame)
@@ -151,7 +153,7 @@ function ChessBoard() {
         const endSquare = finalDragSquareRef.current;
         const piece = selectedPiece.current;
         if (endSquare){
-            if (playMoveIfValid(piece, game, endSquare)){
+            if (playMoveIfValid(piece, endSquare)){
                 dispatch(removeSelected())
             }
             finalDragSquareRef.current = null;
@@ -169,17 +171,43 @@ function ChessBoard() {
     }
 
     function playClickMove(e){
+        // debugger
         if (selectedPiece.current){
             const [x, y] = getMousePos(e);
             const squareId = findChessSquareFromCoordinates(x,y);
-            return playMoveIfValid(selectedPiece.current, game, squareId, isActive);
+            return playMoveIfValid(selectedPiece.current, squareId);
         }
         return false
     }
 
+    console.log("gameBoard", gameBoard)
+
+
+    function playMoveIfValid(piece, endSquare){
+        const startPos = piece.getSquare()
+        const startSquare = posToId(startPos);
+        const endPos = idToPos(endSquare);
+        if (startSquare && endSquare && startSquare !== endSquare){
+            const validOptions = piece.getMoves().options;
+            const validTakeOptions = piece.getMoves().takeOptions;
+            if (validOptions.has(endSquare) || validTakeOptions.has(endSquare)){
+                game.movePiece(startPos, endPos, piece);
+                if (isActive){
+                    sessionStorage.setItem("ongoingGame", JSON.stringify(game.getBoardHash()));
+                }
+                console.log("MOVE LOGGED");
+                dispatch(receiveGameBoard(game));
+                console.log("REDUX UPDATED");
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
 
     return (
-        <div className="chess-board">
+        <div className={`chess-board ${isDesktop ? 'desktop' : 'non-desktop'}`}>
             {gameBoard && [...gameBoard].reverse().map((row, rowIndex) => (
                 <div key={rowIndex} className="board-row">
                     {row.map((piece, colIndex) => {

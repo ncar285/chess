@@ -1,3 +1,6 @@
+
+
+
 .chess-board {
     position: relative;
     width: var(--boardDimension);
@@ -7,6 +10,12 @@
     border-radius: calc(0.01 * var(--boardDimension));
     overflow: hidden;
 }
+
+
+/* .chess-board.non-desktop{
+    width: 100vw;
+    height: 100vw;
+} */
 
 @media (max-width: 650px) {
     .chess-board {

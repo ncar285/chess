@@ -14,6 +14,7 @@ const PlayOptions = () => {
     }
 
     function playComputer(e){
+        sessionStorage.setItem("ongoingGame", null)
         history.push('/play');
     }
 
