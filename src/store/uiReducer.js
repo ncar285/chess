@@ -20,6 +20,9 @@ export const REMOVE_DRAG_POSITION = "REMOVE_DRAG_POSITION"
 export const RECEIVE_DRAG_TYPE = "RECEIVE_DRAG_TYPE"
 export const REMOVE_DRAG_TYPE = "REMOVE_DRAG_TYPE"
 
+export const OPEN_SELECT_TIME_MODAL = "OPEN_SELECT_TIME_MODAL"
+export const CLOSE_SELECT_TIME_MODAL = "CLOSE_SELECT_TIME_MODAL"
+
 // ACTION CREATORS
 export const receiveSelected = selectedId => {
     return {
@@ -114,6 +117,19 @@ export const removeDragType = () => {
     }
 }
 
+
+export const openSelectTimeModal = () => {
+    return {
+        type: OPEN_SELECT_TIME_MODAL,
+    }
+}
+
+export const exitSelectTimeModal = () => {
+    return {
+        type: CLOSE_SELECT_TIME_MODAL,
+    }
+}
+
 // SELECTORS
 export const getSelected = state => state.ui.selectedId;
 
@@ -140,7 +156,8 @@ const initialState = {
     touchHighlightedSquare: null,
     draggingPiece: null,
     dragPosition: null,
-    dragType: null
+    dragType: null,
+    selectTimeModal: false,
 };
 
 const uiReducer = (state = initialState, action) => {
@@ -219,6 +236,16 @@ const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 dragType: null
+            }
+        case OPEN_SELECT_TIME_MODAL:
+            return {
+                ...state,
+                selectTimeModal: true,
+            }
+        case CLOSE_SELECT_TIME_MODAL:
+            return {
+                ...state,
+                selectTimeModal: false,
             }
         default:
             return state;

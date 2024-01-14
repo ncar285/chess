@@ -7,6 +7,7 @@ import { GameProvider, useGame } from './components/GameContext';
 import { useState } from 'react';
 import ChessBoard from './components/ChessBoard/ChessBoard';
 import ActiveChessBoard from './components/ActiveChessBoard/ActiveChessBoard';
+import SelectTimeModal from './components/SelectTimeModal/SelectTimeModal';
 
 function App() {
     const draggingPiece = useSelector(getDraggingPiece)
@@ -19,6 +20,11 @@ function App() {
                 <div className="app-container">
                     {draggingPiece && dragPosition && <DragClone piece={draggingPiece} position={dragPosition}/>}
 
+
+                    <Route path="/" exact>
+                        <HomePage/>
+                        <SelectTimeModal />
+                    </Route>
 
                     <Switch>
                         <Route exact path="/" component={HomePage} />

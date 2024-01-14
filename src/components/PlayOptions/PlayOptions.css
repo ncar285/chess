@@ -7,8 +7,20 @@
     height: 100%;
 }
 
+.play-options-header {
+    padding: 20px;
+}
+
+.play-options-container h1 {
+    color: white;
+    /* font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 7.5vw;
+    font-weight: bolder;
+}
+
 .play-options-logo {
-    width: 10%;
+    width: 20%;
 }
 
 .play-options-form{
