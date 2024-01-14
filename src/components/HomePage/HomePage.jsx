@@ -7,14 +7,15 @@ import ActiveChessBoard from '../ActiveChessBoard/ActiveChessBoard.jsx';
 import { useGame } from '../GameContext.jsx';
 import PlayOptions from '../PlayOptions/PlayOptions.jsx';
 
+
 const HomePage = () => {
 
     const dispatch = useDispatch();
     
     const selectedSquare = useSelector(getSelected);
     
-    const { isDesktop } = useGame();
-    // const isDesktop = false
+    // const { isDesktop } = useGame();
+    const isDesktop = false
 
     function handleClick(e){
         e.preventDefault();
