@@ -1,13 +1,19 @@
 .select-time-modal {
+    
     position: fixed;
     width: 100vw;
-    height: 90vh;
-    bottom: 0;
+    height: 95vh;
+    top: 100vh; /* Initial off-screen position */
     opacity: 0;
-    transition: bottom 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transition: top 0.3s ease-in-out, opacity 0.3s ease-in-out;
     background-color: rgb(83, 83, 83);
-    z-index: 20;
+    z-index: 200;
     border-radius: 20px;
+}
+
+.select-time-modal.active {
+    top: 5%;
+    opacity: 1;
 }
 
 .STM-header {
@@ -27,6 +33,11 @@
     align-items: center;
 }
 
-.exit-cross .invisible{
-    display: none;
+.cross-icon {
+    font-weight: 900;
+    font-size: larger;
+}
+
+.exit-cross:hover {
+    cursor: pointer;
 }

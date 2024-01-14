@@ -20,18 +20,14 @@ function App() {
                 <div className="app-container">
                     {draggingPiece && dragPosition && <DragClone piece={draggingPiece} position={dragPosition}/>}
 
-
-                    <Route path="/" exact>
-                        <HomePage/>
-                        <SelectTimeModal />
-                    </Route>
-
                     <Switch>
-                        <Route exact path="/" component={HomePage} />
-                    </Switch>
-
-                    <Switch>
-                        <Route exact path="/play" component={ActiveChessBoard} />
+                        <Route exact path="/">
+                            <HomePage/>
+                            <SelectTimeModal />
+                        </Route>
+                        <Route exact path="/play">
+                            <ActiveChessBoard />
+                        </Route>
                     </Switch>
 
                     <footer className="footer">

@@ -4,24 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { exitSelectTimeModal } from "../../store/uiReducer";
 
 const SelectTimeModal = () => {
-
     const display = useSelector(state => state.ui.selectTimeModal);
+    const modalClass = `select-time-modal ${display ? 'active' : ''}`;
 
-    console.log("display modal? ", display)
     const dispatch = useDispatch();
-
-    if (!display) return null;
 
     function handleExitModal(){
         dispatch(exitSelectTimeModal());
     }
 
     return (
-
-        <div>
+        <div className={modalClass}>
             <header className='STM-header'>
                 <div className="exit-cross">
-                    <RxCross2 onClick={handleExitModal}/>
+                    <RxCross2 onClick={handleExitModal} className="cross-icon"/>
                 </div>
                 <h1>Choose Time</h1>
                 <div className="exit-cross invisible"></div>
