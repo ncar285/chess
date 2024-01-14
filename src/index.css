@@ -34,3 +34,32 @@
     --touchHighlight: calc((var(--boardDimension)/8) * 3.606);
     --touchCircleOffset: 130%;
 }
+
+body * {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+    background: none;      /* Removes default background */
+    color: inherit;        /* Inherits text color from parent */
+    border: none;          /* Removes default border */
+    padding: 0;            /* Removes default padding */
+    margin: 0;             /* Removes default margin */
+    font: inherit;         /* Inherits font from parent */
+    cursor: pointer;       /* Keeps the cursor as pointer to signify it's a button */
+    outline: inherit;      /* Inherits outline from parent (or you can set it to 'none') */
+    -webkit-appearance: none; /* Removes styling in WebKit browsers */
+    -moz-appearance: none;    /* Removes styling in Mozilla browsers */
+    appearance: none;         /* Removes default styling */
+}
+
+.button {
+    width: 90%;
+    height: 5vh;
+    font-size: 2rem;
+    color: rgb(254, 254, 254);
+    background-color: rgb(32, 32, 32);
+    margin: 1vh 0;
+    border-radius: 0.2em;
+}
+

@@ -53,8 +53,9 @@ const PlayOptions = () => {
                 <button className='button dropdown' onClick={handleTimeSelect}>
                     {displayTime(timeControl)}
                 </button>
-                <button onClick={playComputer}>Computer</button>
-                {/* <button>Play a Friend</button> */}
+                <button className='button' onClick={playComputer}>
+                    Computer
+                </button>
             </form>
         </div>
     );
