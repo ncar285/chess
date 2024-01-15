@@ -2,6 +2,11 @@ import { RxCross2 } from "react-icons/rx";
 import './SelectTimeModal.css'
 import { useDispatch, useSelector } from "react-redux";
 import { exitSelectTimeModal } from "../../store/uiReducer";
+import { GiSupersonicBullet } from "react-icons/gi";
+import { GiLightningHelix } from "react-icons/gi";
+import { RxLapTimer } from "react-icons/rx";
+import { LuCalendarDays } from "react-icons/lu";
+import { GiBulletBill } from "react-icons/gi";
 
 const SelectTimeModal = () => {
     const display = useSelector(state => state.ui.selectTimeModal);
@@ -22,6 +27,41 @@ const SelectTimeModal = () => {
                 <h1>Choose Time</h1>
                 <div className="exit-cross invisible"></div>
             </header>
+            <div className="STM-body">
+                <div className="STM-section">
+                    <h2><GiBulletBill /> Bullet</h2>
+                    <div className="time-category">
+                        <button className="button">1 min</button>
+                        <button className="button">1|1</button>
+                        <button className="button">2|0</button>
+                    </div>
+                </div>
+                <div className="STM-section">
+                    <h2><GiLightningHelix /> Blitz</h2>
+                    <div className="time-category">
+                        <button className="button">1|1</button>
+                        <button className="button">3 min</button>
+                        <button className="button">2|0</button>
+                    </div>
+                </div>
+                <div className="STM-section">
+                    <h2><RxLapTimer /> Rapid</h2>
+                    <div className="time-category">
+                        <button className="button">1 min</button>
+                        <button className="button">1|1</button>
+                        <button className="button">2|0</button>
+                    </div>
+                </div>
+                <div className="STM-section">
+                    <h2><LuCalendarDays /> Long</h2>
+                    <div className="time-category">
+                        <button className="button">No limit</button>
+                        <button className="button hidden"></button>
+                        <button className="button hidden"></button>
+                    </div>
+                </div>
+            </div>
+            
         </div>
 
     );

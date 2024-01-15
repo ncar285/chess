@@ -1,5 +1,4 @@
 .select-time-modal {
-    
     position: fixed;
     width: 100vw;
     height: 95vh;
@@ -36,8 +35,33 @@
 .cross-icon {
     font-weight: 900;
     font-size: larger;
+    /* stroke-width: 0.4em; */
+    stroke: blue !important;
+    fill: blue !important;
 }
 
 .exit-cross:hover {
     cursor: pointer;
+}
+
+.STM-body {
+    padding: 10px;
+}
+
+.STM-section h2{
+    margin: 10px;
+}
+.time-category {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.time-category .button{
+    margin: 0 10px;
+}
+
+.time-category .button.hidden{
+    /* display: none; */
+    visibility: hidden;
+    pointer-events: none;
 }
