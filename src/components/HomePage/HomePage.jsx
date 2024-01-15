@@ -14,8 +14,8 @@ const HomePage = () => {
     
     const selectedSquare = useSelector(getSelected);
     
-    // const { isDesktop } = useGame();
-    const isDesktop = false
+    const { isDesktop } = useGame();
+    // const isDesktop = false
 
     function handleClick(e){
         e.preventDefault();

@@ -20,6 +20,7 @@ export function Board(){
     Array(8).fill(null).map(() => Array(8).fill(null));
     this.placePieces()
     this.takenPieces = new Set();
+    this.history = [{move: null, board: this.board}];
 }
 
 Board.prototype.placePieces = function() {
@@ -113,6 +114,16 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
         if (piece.type.slice(2) === "pawn") {
             piece.firstMove = false;
         }
+
+        // update move history
+        const move = {piece: piece, endSquare}
+        const newHistoryEntry = {
+            move,
+            board: this.board
+        };
+        const newHistory = [...this.history, newHistoryEntry];
+        this.history = newHistory;
+        
     } catch (error) {
         console.error(error.message);
     }

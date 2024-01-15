@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { posToId, indexToFile, idToPos} from '../../Utils/posIdConversion'; 
 import { useDispatch, useSelector } from 'react-redux';
-import { getGame, getGameBoard, getGameType, receiveGameBoard, receiveGameType } from '../../store/gameReducer';
+import { getBoard, getGame, getGameBoard, getGameType, receiveBoard, receiveGame, receiveGameType } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
 import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, getTouchHighlightedSquare, receiveDragPosition, receiveDragType, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDragPosition, removeDraggingPiece, removeHighlightedSquare, removeSelected, removeTouchHighlightedSquare } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
@@ -36,7 +36,7 @@ function ChessBoard() {
 
     const {isDesktop} = useGame();
 
-    const gameBoard = useSelector(getGameBoard);
+    // const gameBoard = useSelector(getGameBoard);
     const game = useSelector(getGame)
     const selectedSquare = useSelector(getSelected);
     const movingOptions = useSelector(getMoveOptions);
@@ -44,15 +44,24 @@ function ChessBoard() {
     const highlightedSquare = useSelector(getHighlightedSquare);
     const touchHighlightedSquare = useSelector(getTouchHighlightedSquare);
 
+
+    const board = useSelector(getBoard);
+
+    console.log("BOARD +++ ", board)
+
     const finalDragSquareRef = useRef(null);
     const selectedPiece = useRef(null);
 
     useEffect(() => {
-        if (!gameBoard) {
+        if (!game) {
             const newGameBoard = new Board();
-            dispatch(receiveGameBoard(newGameBoard));
+            dispatch(receiveGame(newGameBoard));
+            dispatch(receiveBoard(newGameBoard.board))
         } 
-    }, [gameBoard, dispatch]);
+    }, [game, dispatch]);
+
+
+    // console.log("game", game)
     
     useEffect(() => {
         if (highlightedSquare){
@@ -180,7 +189,11 @@ function ChessBoard() {
         return false
     }
 
-    console.log("gameBoard", gameBoard)
+    // console.log("gameBoard", gameBoard)
+
+    function deepCopyBoard(board) {
+        return board.map(row => [...row]);
+    }
 
 
     function playMoveIfValid(piece, endSquare){
@@ -195,9 +208,9 @@ function ChessBoard() {
                 if (isActive){
                     sessionStorage.setItem("ongoingGame", JSON.stringify(game.getBoardHash()));
                 }
-                console.log("MOVE LOGGED");
-                dispatch(receiveGameBoard(game));
-                console.log("REDUX UPDATED");
+
+                const newBoard = deepCopyBoard(game.board);
+                dispatch(receiveBoard(newBoard))
                 return true;
             } else {
                 return false;
@@ -208,7 +221,7 @@ function ChessBoard() {
 
     return (
         <div className={`chess-board ${isDesktop ? 'desktop' : 'non-desktop'}`}>
-            {gameBoard && [...gameBoard].reverse().map((row, rowIndex) => (
+            {board && [...board].reverse().map((row, rowIndex) => (
                 <div key={rowIndex} className="board-row">
                     {row.map((piece, colIndex) => {
                         const squareInfo = STATIC_BOARD[rowIndex][colIndex]
