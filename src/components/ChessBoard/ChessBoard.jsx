@@ -211,6 +211,7 @@ function ChessBoard() {
 
                 const newBoard = deepCopyBoard(game.board);
                 dispatch(receiveBoard(newBoard))
+                dispatch(removeSelected())
                 return true;
             } else {
                 return false;

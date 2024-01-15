@@ -27,6 +27,7 @@ function App() {
                         </Route>
                         <Route exact path="/play">
                             <ActiveChessBoard />
+                            {/* <ChessBoard/> */}
                         </Route>
                     </Switch>
 
