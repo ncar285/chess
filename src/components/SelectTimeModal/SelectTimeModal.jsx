@@ -1,15 +1,13 @@
-import { RxCross2 } from "react-icons/rx";
 import './SelectTimeModal.css'
+import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { exitSelectTimeModal } from "../../store/uiReducer";
-import { GiSupersonicBullet } from "react-icons/gi";
 import { GiLightningHelix } from "react-icons/gi";
 import { RxLapTimer } from "react-icons/rx";
 import { LuCalendarDays } from "react-icons/lu";
 import { GiBulletBill } from "react-icons/gi";
 import { receiveTimeControl } from "../../store/gameReducer";
 import { displayTime } from "../PlayOptions/PlayOptions";
-import { TIME_VALUES } from "../PlayOptions/PlayOptions";
 
 export const TIME_CATEGORIES = ['Bullet', 'Blitz','Rapid','No Limit'];
 
@@ -47,20 +45,6 @@ const SelectTimeModal = () => {
         dispatch(receiveTimeControl(e.target.value));
     }
 
-    const mapHeader = (timeVal) => {
-        const mins = timeVal.split('|');
-        if (mins <= 2){
-            return (<h2><GiBulletBill className="STM-icon bullet"/>Bullet</h2>)
-        } else if (mins > 2 && mins <= 5){
-            return (<h2><GiLightningHelix className="STM-icon blitz"/> Blitz</h2>)
-        } else if (mins > 5 && mins <= 30){
-            return (<h2><RxLapTimer className="STM-icon rapid"/> Rapid</h2>)
-        } else if (mins === 'inf'){
-            return (<h2><LuCalendarDays className="STM-icon long"/> Long</h2>)
-        }
-    }
-
-
     return (
         <div className={modalClass}>
             <header className='STM-header'>
@@ -83,7 +67,6 @@ const SelectTimeModal = () => {
                     )
                 )}
             </div>
-            
         </div>
 
     );

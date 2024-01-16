@@ -55,3 +55,8 @@ button.option {
     pointer-events: none;
     visibility: hidden;
 }
+
+.inner-option-button {
+    display: flex;
+    align-items: center;
+}
