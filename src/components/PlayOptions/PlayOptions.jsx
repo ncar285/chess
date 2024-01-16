@@ -44,6 +44,12 @@ const icon = (timeVal) => {
 
 const STYLES = ['Play a Friend', 'vs Computer', 'Playground']
 
+const URLS = {
+    'Play a Friend': '/play-friend',
+    'vs Computer': '/play-computer',
+    'Playground': '/playground'
+}
+
 const PlayOptions = () => {
     const history = useHistory()
 
@@ -57,11 +63,17 @@ const PlayOptions = () => {
 
     const [gameStyle, setGameStyle] = useState(null)
 
-    const [prevTimeControl, setPrevTimeControl] = useState(null)
+    const [prevTimeControl, setPrevTimeControl] = useState(null);
+
+    const [gameStyleWarning, setGameStyleWarning] = useState(null);
 
     function startGame(){
-        sessionStorage.setItem("ongoingGame", null)
-        history.push('/play-friend');
+        if (!gameStyle){
+            setGameStyleWarning(true);
+        } else {
+            sessionStorage.setItem("ongoingGame", null)
+            history.push(URLS[gameStyle]);
+        }
     }
 
     const selectStyle = (e) => {
@@ -73,6 +85,7 @@ const PlayOptions = () => {
         }
 
         setGameStyle(e.target.value);
+        setGameStyleWarning(false)
 
         // force no time limit for playground
         if (e.target.value === 'Playground'){
@@ -104,9 +117,10 @@ const PlayOptions = () => {
                     </div>
                     <IoIosArrowDown className={`timeControl-icon ${gameStyle === 'Playground' ? 'hidden' : ''}`}/>
                 </button>
-                <button className='start-game' onClick={startGame}>
+                <button  className='start-game' onClick={startGame}>
                     Start Game
                 </button>
+                {gameStyleWarning && <p className='select-game-type-warning'>Please select a game type below</p>}
                 { STYLES.map(style => (
                     <>
                         <button value={style} className={`option ${isSelected(style)}`} onClick={selectStyle}>

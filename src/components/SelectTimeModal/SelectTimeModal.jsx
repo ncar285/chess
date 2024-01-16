@@ -43,6 +43,9 @@ const SelectTimeModal = () => {
     const updateTimeControl = (e) => {
         e.preventDefault();
         dispatch(receiveTimeControl(e.target.value));
+        setTimeout(() => {
+            dispatch(exitSelectTimeModal());
+        }, 300);
     }
 
     return (

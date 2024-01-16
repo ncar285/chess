@@ -3,8 +3,8 @@
     width: 100vw;
     height: 95vh;
     top: 100vh; /* Initial off-screen position */
-    opacity: 0;
-    transition: top 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    /* opacity: 0; */
+    transition: top 0.3s ease-in-out;
     background-color: var(--darkScreen);
     color: var(--textColor);
     z-index: 200;
@@ -13,7 +13,8 @@
 
 .select-time-modal.active {
     top: 5%;
-    opacity: 1;
+    /* opacity: 1; */
+    transition: top 0.3s ease-in-out;
 }
 
 .STM-header {

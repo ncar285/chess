@@ -48,7 +48,9 @@ button.option {
 
 button.start-game {
     background-color: var(--lightGreen);
+    font-size: 4vh;
     margin-bottom: 20px;
+    font-weight: 900;
 }
 
 
@@ -64,4 +66,9 @@ button.start-game {
 .inner-option-button {
     display: flex;
     align-items: center;
+}
+
+.select-game-type-warning {
+    color: red;
+    font-style: italic;
 }
