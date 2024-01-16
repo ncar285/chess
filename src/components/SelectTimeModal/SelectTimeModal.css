@@ -78,11 +78,16 @@
     align-items: center;
     justify-content: space-between;
 }
-.time-category .button{
+.time-category button{
     margin: 10px 10px;
+    
 }
 
-.time-category .button.hidden{
+.time-category button.selected{
+    outline: 4px solid #739851;
+}
+
+.time-category button.hidden{
     /* display: none; */
     visibility: hidden;
     pointer-events: none;

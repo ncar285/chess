@@ -5,42 +5,48 @@ import { FaHandHolding } from "react-icons/fa6";
 import './PlayOptions.css';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { openSelectTimeModal } from '../../store/uiReducer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { receiveTimeControl } from '../../store/gameReducer';
+import { useEffect } from 'react';
+import { IoIosArrowDown } from "react-icons/io";
 
-const timeDisplayValues = {
-    "1|0": '1 min',
-    '1|1': '1|1',
-    '2|1': '2|1',
-    "3|0": '3 minn',
-    '15|10': '15|10',
-    '30|0': '30 min',
-    "10|0": '10 min',
-    '15|10': '15|10',
-    '30|0': '30 min'
-        
+export const TIME_VALUES = ['1|0','1|1','2|1','3|0','3|2','5|0','10|0','15|10','30|0','inf'];
+
+export function displayTime(timeControl){
+    if (!timeControl) return false;
+    if (timeControl === 'inf') return 'No Limit'
+    const [limit, increment] = timeControl.split('|');
+    return (increment === '0') ? limit + ' min' : timeControl;
 }
-
 
 const PlayOptions = () => {
     const history = useHistory()
 
-    const [timeControl, setTimeControl] = useState("10|0");
+    // const [timeControl, setTimeControl] = useState("10|0");
 
     const dispatch = useDispatch();
 
+    useEffect(()=>{
+        dispatch(receiveTimeControl("10|0"));
+    },[dispatch])
 
-    function playComputer(e){
+    const timeControl = useSelector(state => state.game.timeControl);
+
+
+    console.log("TIME_CONTROL", timeControl);
+
+    function playComputer(){
         sessionStorage.setItem("ongoingGame", null)
-        history.push('/play');
+        history.push('/play-computer');
+    }
+
+    function playground(){
+        sessionStorage.setItem("ongoingGame", null)
+        history.push('/playground');
     }
 
     function handleTimeSelect(){
         dispatch(openSelectTimeModal());
-    }
-
-    function displayTime(timeControl){
-        const [limit, increment] = timeControl.split('|');
-        return (increment === '0') ? limit + ' min' : timeControl;
     }
 
     return (
@@ -50,11 +56,16 @@ const PlayOptions = () => {
             </header>
             <img src={PlayImage} alt="Chess Piece" className='play-options-logo' />
             <form className='play-options-form'>
-                <button className='button dropdown' onClick={handleTimeSelect}>
-                    {displayTime(timeControl)}
+                <button className='dropdown' onClick={handleTimeSelect}>
+                    <IoIosArrowDown className='timeControl-icon hidden'/>
+                    {displayTime(timeControl) || '10 min'}
+                    <IoIosArrowDown className='timeControl-icon'/>
                 </button>
-                <button className='button' onClick={playComputer}>
-                    Computer
+                <button className='option' onClick={playComputer}>
+                    vs Computer
+                </button>
+                <button className='option' onClick={playground}>
+                    Playground
                 </button>
             </form>
         </div>

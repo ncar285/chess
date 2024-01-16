@@ -2,6 +2,7 @@
 export const RECEIVE_GAME = 'RECEIVE_GAME';
 export const RECEIVE_GAME_TYPE = 'RECEIVE_GAME_TYPE';
 export const RECEIVE_BOARD = 'RECEIVE_GAME_BOARD';
+export const RECEIVE_TIME_CONTROL = 'RECEIVE_TIME_CONTROL';
 
 // ACTION CREATORS
 export const receiveGame = game => {
@@ -25,6 +26,13 @@ export const receiveBoard = board => {
     };
 };
 
+export const receiveTimeControl = timeControl => {
+    return {
+        type: RECEIVE_TIME_CONTROL,
+        payload: timeControl
+    }
+}
+
 // SELECTORS
 export const getGame = state => state.game.game;
 export const getTakenPieces = state => state.game.game.getTakenPieces();
@@ -36,6 +44,7 @@ const initialState = {
     game: null,
     gameType: null,
     board: null,
+    timeControl: null
 };
 
 const gameReducer = (state = initialState, action) => {
@@ -54,6 +63,11 @@ const gameReducer = (state = initialState, action) => {
             return {
                 ...state,
                 board: action.payload
+            };
+        case RECEIVE_TIME_CONTROL:
+            return {
+                ...state,
+                timeControl: action.payload
             };
         default:
             return state;

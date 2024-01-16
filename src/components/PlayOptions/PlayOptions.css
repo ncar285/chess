@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgb(72, 68, 62);
+    background-color: var(--darkScreen);
     z-index: 100;
     height: 100%;
 }
@@ -24,8 +24,34 @@
 }
 
 .play-options-form{
-    width: 100vw;
+    width: 100%;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.play-options-form button{
+    margin: 10px;
+    width: calc(100% - 40px);
+}
+
+.play-options-form button.dropdown{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+button.option {
+    background-color: var(--superDarkScreen);
+}
+
+
+.timeControl-icon {
+    margin: 0 20px;
+}
+
+.timeControl-icon.hidden {
+    pointer-events: none;
+    visibility: hidden;
 }

@@ -59,7 +59,7 @@ button {
     appearance: none;         /* Removes default styling */
 }
 
-.button {
+button {
     width: 100%;
     /* height: 5vh; */
     padding: 2vh 0;
