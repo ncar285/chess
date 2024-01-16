@@ -42,6 +42,8 @@ const icon = (timeVal) => {
     }
 }
 
+const STYLES = ['Play a Friend', 'vs Computer', 'Playground']
+
 const PlayOptions = () => {
     const history = useHistory()
 
@@ -53,25 +55,39 @@ const PlayOptions = () => {
 
     const timeControl = useSelector(state => state.game.timeControl);
 
+    const [gameStyle, setGameStyle] = useState(null)
 
-    function playFriend(){
+    const [prevTimeControl, setPrevTimeControl] = useState(null)
+
+    function startGame(){
         sessionStorage.setItem("ongoingGame", null)
         history.push('/play-friend');
     }
 
-    function playComputer(){
-        sessionStorage.setItem("ongoingGame", null)
-        history.push('/play-computer');
+    const selectStyle = (e) => {
+
+        // if we forcefully set time control to inf, restore
+        if (prevTimeControl){
+            dispatch(receiveTimeControl(prevTimeControl));
+            setPrevTimeControl(null);
+        }
+
+        setGameStyle(e.target.value);
+
+        // force no time limit for playground
+        if (e.target.value === 'Playground'){
+            setPrevTimeControl(timeControl);
+            dispatch(receiveTimeControl("inf"));
+        }
     }
 
-    function playground(){
-        sessionStorage.setItem("ongoingGame", null)
-        history.push('/playground');
-    }
+    const isSelected = (style) => gameStyle === style ? 'selected' : '';
+
 
     function handleTimeSelect(){
         dispatch(openSelectTimeModal());
     }
+
 
     return (
         <div className='play-options-container'>
@@ -80,26 +96,24 @@ const PlayOptions = () => {
             </header>
             <img src={PlayImage} alt="Chess Piece" className='play-options-logo' />
             <form className='play-options-form'>
-                <button className='dropdown' onClick={handleTimeSelect}>
+                <button disabled={gameStyle === 'Playground'} className='dropdown' onClick={handleTimeSelect}>
                     <IoIosArrowDown className='timeControl-icon hidden'/>
                     <div className='inner-option-button'>
                         {icon(timeControl) && icon(timeControl)}
                         {displayTime(timeControl) && displayTime(timeControl)}
                     </div>
-                    <IoIosArrowDown className='timeControl-icon'/>
+                    <IoIosArrowDown className={`timeControl-icon ${gameStyle === 'Playground' ? 'hidden' : ''}`}/>
                 </button>
-                <button className='start-game' onClick={playFriend}>
+                <button className='start-game' onClick={startGame}>
                     Start Game
                 </button>
-                <button className='option' onClick={playFriend}>
-                    Play a Friend
-                </button>
-                <button className='option' onClick={playComputer}>
-                    vs Computer
-                </button>
-                <button className='option' onClick={playground}>
-                    Playground
-                </button>
+                { STYLES.map(style => (
+                    <>
+                        <button value={style} className={`option ${isSelected(style)}`} onClick={selectStyle}>
+                            {style}
+                        </button>
+                    </>
+                ))}
             </form>
         </div>
     );
