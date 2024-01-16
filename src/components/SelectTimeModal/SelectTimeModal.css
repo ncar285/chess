@@ -3,7 +3,7 @@
     width: 100vw;
     height: 95vh;
     top: 100vh; /* Initial off-screen position */
-    /* opacity: 0; */
+    opacity: 0;
     transition: top 0.3s ease-in-out;
     background-color: var(--darkScreen);
     color: var(--textColor);
@@ -13,7 +13,7 @@
 
 .select-time-modal.active {
     top: 5%;
-    /* opacity: 1; */
+    opacity: 1;
     transition: top 0.3s ease-in-out;
 }
 
@@ -38,9 +38,6 @@
 .cross-icon {
     font-weight: 900;
     font-size: larger;
-    /* stroke-width: 0.4em; */
-    stroke: blue !important;
-    fill: blue !important;
 }
 
 .exit-cross:hover {
@@ -81,7 +78,6 @@
 }
 .time-category button{
     margin: 10px 10px;
-    
 }
 
 .time-category button.hidden{

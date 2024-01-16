@@ -28,11 +28,15 @@ export const HEADERS = {
 const SelectTimeModal = () => {
     const display = useSelector(state => state.ui.selectTimeModal);
 
+    console.log("========display", display)
+
     const timeControl = useSelector(state => state.game.timeControl);
 
     const modalClass = `select-time-modal ${display ? 'active' : ''}`;
 
     const dispatch = useDispatch();
+
+    // if (!display) return null;
 
     function handleExitModal(){
         dispatch(exitSelectTimeModal());

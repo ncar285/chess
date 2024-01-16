@@ -74,11 +74,10 @@ button {
 
 button {
     width: 100%;
-    /* height: 5vh; */
     padding: 2vh 0;
     font-size: var(--normalText);
     color: white;
-    /* background-color: var(--semiDarkScreen); */
+    background-color: var(--semiDarkScreen);
     border-radius: 0.3em;
 }
 
