@@ -13,10 +13,9 @@
 
 .play-options-container h1 {
     color: white;
-    /* font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
-    /* font-family:Arial, Helvetica, sans-serif; */
-    font-size: 7.5vw;
-    font-weight: bolder;
+    font-size: var(--headerText);
+    font-weight: 900;
+    /* font-weight: bolder; */
 }
 
 .play-options-logo {
@@ -48,9 +47,10 @@ button.option {
 
 button.start-game {
     background-color: var(--lightGreen);
-    font-size: 4vh;
+    font-size: var(--headerText);
     margin-bottom: 20px;
     font-weight: 900;
+    color: white;
 }
 
 

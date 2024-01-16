@@ -14,8 +14,8 @@ const HomePage = () => {
     
     const selectedSquare = useSelector(getSelected);
     
-    // const { isDesktop } = useGame();
-    const isDesktop = false
+    const { isDesktop } = useGame();
+    // const isDesktop = false
 
     function handleClick(e){
         e.preventDefault();
@@ -37,7 +37,6 @@ const HomePage = () => {
                 <div className='desktop-homepage'>
                     <div className='desktop-practice-board'>
                         <ChessBoard/>
-                        {/* <div className='temp-chessBoard'></div> */}
                     </div>
                     <div className='desktop-play-options'>
                         <PlayOptions/>

@@ -1,27 +1,24 @@
-
-
-
 .chess-board {
     position: relative;
     width: var(--boardDimension);
     height: var(--boardDimension);
+
+    /* max-width: var(--maxBoardDim);
+    max-height: var(--maxBoardDim); */
+
+    aspect-ratio: 1 / 1;
+
     background-color: #f7f7f7;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border-radius: calc(0.01 * var(--boardDimension));
     overflow: hidden;
 }
 
-
-.chess-board.non-desktop{
-    /* display: flex;
-    align-items: center; */
-    /* justify-content: center; */
-}
-
-@media (max-width: 650px) {
-    .chess-board {
-        border-radius: 0;
-    }
+.chess-board.non-desktop {
+    width: calc(min(100vw,100vh));
+    height: calc(min(100vw,100vh));
+    border-radius: calc(0.01 * min(100vw,100vh));
+    border-radius: 0;
 }
 
 .board-row{
