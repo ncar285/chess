@@ -1,3 +1,4 @@
+import './ComputerOpponent.css'
 import React from 'react';
 import ActiveChessBoard from '../ActiveChessBoard/ActiveChessBoard';
 
@@ -8,7 +9,11 @@ const ComputerOpponent = () => {
     // think about computer move speed
     
     return (
-        <ActiveChessBoard/>
+        <div className='computer-opponent'>
+            <div className='computer bench'></div>
+            <ActiveChessBoard/>
+            <div className='user bench'></div>
+        </div>
     );
 };
 

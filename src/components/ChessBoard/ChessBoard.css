@@ -12,10 +12,11 @@
 }
 
 
-/* .chess-board.non-desktop{
-    width: 100vw;
-    height: 100vw;
-} */
+.chess-board.non-desktop{
+    /* display: flex;
+    align-items: center; */
+    /* justify-content: center; */
+}
 
 @media (max-width: 650px) {
     .chess-board {

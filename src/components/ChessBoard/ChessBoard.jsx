@@ -222,58 +222,58 @@ function ChessBoard() {
 
     return (
         <div className={`chess-board ${isDesktop ? 'desktop' : 'non-desktop'}`}>
-            {board && [...board].reverse().map((row, rowIndex) => (
-                <div key={rowIndex} className="board-row">
-                    {row.map((piece, colIndex) => {
-                        const squareInfo = STATIC_BOARD[rowIndex][colIndex]
-                        const {file, rank, color} = squareInfo;
-                        const id = `${file}${rank}`;
-                        const selected = selectedSquare === id ? 'selected' : '';
-                        let hightlight = '';
-                        if (highlightedSquare === id){
-                            hightlight = 'highlight';
-                        } else if (touchHighlightedSquare === id){
-                            hightlight = 'touchHighlight';
-                        }
+                {board && [...board].reverse().map((row, rowIndex) => (
+                    <div key={rowIndex} className="board-row">
+                        {row.map((piece, colIndex) => {
+                            const squareInfo = STATIC_BOARD[rowIndex][colIndex]
+                            const {file, rank, color} = squareInfo;
+                            const id = `${file}${rank}`;
+                            const selected = selectedSquare === id ? 'selected' : '';
+                            let hightlight = '';
+                            if (highlightedSquare === id){
+                                hightlight = 'highlight';
+                            } else if (touchHighlightedSquare === id){
+                                hightlight = 'touchHighlight';
+                            }
 
-                        return (
-                            <div className={`board-square ${color} ${selected} ${hightlight} `} key={id} id={id}
-                                onClick={handleSquareClick}>
+                            return (
+                                <div className={`board-square ${color} ${selected} ${hightlight} `} key={id} id={id}
+                                    onClick={handleSquareClick}>
 
-                                {
-                                    piece &&
-                                    <ChessPiece 
-                                        piece={piece}
-                                        onTouchDragStart={handleTouchStart}
-                                        onClickDragStart={handleClickStart}
-                                    />
-                                }
+                                    {
+                                        piece &&
+                                        <ChessPiece 
+                                            piece={piece}
+                                            onTouchDragStart={handleTouchStart}
+                                            onClickDragStart={handleClickStart}
+                                        />
+                                    }
 
-                                {   
-                                    (file === "A") && 
-                                    <div className="rank square-label">{rank}</div>
-                                }
+                                    {   
+                                        (file === "A") && 
+                                        <div className="rank square-label">{rank}</div>
+                                    }
 
-                                {
-                                    (rank === 1) && 
-                                    <div className="file square-label">{file.toLowerCase()}</div>
-                                }
+                                    {
+                                        (rank === 1) && 
+                                        <div className="file square-label">{file.toLowerCase()}</div>
+                                    }
 
-                                {   
-                                    movingOptions && movingOptions.has(id) && 
-                                    <div className="suggested-square"></div>
-                                }
+                                    {   
+                                        movingOptions && movingOptions.has(id) && 
+                                        <div className="suggested-square"></div>
+                                    }
 
-                                {
-                                    takingOptions && takingOptions.has(id) && 
-                                    <div className="suggested-capture" ></div>
-                                }
+                                    {
+                                        takingOptions && takingOptions.has(id) && 
+                                        <div className="suggested-capture" ></div>
+                                    }
 
-                            </div>
-                        )
-                    })}
-                </div>
-            ))}
+                                </div>
+                            )
+                        })}
+                    </div>
+                ))}
         </div>
     );
 }

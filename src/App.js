@@ -1,15 +1,13 @@
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import HomePage from './components/HomePage/HomePage';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getDragPosition, getDraggingPiece } from './store/uiReducer';
 import DragClone from './components/DragClone/DragClone';
-import { GameProvider, useGame } from './components/GameContext';
-import { useState } from 'react';
-import ChessBoard from './components/ChessBoard/ChessBoard';
-import ActiveChessBoard from './components/ActiveChessBoard/ActiveChessBoard';
+import { GameProvider } from './components/GameContext';
 import SelectTimeModal from './components/SelectTimeModal/SelectTimeModal';
 import ComputerOpponent from './components/ComputerOpponent/ComputerOpponent';
 import HumanOpponent from './components/HumanOpponent/HumanOpponent';
+import Playground from './components/Playground/Playground';
 
 function App() {
     const draggingPiece = useSelector(getDraggingPiece)
@@ -33,7 +31,7 @@ function App() {
                             <ComputerOpponent />
                         </Route>
                         <Route exact path="/playground">
-                            <ChessBoard />
+                            <Playground/>
                         </Route>
                     </Switch>
 
