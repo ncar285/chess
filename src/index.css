@@ -42,12 +42,14 @@
     --lightGreen: #84A94E;
     --green: #739851;
 
+    --desktopBackground: rgb(80,110,64);
+
 
     --playOptionsWidth: 550px;
-    --preliminaryBoardDim: min(calc(100vw - var(--playOptionsWidth)),100vh);
-    --boardDimension: min(var(--preliminaryBoardDim),90vh);
+    --preliminaryBoardDim: min(calc(100vw - var(--playOptionsWidth) - 40px),100vh);
+    --boardDimension: min(var(--preliminaryBoardDim), calc(100vh - 80px));
 
-    --headerText: min(5vw, 50px);
+    --headerText: min(4vh, 50px);
     --normalText: min(3vh, 28px);
 }
 
@@ -76,7 +78,7 @@ button {
     padding: 2vh 0;
     font-size: var(--normalText);
     color: white;
-    background-color: var(--semiDarkScreen);
+    /* background-color: var(--semiDarkScreen); */
     border-radius: 0.3em;
 }
 

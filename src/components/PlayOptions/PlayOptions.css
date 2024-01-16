@@ -7,6 +7,11 @@
     height: 100%;
 }
 
+.play-options-container.desktop {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 0.3em;
+}
+
 .play-options-header {
     padding: 20px;
 }
@@ -15,7 +20,6 @@
     color: white;
     font-size: var(--headerText);
     font-weight: 900;
-    /* font-weight: bolder; */
 }
 
 .play-options-logo {
@@ -35,14 +39,21 @@
     width: calc(100% - 40px);
 }
 
-.play-options-form button.dropdown{
+.play-options-container button.dropdown{
+    background-color: var(--semiDarkScreen);
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+.play-options-container button.dropdown {
+    background-color: rgba(255,255,255,0.1);
+}
 
-button.option {
+/* button.option {
     background-color: var(--superDarkScreen);
+} */
+.play-options-container.desktop button.option {
+    background-color: rgba(0,0,0,0.2);
 }
 
 button.start-game {

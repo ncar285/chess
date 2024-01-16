@@ -1,5 +1,5 @@
 import './PlayOptions.css';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 // import ChessPieceImage from '../../chessPieces/smallModern/svg/3.svg';
 import PlayImage from '../../assets/play-image.svg'
 import { FaHandHolding } from "react-icons/fa6";
@@ -13,6 +13,7 @@ import { GiLightningHelix } from "react-icons/gi";
 import { RxLapTimer } from "react-icons/rx";
 import { LuCalendarDays } from "react-icons/lu";
 import { GiBulletBill } from "react-icons/gi";
+import { useGame } from '../GameContext';
 
 export const TIME_VALUES = ['1|0','1|1','2|1','3|0','3|2','5|0','10|0','15|10','30|0','inf'];
 
@@ -24,20 +25,20 @@ export function displayTime(timeControl){
 }
 
 const icon = (timeVal) => {
-    console.log("time val: ", timeVal)
+    // console.log("time val: ", timeVal)
     if (!timeVal) return false;
     const [mins,_] = timeVal.split('|');
     if (mins <= 2){
-        console.log(" return bullet")
+        // console.log(" return bullet")
         return (<GiBulletBill className="STM-icon bullet"/>)
     } else if (mins > 2 && mins <= 5){
-        console.log(" return lightnming")
+        // console.log(" return lightnming")
         return (<GiLightningHelix className="STM-icon blitz"/>)
     } else if (mins > 5 && mins <= 30){
-        console.log(" return timer")
+        // console.log(" return timer")
         return (<RxLapTimer className="STM-icon rapid"/>)
     } else if (mins === 'inf'){
-        console.log(" return calendar")
+        // console.log(" return calendar")
         return (<LuCalendarDays className="STM-icon long"/>)
     }
 }
@@ -58,6 +59,10 @@ const PlayOptions = () => {
     useEffect(()=>{
         dispatch(receiveTimeControl("10|0"));
     },[dispatch])
+
+    
+    const { isDesktop } = useGame();
+
 
     const timeControl = useSelector(state => state.game.timeControl);
 
@@ -102,8 +107,9 @@ const PlayOptions = () => {
     }
 
 
+
     return (
-        <div className='play-options-container'>
+        <div className={`play-options-container ${isDesktop ? 'desktop' : ''}`}>
             <header className='play-options-header'>
                 <h1>Play</h1>
             </header>

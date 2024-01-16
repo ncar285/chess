@@ -6,7 +6,7 @@
     /* max-width: var(--maxBoardDim);
     max-height: var(--maxBoardDim); */
 
-    aspect-ratio: 1 / 1;
+    /* aspect-ratio: 1 / 1; */
 
     background-color: #f7f7f7;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);

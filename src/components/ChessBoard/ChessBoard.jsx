@@ -47,7 +47,7 @@ function ChessBoard() {
 
     const board = useSelector(getBoard);
 
-    console.log("BOARD +++ ", board)
+    // console.log("BOARD +++ ", board)
 
     const finalDragSquareRef = useRef(null);
     const selectedPiece = useRef(null);

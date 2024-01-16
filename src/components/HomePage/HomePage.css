@@ -9,14 +9,18 @@
     justify-content: center;
 }
 
+#home-page.desktop {
+    background-color: var(--desktopBackground);
+}
+
 
 .desktop-homepage {
+    height: calc(100vh - 40px);
     display: flex;
-    height: 100vh;
+    padding: 40px;
 }
 
 .desktop-practice-board {
-    background-color: rgb(163, 236, 163);
     width: calc(var(--boardDimension) + 40px);
     height: auto;
     display: flex;
@@ -26,12 +30,13 @@
 }
 
 .desktop-play-options {
-    background-color: rgb(168, 158, 158);
     width: var(--playOptionsWidth);
+    height: 100%;
     display: flex;
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
+    min-width: 400px;
 }
 
 

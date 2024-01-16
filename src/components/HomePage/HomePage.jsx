@@ -30,7 +30,7 @@ const HomePage = () => {
 
     return (
 
-        <div id="home-page" onClick={handleClick}>
+        <div id="home-page" className={`${isDesktop ? 'desktop' : 'phone'}`} onClick={handleClick}>
 
             {
                 isDesktop && 
