@@ -29,7 +29,7 @@ const SelectTimeModal = () => {
             </header>
             <div className="STM-body">
                 <div className="STM-section">
-                    <h2><GiBulletBill /> Bullet</h2>
+                    <h2><GiBulletBill className="STM-icon bullet"/>Bullet</h2>
                     <div className="time-category">
                         <button className="button">1 min</button>
                         <button className="button">1|1</button>
@@ -37,7 +37,7 @@ const SelectTimeModal = () => {
                     </div>
                 </div>
                 <div className="STM-section">
-                    <h2><GiLightningHelix /> Blitz</h2>
+                    <h2><GiLightningHelix className="STM-icon blitz"/> Blitz</h2>
                     <div className="time-category">
                         <button className="button">1|1</button>
                         <button className="button">3 min</button>
@@ -45,7 +45,7 @@ const SelectTimeModal = () => {
                     </div>
                 </div>
                 <div className="STM-section">
-                    <h2><RxLapTimer /> Rapid</h2>
+                    <h2><RxLapTimer className="STM-icon rapid"/> Rapid</h2>
                     <div className="time-category">
                         <button className="button">1 min</button>
                         <button className="button">1|1</button>
@@ -53,7 +53,7 @@ const SelectTimeModal = () => {
                     </div>
                 </div>
                 <div className="STM-section">
-                    <h2><LuCalendarDays /> Long</h2>
+                    <h2><LuCalendarDays className="STM-icon long"/> Long</h2>
                     <div className="time-category">
                         <button className="button">No limit</button>
                         <button className="button hidden"></button>
