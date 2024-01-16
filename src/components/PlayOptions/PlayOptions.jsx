@@ -1,8 +1,8 @@
+import './PlayOptions.css';
 import React, { useState } from 'react';
 // import ChessPieceImage from '../../chessPieces/smallModern/svg/3.svg';
 import PlayImage from '../../assets/play-image.svg'
 import { FaHandHolding } from "react-icons/fa6";
-import './PlayOptions.css';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { openSelectTimeModal } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,8 +45,6 @@ const icon = (timeVal) => {
 const PlayOptions = () => {
     const history = useHistory()
 
-    // const [timeControl, setTimeControl] = useState("10|0");
-
     const dispatch = useDispatch();
 
     useEffect(()=>{
@@ -56,7 +54,10 @@ const PlayOptions = () => {
     const timeControl = useSelector(state => state.game.timeControl);
 
 
-    console.log("TIME_CONTROL", timeControl);
+    function playFriend(){
+        sessionStorage.setItem("ongoingGame", null)
+        history.push('/play-friend');
+    }
 
     function playComputer(){
         sessionStorage.setItem("ongoingGame", null)
@@ -86,6 +87,12 @@ const PlayOptions = () => {
                         {displayTime(timeControl) && displayTime(timeControl)}
                     </div>
                     <IoIosArrowDown className='timeControl-icon'/>
+                </button>
+                <button className='start-game' onClick={playFriend}>
+                    Start Game
+                </button>
+                <button className='option' onClick={playFriend}>
+                    Play a Friend
                 </button>
                 <button className='option' onClick={playComputer}>
                     vs Computer

@@ -46,6 +46,11 @@ button.option {
     background-color: var(--superDarkScreen);
 }
 
+button.start-game {
+    background-color: var(--lightGreen);
+    margin-bottom: 20px;
+}
+
 
 .timeControl-icon {
     margin: 0 20px;

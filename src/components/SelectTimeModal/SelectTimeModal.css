@@ -83,10 +83,6 @@
     
 }
 
-.time-category button.selected{
-    outline: 4px solid #739851;
-}
-
 .time-category button.hidden{
     /* display: none; */
     visibility: hidden;

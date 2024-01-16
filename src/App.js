@@ -8,11 +8,12 @@ import { useState } from 'react';
 import ChessBoard from './components/ChessBoard/ChessBoard';
 import ActiveChessBoard from './components/ActiveChessBoard/ActiveChessBoard';
 import SelectTimeModal from './components/SelectTimeModal/SelectTimeModal';
+import ComputerOpponent from './components/ComputerOpponent/ComputerOpponent';
+import HumanOpponent from './components/HumanOpponent/HumanOpponent';
 
 function App() {
     const draggingPiece = useSelector(getDraggingPiece)
     const dragPosition = useSelector(getDragPosition)
-
 
     return (
         <HashRouter>
@@ -25,9 +26,14 @@ function App() {
                             <HomePage/>
                             <SelectTimeModal />
                         </Route>
-                        <Route exact path="/play">
-                            <ActiveChessBoard />
-                            {/* <ChessBoard/> */}
+                        <Route exact path="/play-friend">
+                            <HumanOpponent />
+                        </Route>
+                        <Route exact path="/play-computer">
+                            <ComputerOpponent />
+                        </Route>
+                        <Route exact path="/playground">
+                            <ChessBoard />
                         </Route>
                     </Switch>
 

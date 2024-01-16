@@ -38,6 +38,9 @@
     --darkScreen: #302E2B;
     --semiDarkScreen: #433E3C;
     --textColor: #B8B6B4;
+
+    --lightGreen: #84A94E;
+    --green: #739851;
 }
 
 body * {
@@ -67,5 +70,9 @@ button {
     color: white;
     background-color: var(--semiDarkScreen);
     border-radius: 0.3em;
+}
+
+button.selected{
+    outline: 4px solid var(--lightGreen);
 }
 
