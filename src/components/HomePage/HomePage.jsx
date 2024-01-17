@@ -1,11 +1,11 @@
 import React from 'react';
-import ChessBoard from '../ChessBoard/ChessBoard.jsx';
 import './HomePage.css'
+import ChessBoard from '../ChessBoard/ChessBoard.jsx';
 import { getSelected, removeMoveOptions, removeSelected } from '../../store/uiReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import ActiveChessBoard from '../ActiveChessBoard/ActiveChessBoard.jsx';
 import { useGame } from '../GameContext.jsx';
 import PlayOptions from '../PlayOptions/PlayOptions.jsx';
+import DesktopMatchRoom from '../DesktopMatchRoom/DesktopMatchRoom.jsx';
 
 
 const HomePage = () => {
@@ -14,34 +14,18 @@ const HomePage = () => {
     
     const selectedSquare = useSelector(getSelected);
     
-    const { isDesktop } = useGame();
-    // const isDesktop = false
-
-    function handleClick(e){
-        e.preventDefault();
-        const notOnBoard = e.target.id === 'game';
-        const isEmptySquare = e.target.classList.contains('board-square');
-        if (selectedSquare && isEmptySquare || notOnBoard){
-            dispatch(removeSelected());
-            dispatch(removeMoveOptions());
-        }
-    }
+    // const { isDesktop } = useGame();
+    const isDesktop = false;
 
 
     return (
-
-        <div id="home-page" className={`${isDesktop ? 'desktop' : 'phone'}`} onClick={handleClick}>
-
+        <>
             {
                 isDesktop && 
-                <div className='desktop-homepage'>
-                    <div className='desktop-practice-board'>
-                        <ChessBoard/>
-                    </div>
-                    <div className='desktop-play-options'>
-                        <PlayOptions/>
-                    </div>
-                </div>
+                <DesktopMatchRoom
+                    boardComponent={<ChessBoard />} 
+                    menuComponent={<PlayOptions />} 
+                />
             }
             {
                 !isDesktop && 
@@ -49,10 +33,7 @@ const HomePage = () => {
                     <PlayOptions/>
                 </div>
             }
-
-            {/* <ChessBoard /> */}
-            {/* <ActiveChessBoard/> */}
-        </div>
+        </>
     );
 };
 
