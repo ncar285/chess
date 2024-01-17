@@ -28,7 +28,7 @@ export const HEADERS = {
 const SelectTimeModal = () => {
     const display = useSelector(state => state.ui.selectTimeModal);
 
-    console.log("========display", display)
+    // console.log("========display", display)
 
     const timeControl = useSelector(state => state.game.timeControl);
 
