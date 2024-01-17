@@ -1,6 +1,5 @@
 import './ComputerOpponent.css'
 import React from 'react';
-import ActiveChessBoard from '../ActiveChessBoard/ActiveChessBoard';
 import PhoneMatchRoom from '../PhoneMatchRoom/PhoneMatchRoom';
 import { useGame } from '../GameContext';
 import PlayOptions from '../PlayOptions/PlayOptions';

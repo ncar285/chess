@@ -10,13 +10,8 @@ import DesktopMatchRoom from '../DesktopMatchRoom/DesktopMatchRoom.jsx';
 
 const HomePage = () => {
 
-    const dispatch = useDispatch();
-    
-    const selectedSquare = useSelector(getSelected);
-    
-    // const { isDesktop } = useGame();
-    const isDesktop = false;
-
+    const { isDesktop } = useGame();
+    // const isDesktop = false;
 
     return (
         <>

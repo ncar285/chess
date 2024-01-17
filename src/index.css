@@ -1,6 +1,11 @@
 :root {
-    --brown: #744D2A;
-    --white: #CEB07E;
+
+    --playOptionsWidth: 550px;
+    --preliminaryBoardDim: min(calc(100vw - var(--playOptionsWidth) - 40px),100vh);
+    --boardDimension: min(var(--preliminaryBoardDim), calc(100vh - 80px));
+
+
+
     /* --boardDimension: calc(min(50vw, 50vh)); */
     --boardLabel: calc( 0.04 * var(--boardDimension));
     --highlightWidth: calc((var(--boardDimension)/8) * 0.075);
@@ -34,20 +39,21 @@
     --touchHighlight: calc((var(--boardDimension)/8) * 3.606);
     --touchCircleOffset: 130%;
 
+
+    --brownSquare: #744D2A;
+    --whiteSquare: #CEB07E;
+
+    --greenSquare: #779656;
+    --whiteSquarePhone: #EEEDD1;
+
     --superDarkScreen: #22211F;
     --darkScreen: #302E2B;
     --semiDarkScreen: #433E3C;
     --textColor: #B8B6B4;
-
     --lightGreen: #84A94E;
     --green: #739851;
-
     --desktopBackground: rgb(80,110,64);
 
-
-    --playOptionsWidth: 550px;
-    --preliminaryBoardDim: min(calc(100vw - var(--playOptionsWidth) - 40px),100vh);
-    --boardDimension: min(var(--preliminaryBoardDim), calc(100vh - 80px));
 
     --headerText: min(4vh, 50px);
     --normalText: min(3vh, 28px);

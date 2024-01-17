@@ -1,5 +1,4 @@
 .chess-piece {
-    width: var(--pieceWidth);
     height: auto; 
 
     display: block;
@@ -9,6 +8,13 @@
     transform: translateY(-50%);
     cursor: grab;
     z-index: 11;
+}
+
+.chess-board.non-desktop .chess-piece {
+    width: calc(100vw / 8 * 0.65);
+}
+.chess-board.desktop .chess-piece {
+    width: var(--pieceWidth);
 }
 
 /* .chess-piece.pawn{

@@ -17,7 +17,7 @@
     cursor: grabbing;
 }
 
-.chess-piece.pawn{
+/* .chess-piece.pawn{
     height: var(--pawnHeight);
     width: auto;
 }
@@ -28,7 +28,7 @@
 .chess-piece.king{
     height: var(--kingHeight);
     width: auto;
-}
+} */
 /* .chess-piece.rook{
     height: var(--rookHeight);
     width: auto;
