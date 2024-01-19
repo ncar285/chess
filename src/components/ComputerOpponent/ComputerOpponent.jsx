@@ -4,6 +4,7 @@ import PhoneMatchRoom from '../PhoneMatchRoom/PhoneMatchRoom';
 import { useGame } from '../GameContext';
 import PlayOptions from '../PlayOptions/PlayOptions';
 import DesktopMatchRoom from '../DesktopMatchRoom/DesktopMatchRoom';
+import ActiveChessBoard from '../ActiveChessBoard/ActiveChessBoard';
 
 const ComputerOpponent = () => {
 
@@ -18,14 +19,14 @@ const ComputerOpponent = () => {
             {
                 isDesktop && 
                 <DesktopMatchRoom
-                    boardComponent={<ComputerOpponent />} 
+                    boardComponent={<ActiveChessBoard />} 
                     menuComponent={<PlayOptions />} 
                 />
             }
             {
                 !isDesktop && 
                 <PhoneMatchRoom
-                    boardComponent={<ComputerOpponent />} 
+                    boardComponent={<ActiveChessBoard />} 
                 />
             }
         </div>

@@ -1,0 +1,83 @@
+.game-options-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--darkScreen);
+    z-index: 100;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 0.3em;
+}
+
+.play-options-header {
+    padding: 20px;
+}
+
+.play-options-container h1 {
+    color: white;
+    font-size: var(--headerText);
+    font-weight: 900;
+}
+
+.play-options-logo {
+    width: 20%;
+}
+
+.play-options-form{
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.play-options-form button{
+    margin: 10px;
+    width: calc(100% - 40px);
+}
+
+.play-options-container button.dropdown{
+    background-color: var(--semiDarkScreen);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.play-options-container button.dropdown {
+    background-color: rgba(255,255,255,0.1);
+}
+
+/* button.option {
+    background-color: var(--superDarkScreen);
+} */
+.play-options-container.desktop button.option {
+    background-color: rgba(0,0,0,0.2);
+}
+
+button.start-game {
+    background-color: var(--lightGreen);
+    font-size: var(--headerText);
+    margin-bottom: 20px;
+    font-weight: 900;
+    color: white;
+}
+
+
+.timeControl-icon {
+    margin: 0 20px;
+}
+
+.timeControl-icon.hidden {
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.inner-option-button {
+    display: flex;
+    align-items: center;
+}
+
+.select-game-type-warning {
+    color: red;
+    font-style: italic;
+}
