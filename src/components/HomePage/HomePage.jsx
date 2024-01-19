@@ -1,8 +1,6 @@
-import React from 'react';
 import './HomePage.css'
+import React from 'react';
 import ChessBoard from '../ChessBoard/ChessBoard.jsx';
-import { getSelected, removeMoveOptions, removeSelected } from '../../store/uiReducer';
-import { useDispatch, useSelector } from 'react-redux';
 import { useGame } from '../GameContext.jsx';
 import PlayOptions from '../PlayOptions/PlayOptions.jsx';
 import DesktopMatchRoom from '../DesktopMatchRoom/DesktopMatchRoom.jsx';
