@@ -3,41 +3,18 @@
     --playOptionsWidth: 550px;
     --preliminaryBoardDim: min(calc(100vw - var(--playOptionsWidth) - 40px),100vh);
     --boardDimension: min(var(--preliminaryBoardDim), calc(100vh - 80px));
-
-
-
-    /* --boardDimension: calc(min(50vw, 50vh)); */
+    
     --boardLabel: calc( 0.04 * var(--boardDimension));
     --highlightWidth: calc((var(--boardDimension)/8) * 0.075);
     --suggestedCaptureThickness: calc((var(--boardDimension)/8) * 0.1);
-
-    --pieceWidth: calc((var(--boardDimension)/8) * 0.65);
-
-    --touchMovePieceWidth: calc((var(--boardDimension)/8) * 0.65 * 2);
-
-    /* --pawnHeight: calc((var(--boardDimension)/8) * 0.7);
-    --knightHeight: calc((var(--boardDimension)/8) * 0.8);
-    --rookHeight: calc((var(--boardDimension)/8) * 0.7);
-    --bishopHeight: calc((var(--boardDimension)/8) * 0.8);
-    --kingHeight: calc((var(--boardDimension)/8) * 0.95);
-    --queenHeight: calc((var(--boardDimension)/8) * 0.95); */
-
-    /* --pawnHeight: calc((var(--boardDimension)/8) * 0.7);
-    --knightHeight: calc((var(--boardDimension)/8) * 0.9);
-    --rookHeight: calc((var(--boardDimension)/8) * 0.7);
-    --bishopHeight: calc((var(--boardDimension)/8) * 0.9);
-    --kingHeight: calc((var(--boardDimension)/8) * 1);
-    --queenHeight: calc((var(--boardDimension)/8) * 0.95); */
-
-    --pawnHeight: calc((var(--boardDimension)/8) * 0.7);
-    --rookHeight: calc((var(--boardDimension)/8) * 0.7);
-    /* --queenHeight: calc((var(--boardDimension)/8) * 1.5); */
-    --kingHeight: calc((var(--boardDimension)/8) * 1);
-
     --piecePlacement: calc((var(--boardDimension)/8) * 0.05);
-
+    
     --touchHighlight: calc((var(--boardDimension)/8) * 3.606);
     --touchCircleOffset: 130%;
+    
+    --pieceWidth: calc((var(--boardDimension)/8) * 0.65);
+    --phonePieceWidth: calc(100vw / 8 * 0.65);
+    --touchMovePieceWidth: calc(var(--phonePieceWidth) * 1.9);
 
 
     --brownSquare: #744D2A;

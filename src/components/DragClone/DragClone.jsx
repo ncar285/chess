@@ -5,6 +5,7 @@ import { getDragType, getHighlightedSquare, getTouchHighlightedSquare, receiveHi
 import { useDispatch, useSelector } from 'react-redux';
 import { PIECE_IMAGES } from '../../Utils/chessPieces'
 import { findChessSquareFromCoordinates } from '../../Utils/findChessSquare';
+import { useGame } from '../GameContext';
 
 function DragClone( {piece, position} ){
 
@@ -18,6 +19,8 @@ function DragClone( {piece, position} ){
     const dragType = useSelector(getDragType);
 
     const [enlarged, setEnlarged] = useState('');
+
+    const { isDesktop } = useGame();
 
     useEffect(()=>{
         if (cloneRef.current && position){
@@ -33,8 +36,6 @@ function DragClone( {piece, position} ){
                     if (touchHighlightedSquare){
                         setEnlarged('enlarged');
                     }
-                    // console.log("touchHighlightedSquare", touchHighlightedSquare)
-                    // console.log("squareBelow", squareBelow)
                 }
             } else {
                 if (highlightedSquare !== squareBelow){
@@ -46,6 +47,7 @@ function DragClone( {piece, position} ){
     }, [position])
 
     const touchDrag = dragType === 'touch' ? 'touchHighlight' : '';
+    const desktop = isDesktop ? 'desktop' : 'non-desktop';
     // only add dragging once a touch drag has left it's square
     // const dragging = dragType === 'mouse' ? 'dragging' : 
         
@@ -55,7 +57,7 @@ function DragClone( {piece, position} ){
             alt={`${piece.getColor()} ${piece.getType()}`}
             src={PIECE_IMAGES[piece.getType()]} 
             ref={cloneRef}
-            className={`chess-piece dragging ${pieceType} ${touchDrag} ${enlarged}`}
+            className={`chess-piece dragging ${pieceType} ${touchDrag} ${enlarged} ${desktop}`}
         />
     );
 

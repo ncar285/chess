@@ -1,6 +1,5 @@
 .chess-piece {
     height: auto; 
-
     display: block;
     margin: auto;
     position: relative;
@@ -11,33 +10,8 @@
 }
 
 .chess-board.non-desktop .chess-piece {
-    width: calc(100vw / 8 * 0.65);
+    width: var(--phonePieceWidth);
 }
 .chess-board.desktop .chess-piece {
     width: var(--pieceWidth);
 }
-
-/* .chess-piece.pawn{
-    height: var(--pawnHeight);
-    width: auto;
-}
-.chess-piece.knight{
-    height: var(--knightHeight);
-    width: auto;
-}
-.chess-piece.rook{
-    height: var(--rookHeight);
-    width: auto;
-}
-.chess-piece.bishop{
-    height: var(--bishopHeight);
-    width: auto;
-}
-.chess-piece.king{
-    height: var(--kingHeight);
-    width: auto;
-}
-.chess-piece.queen{
-    height: var(--queenHeight);
-    width: auto;
-} */

@@ -1,51 +1,24 @@
 .chess-piece.dragging {
     position: absolute;
     transform: translateY(-50%) translateX(-50%);
-    /* pointer-events: none; */
-    /* cursor: grabbing; */
-    width: var(--pieceWidth);
     height: auto; 
 }
 
+/* non desktop just started dragging */
+.chess-piece.dragging.non-desktop {
+    width: var(--phonePieceWidth);
+}
+/* non desktop dragging over board */
 .chess-piece.enlarged.touchHighlight {
-    transform: translateY(-100%) translateX(-50%);
     width: var(--touchMovePieceWidth);
-    height: auto; 
+    transform: translateY(-100%) translateX(-50%)
+}
+
+/* non desktop dragging */
+.chess-piece.dragging.desktop  {
+    width: var(--pieceWidth);
 }
 
 .chess-piece:active {
     cursor: grabbing;
 }
-
-/* .chess-piece.pawn{
-    height: var(--pawnHeight);
-    width: auto;
-}
-.chess-piece.rook{
-    height: var(--rookHeight);
-    width: auto;
-}
-.chess-piece.king{
-    height: var(--kingHeight);
-    width: auto;
-} */
-/* .chess-piece.rook{
-    height: var(--rookHeight);
-    width: auto;
-}
-.chess-piece.knight{
-    height: var(--knightHeight);
-    width: auto;
-}
-.chess-piece.bishop{
-    height: var(--bishopHeight);
-    width: auto;
-}
-.chess-piece.king{
-    height: var(--kingHeight);
-    width: auto;
-}
-.chess-piece.queen{
-    height: var(--queenHeight);
-    width: auto;
-} */
