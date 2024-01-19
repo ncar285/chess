@@ -1,7 +1,6 @@
 import './ComputerGameOptions.css';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { useGame } from '../GameContext';
 import StopWatch from '../StopWatch/StopWatch';
@@ -17,57 +16,49 @@ export function displayTime(timeControl){
 
 
 const ComputerGameOptions = () => {
-    const history = useHistory()
-
-    const dispatch = useDispatch();
 
     const timeControl = useSelector(state => state.game.timeControl);
 
     const [playerOneTime, setPlayerOneTime] = useState(null);
     const [playerTwoTime, setPlayerTwoTime] = useState(null);
 
-    useEffect(()=>{
+
+    useEffect(() => {
+        let intervalId;
+        
         try {
             const playerOne = JSON.parse(sessionStorage.getItem("player-one-time"));
             const playerTwo = JSON.parse(sessionStorage.getItem("player-one-time"));
+
+    
             if (playerOne) {
                 setPlayerOneTime(parseInt(playerOne));
             } else {
-                const [min, _] = timeControl.split('|')
-                setPlayerOneTime(min * 60)
+                const [min, _] = timeControl.split('|');
+                setPlayerOneTime(min * 60);
             }
+    
             if (playerTwo) {
                 setPlayerTwoTime(parseInt(playerTwo));
             } else {
-                const [min, _] = timeControl.split('|')
-                setPlayerOneTime(min * 60)
+                const [min, _] = timeControl.split('|');
+                setPlayerTwoTime(min * 60);
             }
         } catch (error) {
             console.error("Error setting time:", error);
         }
-
-    }, [])
-
-
-    useEffect(()=>{
-        setTimeout(()=>{
-            if (playerOneTime  && playerTwoTime){
-                setPlayerOneTime(time => time - 1);
-                setPlayerOneTime(time => time - 1);
-            }
-        },1000)
-        return (
-            clearInterval()
-        )
-    }, [])
-
-
     
-    const { isDesktop } = useGame();
-
-
-
-
+        // Store the interval ID
+        intervalId = setInterval(() => {
+            if (playerOneTime && playerTwoTime) {
+                setPlayerOneTime(time => time - 1);
+                setPlayerTwoTime(time => time - 1);
+            }
+        }, 1000);
+    
+        // Clear the interval when the component is unmounted
+        return () => clearInterval(intervalId);
+    }, []);
 
 
     return (
