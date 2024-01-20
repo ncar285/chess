@@ -14,7 +14,6 @@ const ComputerOpponent = () => {
     const [userTime, setUserTime] = useState(null);
     const [opponentTime, setOpponentTime] = useState(null);
     const [currentTurn, setCurrentTurn] = useState(null);
-    // const [userColor, setUserColor] = useState(null);
 
     const { setUserColor } = useGame();
 
@@ -34,7 +33,6 @@ const ComputerOpponent = () => {
         setUserTime(initialTime);
         setOpponentTime(initialTime);
     },[])
-
 
 
     // reset the time on a refresh
@@ -59,6 +57,26 @@ const ComputerOpponent = () => {
             console.error("Error setting time:", error);
         }
     }, []);
+
+
+    // decrement a the player's turn's time
+    useEffect(()=>{
+
+        let intervalId;
+
+        intervalId = setInterval(() => {
+            if (currentTurn && userTime){   // i.e. the main user's turn
+                setUserTime(time => time - 1);
+                sessionStorage.setItem("user-time",JSON.stringify(userTime - 1));
+            } else if(opponentTime){
+                setOpponentTime(time => time - 1);
+                sessionStorage.setItem("opponent-time",JSON.stringify(opponentTime - 1));
+            }
+        }, 1000);
+    
+        return () => clearInterval(intervalId);
+
+    },[userTime, opponentTime, currentTurn])
 
 
 
