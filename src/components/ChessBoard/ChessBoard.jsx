@@ -28,15 +28,8 @@ function ChessBoard() {
 
     const dispatch = useDispatch();
 
-    // dispatch(receiveGameType(gameType));
-
-    const { isActive } = useGame();
-
-    // console.log("gameType", gameType)
-
-    const {isDesktop} = useGame();
-
-    // const gameBoard = useSelector(getGameBoard);
+    const { isActive, userColor, isDesktop } = useGame();
+    
     const game = useSelector(getGame)
     const selectedSquare = useSelector(getSelected);
     const movingOptions = useSelector(getMoveOptions);
@@ -47,7 +40,6 @@ function ChessBoard() {
 
     const board = useSelector(getBoard);
 
-    // console.log("BOARD +++ ", board)
 
     const finalDragSquareRef = useRef(null);
     const selectedPiece = useRef(null);
@@ -60,8 +52,6 @@ function ChessBoard() {
         } 
     }, [game, dispatch]);
 
-
-    // console.log("game", game)
     
     useEffect(() => {
         if (highlightedSquare){
@@ -180,7 +170,6 @@ function ChessBoard() {
     }
 
     function playClickMove(e){
-        // debugger
         if (selectedPiece.current){
             const [x, y] = getMousePos(e);
             const squareId = findChessSquareFromCoordinates(x,y);
@@ -188,8 +177,6 @@ function ChessBoard() {
         }
         return false
     }
-
-    // console.log("gameBoard", gameBoard)
 
     function deepCopyBoard(board) {
         return board.map(row => [...row]);
@@ -220,9 +207,23 @@ function ChessBoard() {
     }
 
 
+    if (!userColor){
+        console.log("+++ No assigned user color +++")
+    }
+
+    const isWhite = userColor === "white" || userColor === null;
+
+    if (isWhite){
+        console.log("board displayed with user as WHITE")
+    } else {
+        console.log("board displayed with user as BLACK")
+    }
+
+    const displayBoard = board ? (isWhite ? [...board].reverse() : [...board]) : [];
+
     return (
         <div className={`chess-board ${isDesktop ? 'desktop' : 'non-desktop'}`}>
-                {board && [...board].reverse().map((row, rowIndex) => (
+                {displayBoard.map((row, rowIndex) => (
                     <div key={rowIndex} className="board-row">
                         {row.map((piece, colIndex) => {
                             const squareInfo = STATIC_BOARD[rowIndex][colIndex]

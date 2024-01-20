@@ -1,34 +1,24 @@
-import { useEffect, useRef } from "react"
+import './StopWatch.css'
 
 
-const StopWatch = () => {
+const StopWatch = ({ time }) => {
 
-    const timeRef = useRef(null);
+    if (!time) return null
 
+    // console.log("time",time)
 
-    // inizialize the time ref
-    useEffect(()=>{
-        if (!timeRef){
-            timeRef.current = 0;
-        } else {
-            setInterval(()=>{
-                timeRef.current += 1;
-            },1000)
-        }
+    const displayTime = (seconds) => {
+        console.log("seconds",seconds)
+        const mins = Math.floor(seconds/60);
+        const secs = seconds - (mins * 60);
+        return `${mins}:${secs}`
+    }
 
-        return timeRef.current = null;
-    },[])
+    // console.log("{displayTime(time)}",displayTime(time))
 
     return (
-        <div>
-
-            {
-                typeof(timeRef.current) === "number" && 
-                <div className="stopWatch-container">
-                    {timeRef.current}
-                </div>
-            }
-
+        <div className="stopWatch-container">
+            {displayTime(time)}
         </div>
     )
 

@@ -3,6 +3,9 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
+    // const { setIsActive } = useGame();
+    const [userColor, setUserColor] = useState(null);
+
     const [isActive, setIsActive] = useState(false);
     const [isDesktop, setIsDesktop] = useState(() => {
         const mobileDeviceRegex = /iPhone|iPad|iPod|Android/i;
@@ -11,7 +14,7 @@ export const GameProvider = ({ children }) => {
   
 
     return (
-        <GameContext.Provider value={{ isActive, setIsActive, isDesktop }}>
+        <GameContext.Provider value={{ isActive, setIsActive, isDesktop, userColor, setUserColor }}>
             {children}
         </GameContext.Provider>
     );
