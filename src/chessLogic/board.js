@@ -21,6 +21,10 @@ export function Board(){
     this.placePieces()
     this.takenPieces = new Set();
     this.history = [{move: null, board: this.board}];
+
+    this.whosTurn = "white";
+    this.whiteCanCastle = true;
+    this.blackCanCastle = true;
 }
 
 Board.prototype.placePieces = function() {
@@ -87,6 +91,28 @@ Board.prototype.setBoardTo = function(boardHash){
     })
 }
 
+// this.playersMove = "white";
+// this.whiteCanCastle = true;
+// this.blackCanCastle = true;
+
+Board.prototype.whosMove = function(){
+    return this.whosTurn;
+}
+
+Board.prototype.isPlayersMove = function(piece){
+    return piece.getColor() === this.whosMove();
+}
+
+
+
+Board.prototype.switchTurn = function(){
+    if (this.whosTurn === "white"){
+        this.whosTurn = "black";
+    } else {
+        this.whosTurn = "white";
+    }
+}
+
 Board.prototype.movePiece = function(startSquare, endSquare, piece){
     try {
         if (!Board.isInsideBoard(startSquare) || !Board.isInsideBoard(endSquare)) {
@@ -123,6 +149,9 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
         };
         const newHistory = [...this.history, newHistoryEntry];
         this.history = newHistory;
+
+        // switch the turn
+        this.switchTurn();
         
     } catch (error) {
         console.error(error.message);

@@ -182,26 +182,42 @@ function ChessBoard() {
         return board.map(row => [...row]);
     }
 
+    if (game){
+
+        console.log("whos move? ",game.whosMove());
+    }
+
 
     function playMoveIfValid(piece, endSquare){
         const startPos = piece.getSquare()
         const startSquare = posToId(startPos);
         const endPos = idToPos(endSquare);
         if (startSquare && endSquare && startSquare !== endSquare){
+            
             const validOptions = piece.getMoves().options;
             const validTakeOptions = piece.getMoves().takeOptions;
-            if (validOptions.has(endSquare) || validTakeOptions.has(endSquare)){
+            const isValid = validOptions.has(endSquare) || validTakeOptions.has(endSquare);
+
+            const isTurn = game.isPlayersMove(piece);
+            console.log("is it the player's turn?", isTurn)
+
+            if (isTurn && isValid){
                 game.movePiece(startPos, endPos, piece);
+
                 if (isActive){
                     sessionStorage.setItem("ongoingGame", JSON.stringify(game.getBoardHash()));
                 }
                 // debugger
 
-                console.log("Previous user's turn",userTurn )
-                setUserTurn(isTurn => !isTurn)
+                // console.log("whos turn is it?")
+                // const currPlayer = game.whosMove();
+                // console.log()
+
+                // console.log("Previous user's turn",userTurn )
+                // setUserTurn(isTurn => !isTurn)
                 
-                const newBoard = deepCopyBoard(game.board);
-                dispatch(receiveBoard(newBoard))
+                // const newBoard = deepCopyBoard(game.board);
+                // dispatch(receiveBoard(newBoard))
                 dispatch(removeSelected())
                 return true;
             } else {
