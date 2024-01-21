@@ -1,34 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { posToId, indexToFile, idToPos} from '../../Utils/posIdConversion'; 
+import React, { useEffect, useRef } from 'react';
+import { posToId, idToPos} from '../../Utils/posIdConversion'; 
 import { useDispatch, useSelector } from 'react-redux';
-import { getBoard, getGame, getGameBoard, getGameType, receiveBoard, receiveGame, receiveGameType } from '../../store/gameReducer';
+import { getBoard, getGame, receiveBoard, receiveGame } from '../../store/gameReducer';
 import { Board } from '../../chessLogic/board';
 import { getHighlightedSquare, getMoveOptions, getSelected, getTakeOptions, getTouchHighlightedSquare, receiveDragPosition, receiveDragType, receiveDraggingPiece, receiveMoveOptions, receiveSelected, removeDragPosition, removeDraggingPiece, removeHighlightedSquare, removeSelected, removeTouchHighlightedSquare } from '../../store/uiReducer';
 import ChessPiece from '../ChessPiece/ChessPiece';
-// import { playMoveIfValid } from '../../Utils/playMoveIfValid';
 import { getMousePos } from '../../Utils/getMousePos';
 import { findChessSquareFromCoordinates } from '../../Utils/findChessSquare';
 import { useGame } from '../GameContext.jsx';
+import { STATIC_WHITE_BOARD, STATIC_BLACK_BOARD } from '../../Utils/staticChessBoard.js';
 import "./ChessBoard.css"
 
-const STATIC_BOARD = [];
-for (let a = 7 ; a  >= 0 ; a-- ){
-    STATIC_BOARD.push([]);
-    const rank = a + 1;
-    for (let b = 0 ; b  < 8 ; b++ ){
-        const color = ((a + b) % 2 === 0) ? "brown" : "white"
-        const file = indexToFile(b);
-        const len = STATIC_BOARD.length;
-        STATIC_BOARD[len-1].push({file, rank, color});
-    }
-}
 
 
 function ChessBoard() {
 
     const dispatch = useDispatch();
 
-    const { isActive, userColor, isDesktop, userTurn, setUserTurn } = useGame();
+    const { isActive, userColor, isDesktop } = useGame();
     
     const game = useSelector(getGame)
     const selectedSquare = useSelector(getSelected);
@@ -105,14 +94,19 @@ function ChessBoard() {
     };
 
     const startActions = (piece, e) => {
-        const [x, y] = getMousePos(e);
-        const startSquareId = posToId(piece.getSquare());
-        selectedPiece.current = piece;
 
-        dispatch(receiveDraggingPiece(piece));
-        dispatch(receiveDragPosition({x,y}));
-        dispatch(receiveSelected(startSquareId));
-        dispatch(receiveMoveOptions(piece.getMoves()));
+        const isOurMove = userColor === game.whosMove();
+
+        if (isOurMove || !isActive){
+            const [x, y] = getMousePos(e);
+            const startSquareId = posToId(piece.getSquare());
+            selectedPiece.current = piece;
+    
+            dispatch(receiveDraggingPiece(piece));
+            dispatch(receiveDragPosition({x,y}));
+            dispatch(receiveSelected(startSquareId));
+            dispatch(receiveMoveOptions(piece.getMoves()));
+        }
     }
 
     function handleTouchMove (e) {
@@ -178,28 +172,20 @@ function ChessBoard() {
         return false
     }
 
-    function deepCopyBoard(board) {
-        return board.map(row => [...row]);
-    }
-
-    if (game){
-
-        console.log("whos move? ",game.whosMove());
-    }
-
+    // function deepCopyBoard(board) {
+    //     return board.map(row => [...row]);
+    // }
 
     function playMoveIfValid(piece, endSquare){
         const startPos = piece.getSquare()
         const startSquare = posToId(startPos);
         const endPos = idToPos(endSquare);
+
         if (startSquare && endSquare && startSquare !== endSquare){
-            
             const validOptions = piece.getMoves().options;
             const validTakeOptions = piece.getMoves().takeOptions;
             const isValid = validOptions.has(endSquare) || validTakeOptions.has(endSquare);
-
             const isTurn = game.isPlayersMove(piece);
-            console.log("is it the player's turn?", isTurn)
 
             if (isTurn && isValid){
                 game.movePiece(startPos, endPos, piece);
@@ -207,18 +193,9 @@ function ChessBoard() {
                 if (isActive){
                     sessionStorage.setItem("ongoingGame", JSON.stringify(game.getBoardHash()));
                 }
-                // debugger
 
-                // console.log("whos turn is it?")
-                // const currPlayer = game.whosMove();
-                // console.log()
-
-                // console.log("Previous user's turn",userTurn )
-                // setUserTurn(isTurn => !isTurn)
-                
-                // const newBoard = deepCopyBoard(game.board);
-                // dispatch(receiveBoard(newBoard))
                 dispatch(removeSelected())
+
                 return true;
             } else {
                 return false;
@@ -227,18 +204,7 @@ function ChessBoard() {
     }
 
 
-    // if (!userColor){
-    //     console.log("+++ No assigned user color +++")
-    // }
-
     const isWhite = userColor === "white" || userColor === null;
-
-    // if (isWhite){
-    //     console.log("board displayed with user as WHITE")
-    // } else {
-    //     console.log("board displayed with user as BLACK")
-    // }
-
     const displayBoard = board ? (isWhite ? [...board].reverse() : [...board]) : [];
 
     return (
@@ -246,8 +212,11 @@ function ChessBoard() {
                 {displayBoard.map((row, rowIndex) => (
                     <div key={rowIndex} className="board-row">
                         {row.map((piece, colIndex) => {
-                            const squareInfo = STATIC_BOARD[rowIndex][colIndex]
+                            const squareInfo = isWhite ? 
+                            STATIC_WHITE_BOARD[rowIndex][colIndex] :
+                            STATIC_BLACK_BOARD[rowIndex][colIndex]
                             const {file, rank, color} = squareInfo;
+
                             const id = `${file}${rank}`;
                             const selected = selectedSquare === id ? 'selected' : '';
                             let hightlight = '';
@@ -264,6 +233,7 @@ function ChessBoard() {
                                     {
                                         piece &&
                                         <ChessPiece 
+                                            key={`${id}-${piece.getType()}`}
                                             piece={piece}
                                             onTouchDragStart={handleTouchStart}
                                             onClickDragStart={handleClickStart}

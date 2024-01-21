@@ -28,7 +28,6 @@ export const HEADERS = {
 const SelectTimeModal = () => {
     const display = useSelector(state => state.ui.selectTimeModal);
 
-    // console.log("========display", display)
 
     const timeControl = useSelector(state => state.game.timeControl);
 
@@ -62,12 +61,15 @@ const SelectTimeModal = () => {
                 <div className="exit-cross invisible"></div>
             </header>
             <div className="STM-body">
-                {TIME_CATEGORIES.map((category)=>(
-                        <div className="STM-section">
+                {TIME_CATEGORIES.map((category, i)=>(
+                        <div className="STM-section" key={`${category}-${i}`}>
                             {   HEADERS[category] }
                             <div className="time-category">
                                 { TIME_OPTIONS[category].map(timeVal => (
-                                    <button value={timeVal} onClick={updateTimeControl} className={`${isSelected(timeVal)}`}>{displayTime(timeVal)}</button>
+                                    <button value={timeVal} onClick={updateTimeControl} 
+                                    className={`${isSelected(timeVal)}`} key={timeVal}>
+                                        {displayTime(timeVal)}
+                                    </button>
                                 ))}
                             </div>
                         </div>

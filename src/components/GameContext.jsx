@@ -8,8 +8,6 @@ export const GameProvider = ({ children }) => {
 
     const [isActive, setIsActive] = useState(false);
 
-    const [userTurn, setUserTurn] = useState(null);
-
     const [isDesktop, setIsDesktop] = useState(() => {
         const mobileDeviceRegex = /iPhone|iPad|iPod|Android/i;
         return !mobileDeviceRegex.test(navigator.userAgent);
@@ -17,7 +15,7 @@ export const GameProvider = ({ children }) => {
   
 
     return (
-        <GameContext.Provider value={{ isActive, setIsActive, isDesktop, userColor, setUserColor, userTurn, setUserTurn }}>
+        <GameContext.Provider value={{ isActive, setIsActive, isDesktop, userColor, setUserColor }}>
             {children}
         </GameContext.Provider>
     );

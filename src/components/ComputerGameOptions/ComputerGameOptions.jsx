@@ -1,29 +1,8 @@
 import './ComputerGameOptions.css';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import React from 'react';
 import StopWatch from '../StopWatch/StopWatch';
 
 const ComputerGameOptions = ({opponentTime, userTime}) => {
-
-    // useEffect(()=>{
-
-    //     let intervalId;
-
-    //     intervalId = setInterval(() => {
-    //         if (playerOneTime && playerTwoTime) {
-    //             setPlayerOneTime(time => time - 1);
-    //             setPlayerTwoTime(time => time - 1);
-    //             sessionStorage.setItem("player-one-time",JSON.stringify(playerOneTime - 1));
-    //             sessionStorage.setItem("player-one-time",JSON.stringify(playerTwoTime - 1));
-    //         }
-    //     }, 1000);
-    
-    //     return () => clearInterval(intervalId);
-
-    // },[playerOneTime, playerTwoTime])
-
-
 
     return (
         <div className="game-options-container">

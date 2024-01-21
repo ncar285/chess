@@ -130,7 +130,8 @@ const PlayOptions = () => {
                 {gameStyleWarning && <p className='select-game-type-warning'>Please select a game type below</p>}
                 { STYLES.map(style => (
                     <>
-                        <button value={style} className={`option ${isSelected(style)}`} onClick={selectStyle}>
+                        <button value={style} className={`option ${isSelected(style)}`}
+                         onClick={selectStyle} key={style}>
                             {style}
                         </button>
                     </>

@@ -11,10 +11,12 @@ const ComputerOpponent = () => {
 
     const timeControl = useSelector(state => state.game.timeControl);
 
+    const game = useSelector(state => state.game.game);
+
     const [userTime, setUserTime] = useState(null);
     const [opponentTime, setOpponentTime] = useState(null);
 
-    const { setUserColor, setUserTurn, userTurn } = useGame();
+    const { userColor, setUserColor } = useGame();
 
     const randomSelect = (array) => array[Math.floor(Math.random() * array.length)];
 
@@ -24,9 +26,9 @@ const ComputerOpponent = () => {
         const color = randomSelect(['white', 'black']);
         
         setUserColor(color);
-        setUserTurn(color === 'white');
+        // setUserTurn(color === 'white');
 
-        const [min, _] = timeControl.split('|');
+        const min = timeControl.split('|')[0];
         const initialTime = parseInt(min, 10) * 60;
 
         setUserTime(initialTime);
@@ -64,7 +66,9 @@ const ComputerOpponent = () => {
         let intervalId;
 
         intervalId = setInterval(() => {
-            if (userTurn && userTime){   // i.e. the main user's turn
+        
+            const isOurMove = game.whosMove() === userColor;
+            if (isOurMove && userTime){   // i.e. the main user's turn
                 setUserTime(time => time - 1);
                 sessionStorage.setItem("user-time",JSON.stringify(userTime - 1));
             } else if(opponentTime){
@@ -75,7 +79,7 @@ const ComputerOpponent = () => {
     
         return () => clearInterval(intervalId);
 
-    },[userTime, opponentTime, userTurn])
+    },[userTime, opponentTime, game, userColor])
 
 
 
