@@ -28,7 +28,7 @@ function ChessBoard() {
 
     const dispatch = useDispatch();
 
-    const { isActive, userColor, isDesktop } = useGame();
+    const { isActive, userColor, isDesktop, userTurn, setUserTurn } = useGame();
     
     const game = useSelector(getGame)
     const selectedSquare = useSelector(getSelected);
@@ -195,7 +195,11 @@ function ChessBoard() {
                 if (isActive){
                     sessionStorage.setItem("ongoingGame", JSON.stringify(game.getBoardHash()));
                 }
+                // debugger
 
+                console.log("Previous user's turn",userTurn )
+                setUserTurn(isTurn => !isTurn)
+                
                 const newBoard = deepCopyBoard(game.board);
                 dispatch(receiveBoard(newBoard))
                 dispatch(removeSelected())
@@ -207,17 +211,17 @@ function ChessBoard() {
     }
 
 
-    if (!userColor){
-        console.log("+++ No assigned user color +++")
-    }
+    // if (!userColor){
+    //     console.log("+++ No assigned user color +++")
+    // }
 
     const isWhite = userColor === "white" || userColor === null;
 
-    if (isWhite){
-        console.log("board displayed with user as WHITE")
-    } else {
-        console.log("board displayed with user as BLACK")
-    }
+    // if (isWhite){
+    //     console.log("board displayed with user as WHITE")
+    // } else {
+    //     console.log("board displayed with user as BLACK")
+    // }
 
     const displayBoard = board ? (isWhite ? [...board].reverse() : [...board]) : [];
 

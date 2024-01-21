@@ -25,20 +25,15 @@ export function displayTime(timeControl){
 }
 
 const icon = (timeVal) => {
-    // console.log("time val: ", timeVal)
     if (!timeVal) return false;
     const [mins,_] = timeVal.split('|');
     if (mins <= 2){
-        // console.log(" return bullet")
         return (<GiBulletBill className="STM-icon bullet"/>)
     } else if (mins > 2 && mins <= 5){
-        // console.log(" return lightnming")
         return (<GiLightningHelix className="STM-icon blitz"/>)
     } else if (mins > 5 && mins <= 30){
-        // console.log(" return timer")
         return (<RxLapTimer className="STM-icon rapid"/>)
     } else if (mins === 'inf'){
-        // console.log(" return calendar")
         return (<LuCalendarDays className="STM-icon long"/>)
     }
 }
@@ -72,10 +67,16 @@ const PlayOptions = () => {
 
     const [gameStyleWarning, setGameStyleWarning] = useState(null);
 
+
     function startGame(){
         if (!gameStyle){
             setGameStyleWarning(true);
-        } else {
+        } else if (!timeControl){
+            console.log("NOP TIME COMTROL ERROR")
+        }else {
+            const min = timeControl.split('|')[0];
+            sessionStorage.setItem("opponent-time",min * 60);
+            sessionStorage.setItem("user-time",min * 60);
             sessionStorage.setItem("ongoingGame", null)
             history.push(URLS[gameStyle]);
         }

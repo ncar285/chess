@@ -13,9 +13,8 @@ const ComputerOpponent = () => {
 
     const [userTime, setUserTime] = useState(null);
     const [opponentTime, setOpponentTime] = useState(null);
-    const [currentTurn, setCurrentTurn] = useState(null);
 
-    const { setUserColor } = useGame();
+    const { setUserColor, setUserTurn, userTurn } = useGame();
 
     const randomSelect = (array) => array[Math.floor(Math.random() * array.length)];
 
@@ -25,7 +24,7 @@ const ComputerOpponent = () => {
         const color = randomSelect(['white', 'black']);
         
         setUserColor(color);
-        setCurrentTurn(color === 'white');
+        setUserTurn(color === 'white');
 
         const [min, _] = timeControl.split('|');
         const initialTime = parseInt(min, 10) * 60;
@@ -65,7 +64,7 @@ const ComputerOpponent = () => {
         let intervalId;
 
         intervalId = setInterval(() => {
-            if (currentTurn && userTime){   // i.e. the main user's turn
+            if (userTurn && userTime){   // i.e. the main user's turn
                 setUserTime(time => time - 1);
                 sessionStorage.setItem("user-time",JSON.stringify(userTime - 1));
             } else if(opponentTime){
@@ -76,7 +75,7 @@ const ComputerOpponent = () => {
     
         return () => clearInterval(intervalId);
 
-    },[userTime, opponentTime, currentTurn])
+    },[userTime, opponentTime, userTurn])
 
 
 
@@ -91,7 +90,7 @@ const ComputerOpponent = () => {
             {
                 isDesktop && 
                 <DesktopMatchRoom
-                    boardComponent={<ActiveChessBoard />} 
+                    boardComponent={<ActiveChessBoard/>} 
                     menuComponent={<ComputerGameOptions opponentTime={opponentTime} userTime={userTime} />} 
                 />
             }

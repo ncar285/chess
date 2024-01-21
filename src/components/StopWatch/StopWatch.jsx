@@ -8,7 +8,7 @@ const StopWatch = ({ time }) => {
     // console.log("time",time)
 
     const displayTime = (seconds) => {
-        console.log("seconds",seconds)
+        // console.log("seconds",seconds)
         const mins = Math.floor(seconds/60);
         const secs = seconds - (mins * 60);
         return `${mins}:${secs}`
