@@ -9,6 +9,7 @@ export function Rook(color,square, board){
     this.type = color.slice(0,1) + "_" + this.pieceName;
     Piece.call(this, color, square, board);
     this.slideable = new Slideable(board);
+    this.firstMove = true;
 }
 
 inherit(Piece, Rook);

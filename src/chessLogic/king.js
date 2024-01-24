@@ -7,6 +7,7 @@ export function King(color, square, board){
     this.pieceName = "king";
     this.type = color.slice(0,1) + "_" + this.pieceName;
     Piece.call(this, color, square, board);
+    this.firstMove = true;
 }
 
 inherit(Piece, King);

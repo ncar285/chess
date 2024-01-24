@@ -1,4 +1,4 @@
-import { idToPos } from '../Utils/posIdConversion.js';
+import { idToPos, posToId } from '../Utils/posIdConversion.js';
 import { Bishop } from './bishop.js';
 import { King } from './king.js';
 import { Knight } from './knight.js';
@@ -136,10 +136,7 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
             capturedPiece.taken = true;
         }
 
-        // Update a pawn's firstMove property
-        if (piece.type.slice(2) === "pawn") {
-            piece.firstMove = false;
-        }
+        if (piece.firstMove) piece.firstMove = false;
 
         // update move history
         const move = {piece: piece, endSquare}
@@ -168,6 +165,36 @@ Board.prototype.isOccupiedByColor = function(pos, color) {
     if (!Board.isInsideBoard(pos)) return false;
     const [rank,file] = pos;
     return this.isOccupied(pos) && this.board[rank][file].color === color;
+};
+
+Board.prototype.squareEmpty = function(pos) {
+    return this.getPiece(pos) === null;
+};
+
+Board.prototype.addCastleOptions = function(piece, options) {
+    if (piece.pieceName === "king" && piece.firstMove){
+        const rank = piece.getSquare()[0];
+
+        // Check for queenside castling
+        const queensideRook = this.getPiece([rank,0]);
+        if (queensideRook && queensideRook.pieceName === "rook" && queensideRook.firstMove){
+            if (this.squareEmpty([rank,1]) && 
+                this.squareEmpty([rank,2]) && 
+                this.squareEmpty([rank,3])) {
+                    options.add(posToId([rank,2]));
+            }
+        }
+
+        // Check for kingside castling
+        const kingsideRook = this.getPiece([rank,7]);
+        if (kingsideRook && kingsideRook.pieceName === "rook" && kingsideRook.firstMove){
+            if (this.squareEmpty([rank,5]) && 
+                this.squareEmpty([rank,6])) {
+                options.add(posToId([rank,6]));
+            }
+        }
+
+    }
 };
 
 Board.isInsideBoard = function(pos) {

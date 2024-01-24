@@ -24,15 +24,14 @@ const ComputerOpponent = () => {
     // randomly assign colors to the players
     useEffect(()=>{
         const color = randomSelect(['white', 'black']);
-        
         setUserColor(color);
-        // setUserTurn(color === 'white');
 
-        const min = timeControl.split('|')[0];
-        const initialTime = parseInt(min, 10) * 60;
-
-        setUserTime(initialTime);
-        setOpponentTime(initialTime);
+        if (timeControl){
+            const min = timeControl.split('|')[0];
+            const initialTime = parseInt(min, 10) * 60;
+            setUserTime(initialTime);
+            setOpponentTime(initialTime);
+        }
     },[])
 
 
@@ -41,18 +40,18 @@ const ComputerOpponent = () => {
         try {
             const playerOne = JSON.parse(sessionStorage.getItem("user-time"));
             const playerTwo = JSON.parse(sessionStorage.getItem("opponent-time"));
+
+            const initialTime = timeControl ? timeControl.split('|')[0] * 60 : null;
+
             if (playerOne) {
                 setUserTime(parseInt(playerOne));
             } else {
-                const [min, _] = timeControl.split('|');
-                setUserTime(min * 60);
+                if (initialTime) setUserTime(initialTime);
             }
-    
             if (playerTwo) {
                 setOpponentTime(parseInt(playerTwo));
             } else {
-                const [min, _] = timeControl.split('|');
-                setOpponentTime(min * 60);
+                if (initialTime) setOpponentTime(initialTime);
             }
         } catch (error) {
             console.error("Error setting time:", error);

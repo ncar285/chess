@@ -65,5 +65,7 @@ Piece.prototype.getMoves = function(){
             takeOptions.add(posToId(pos));
         }
     });
+    this.board.addCastleOptions(this,options);
+
     return { options, takeOptions }
 }
