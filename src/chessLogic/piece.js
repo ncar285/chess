@@ -44,13 +44,6 @@ Piece.prototype.isTaken = function(){
     return this.taken;
 }
 
-
-
-// Piece.prototype.setBoard = function(board){
-//     this.board = board;
-// }
-
-
 Piece.prototype.getMoves = function(){
     const validMoves = this.validMoves();
     const options = new Set();

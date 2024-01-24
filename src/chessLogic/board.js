@@ -121,12 +121,14 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
         if (!this.isOccupied(startSquare)) {
             throw new Error("No piece at the start square.");
         }
-        // store captured piece if there is one
+
+        const [startRank, startFile] = startSquare;
+        const [endRank, endFile] = endSquare;
         const capturedPiece = this.getPiece(endSquare);
 
         // Update the moved piece
-        this.board[startSquare[0]][startSquare[1]] = null;
-        this.board[endSquare[0]][endSquare[1]] = piece;
+        this.board[startRank][startFile] = null;
+        this.board[endRank][endFile] = piece;
         piece.setSquare(endSquare);
 
         // Update a captured piece
@@ -134,6 +136,28 @@ Board.prototype.movePiece = function(startSquare, endSquare, piece){
             capturedPiece.setSquare(null);
             this.addTakenPiece(capturedPiece);
             capturedPiece.taken = true;
+        }
+
+
+        // if it was a catle, also move the corresponding rook
+        if (piece.pieceName === "king" &&  piece.firstMove){
+            // debugger
+            // const [endRank, endFile] = endSquare;
+            const queensideRook = this.getPiece([endRank,0])
+            if (endFile  === 2 && queensideRook.firstMove) {
+                this.board[endRank][0] = null;
+                this.board[endRank][3] = queensideRook;
+                queensideRook.setSquare([endRank,3]);
+                queensideRook.firstMove = false;
+            }
+
+            const kingsideRook = this.getPiece([endRank,7])
+            if (endFile  === 6 && kingsideRook.firstMove) {
+                this.board[endRank][7] = null;
+                this.board[endRank][5] = kingsideRook;
+                kingsideRook.setSquare([endRank,5]);
+                kingsideRook.firstMove = false;
+            }
         }
 
         if (piece.firstMove) piece.firstMove = false;
