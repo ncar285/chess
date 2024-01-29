@@ -10,6 +10,7 @@ import { findChessSquareFromCoordinates } from '../../Utils/findChessSquare';
 import { useGame } from '../GameContext.jsx';
 import { STATIC_WHITE_BOARD, STATIC_BLACK_BOARD } from '../../Utils/staticChessBoard.js';
 import "./ChessBoard.css"
+import { GAME_SOUNDS } from '../../Utils/gameSounds.js';
 
 
 
@@ -189,6 +190,10 @@ function ChessBoard() {
 
             if (isTurn && isValid){
                 game.movePiece(startPos, endPos, piece);
+
+                    // play the own move sound
+                    const moveSelfSound = new Audio(GAME_SOUNDS.moveSelf);
+                    moveSelfSound.play()
 
                 if (isActive){
                     sessionStorage.setItem("ongoingGame", JSON.stringify(game.getBoardHash()));
