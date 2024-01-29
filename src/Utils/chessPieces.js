@@ -1,16 +1,16 @@
 // Piece images
-import b_bishop from '../pieces/b_bishop.png'
-import w_bishop from '../pieces/w_bishop.png'
-import b_king from '../pieces/b_king.png'
-import w_king from '../pieces/w_king.png'
-import b_knight from '../pieces/b_knight.png'
-import w_knight from '../pieces/w_knight.png'
-import b_pawn from '../pieces/b_pawn.png'
-import w_pawn from '../pieces/w_pawn.png'
-import b_queen from '../pieces/b_queen.png'
-import w_queen from '../pieces/w_queen.png'
-import b_rook from '../pieces/b_rook.png'
-import w_rook from '../pieces/w_rook.png'
+import b_bishop from '../assets/pieces/b_bishop.png'
+import w_bishop from '../assets/pieces/w_bishop.png'
+import b_king from '../assets/pieces/b_king.png'
+import w_king from '../assets/pieces/w_king.png'
+import b_knight from '../assets/pieces/b_knight.png'
+import w_knight from '../assets/pieces/w_knight.png'
+import b_pawn from '../assets/pieces/b_pawn.png'
+import w_pawn from '../assets/pieces/w_pawn.png'
+import b_queen from '../assets/pieces/b_queen.png'
+import w_queen from '../assets/pieces/w_queen.png'
+import b_rook from '../assets/pieces/b_rook.png'
+import w_rook from '../assets/pieces/w_rook.png'
 
 export const PIECE_IMAGES = {
     'b_bishop': b_bishop,

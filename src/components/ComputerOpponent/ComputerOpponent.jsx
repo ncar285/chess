@@ -6,6 +6,7 @@ import DesktopMatchRoom from '../DesktopMatchRoom/DesktopMatchRoom';
 import ActiveChessBoard from '../ActiveChessBoard/ActiveChessBoard';
 import ComputerGameOptions from '../ComputerGameOptions/ComputerGameOptions';
 import { useSelector } from 'react-redux';
+import { GAME_SOUNDS } from '../../Utils/gameSounds';
 
 const ComputerOpponent = () => {
 
@@ -32,6 +33,10 @@ const ComputerOpponent = () => {
             setUserTime(initialTime);
             setOpponentTime(initialTime);
         }
+
+        // play the start sound
+        const gameStartSound = new Audio(GAME_SOUNDS.gameStart);
+        gameStartSound.play()
     },[])
 
 
