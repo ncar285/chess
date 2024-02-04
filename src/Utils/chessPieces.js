@@ -26,3 +26,33 @@ export const PIECE_IMAGES = {
     'b_rook': b_rook,
     'w_rook': w_rook
 };
+
+export const FEN_PIECE_IMAGES = {
+    'b': b_bishop,
+    'B': w_bishop,
+    'k': b_king,
+    'K': w_king,
+    'n': b_knight,
+    'N': w_knight,
+    'p': b_pawn,
+    'P': w_pawn,
+    'q': b_queen,
+    'Q': w_queen,
+    'r': b_rook,
+    'R': w_rook
+};
+
+export const PIECE_NAMES = {
+    'b': "black bishop",
+    'B': "white bishop",
+    'k': "black king",
+    'K': "white king",
+    'n': "black knight",
+    'N': "white knight",
+    'p': "black pawn",
+    'P': "white pawn",
+    'q': "black queen",
+    'Q': "white queen",
+    'r': "black rook",
+    'R': "white rook"
+};

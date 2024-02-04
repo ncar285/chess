@@ -4,6 +4,7 @@ import ChessBoard from '../ChessBoard/ChessBoard.jsx';
 import { useGame } from '../GameContext.jsx';
 import PlayOptions from '../PlayOptions/PlayOptions.jsx';
 import DesktopMatchRoom from '../DesktopMatchRoom/DesktopMatchRoom.jsx';
+import InactiveChessBoard from '../InactiveChessBoard/InactiveChessBoard.jsx';
 
 
 const HomePage = () => {
@@ -16,7 +17,7 @@ const HomePage = () => {
             {
                 isDesktop && 
                 <DesktopMatchRoom
-                    boardComponent={<ChessBoard />} 
+                    boardComponent={<InactiveChessBoard />} 
                     menuComponent={<PlayOptions />} 
                 />
             }

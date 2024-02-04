@@ -1,0 +1,96 @@
+.chess-board.inactive {
+    position: relative;
+    width: var(--boardDimension);
+    height: var(--boardDimension);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: calc(0.01 * var(--boardDimension));
+    overflow: hidden;
+}
+
+.chess-board.non-desktop {
+    width: calc(min(100vw,100vh));
+    height: calc(min(100vw,100vh));
+    border-radius: calc(0.01 * min(100vw,100vh));
+    border-radius: 0;
+}
+
+.board-row{
+    height: calc(100% / 8);
+    width: 100%;
+    display: flex;
+}
+
+.board-square{
+    height: 100%;
+    width: calc(100% / 8);
+    position: relative;
+}
+
+.square-label{
+    position: absolute;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: var(--boardLabel);
+    font-weight: 500;
+    padding: calc(0.007 * var(--boardDimension));
+    pointer-events: none;
+}
+
+/* ! DESKTOP CHESS BOARD STYLES */
+.chess-board.desktop .board-square.brown {
+    background-color: var(--brownSquare);
+}
+.chess-board.desktop .board-square.white {
+    background-color: var(--whiteSquare);
+}
+.chess-board.desktop .board-square.white .square-label{
+    color: var(--brownSquare);
+}
+.chess-board.desktop .board-square.brown .square-label{
+    color: var(--whiteSquare);
+}
+
+/* ! DESKTOP CHESS BOARD STYLES */
+.chess-board.non-desktop .board-square.brown {
+    background-color: var(--greenSquare);
+}
+.chess-board.non-desktop .board-square.white {
+    background-color: var(--whiteSquarePhone);
+}
+.chess-board.non-desktop .board-square.white .square-label{
+    color: var(--greenSquare);
+}
+.chess-board.non-desktop .board-square.brown .square-label{
+    color: var(--whiteSquarePhone);
+}
+
+.square-label.file {
+    bottom: 0;
+    right: 0;
+}
+
+.square-label.rank {
+    top: 0;
+    left: 0;
+}
+
+.chess-piece {
+    height: auto; 
+    display: block;
+    margin: auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: grab;
+    z-index: 11;
+}
+
+.chess-board.non-desktop .chess-piece {
+    width: var(--phonePieceWidth);
+}
+.chess-board.desktop .chess-piece {
+    width: var(--pieceWidth);
+}
+
+/* .chess-piece.inactive:hover{
+    cursor: auto;
+} */
