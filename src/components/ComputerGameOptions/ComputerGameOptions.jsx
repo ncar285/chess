@@ -10,7 +10,7 @@ const ComputerGameOptions = ({opponentTime, userTime}) => {
                 <StopWatch time={opponentTime}/>
             </div>
 
-            <div>Middle content</div>
+            <div>Computer Side Nav content</div>
 
 
             <div className='player-1-stopwatch'>

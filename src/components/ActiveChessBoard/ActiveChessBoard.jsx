@@ -18,6 +18,8 @@ const ActiveChessBoard = () => {
         setIsActive(true);
     }, [setIsActive]);
 
+    
+
     useEffect(() => {
         try {
             const boardHash = JSON.parse(sessionStorage.getItem(SESSION_GAME_KEY));

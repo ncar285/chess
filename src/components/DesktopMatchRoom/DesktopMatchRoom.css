@@ -7,20 +7,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     background-color: var(--desktopBackground);
 }
 
 .desktop-game {
-    /* height: calc(100vh - 40px);
-    width: calc(100vw - 40px); */
     display: flex;
     padding: 40px;
 }
 
+.match-container{
+    width: calc(var(--boardDimension) + 40px);
+    background-color: azure;
+}
+
 .desktop-board {
     width: calc(var(--boardDimension) + 40px);
-    height: auto;
+    /* height: auto; */
     display: flex;
     justify-content: center;
     padding: 20px;
@@ -37,7 +39,7 @@
     min-width: 400px;
 }
 
-@media (max-width: 960px) {
+/* @media (max-width: 960px) {
     .desktop-board {
         display: none;
     }
@@ -48,4 +50,6 @@
         padding: 20px;
         box-sizing: border-box;
     }
-}
+} */
+
+
