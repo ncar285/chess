@@ -98,19 +98,35 @@ const DesktopMatchRoom = ({ boardComponent, menuComponent }) => {
     // },[userTime, opponentTime, game, userColor])
 
     return (
-        <div id="match-room-desktop" onClick={handleClick}>
-            <div className='desktop-game'>
+        <div className='desktop-game' onClick={handleClick} >
+
+            <div className='side-nav'>
+
+            </div>
+
+            <div className='centered-game-content'>
+
                 <div className='match-container'>
-                    <GamePanel user={false} />
-                    <div className='desktop-board'>
-                        {boardComponent}
+                    <div className='temp-game-panel'>
+                        <GamePanel user={false} />
                     </div>
-                    <GamePanel user={true} />
+                    <div className='desktop-board'>
+                        <div className='temp-board'>
+                            {boardComponent}
+                        </div>
+                    </div>
+                    <div className='temp-game-panel'>
+                        <GamePanel user={true} />
+                    </div>
                 </div>
                 <div className='desktop-play-options'>
-                    {menuComponent} 
+                    <div className='temp-menu'>
+                        {menuComponent} 
+                    </div>
                 </div>
             </div>
+
+
         </div>
     );
 };

@@ -1,0 +1,92 @@
+.desktop-game {
+    display: flex;
+    height: 100vh;
+    justify-content: space-between;
+    gap: 20px;
+    /* padding: 20px; */
+}
+
+.match-container{
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.temp-game-panel {
+    height: var(--gamePanelHeight);
+    background-color: orange;
+}
+
+.desktop-board {
+    /* flex-grow: 1; */
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+.temp-board{
+    position: relative;
+
+    /* flex-grow: 1; */
+
+    height: calc(100% - 2 * var(--gamePanelHeight));
+    width: 100px;
+
+    max-width: 100%; /* Limits width to parent's width */
+    max-height: calc(100% - 200px); /* Subtracts the combined height of the two .temp-game-panel elements */
+    background-color: green;
+    aspect-ratio: 1 / 1; /* Maintains square shape */
+
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: calc(0.01 * var(--boardDimension));
+    overflow: hidden;
+    margin: auto;
+}
+
+.desktop-play-options {
+    width: 40%;
+    /* height: 100vh; */
+    height: 100%;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center the .temp-menu */
+    background-color: blue;
+}
+
+.temp-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    /* height: 100px;
+    height: calc(100% - 40px);
+    margin-right: 20px;
+    flex-grow: 1; */
+
+    margin: auto;
+    /* background-color: var(--darkScreen); */
+    z-index: 100;
+
+    border-radius: 0.3em;
+    background-color: green;
+}
+
+/* @media (max-width: 960px) {
+    .desktop-board {
+        display: none;
+    }
+
+    .desktop-play-options {
+        display: block;
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+} */
+
+

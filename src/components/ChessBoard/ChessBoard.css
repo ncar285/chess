@@ -1,12 +1,12 @@
+
+
 .chess-board {
     position: relative;
-    width: var(--boardDimension);
-    height: var(--boardDimension);
 
-    /* max-width: var(--maxBoardDim);
-    max-height: var(--maxBoardDim); */
+    width: 100%;
+    height: 100%;
 
-    /* aspect-ratio: 1 / 1; */
+    aspect-ratio: 1 / 1;
 
     background-color: #f7f7f7;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);

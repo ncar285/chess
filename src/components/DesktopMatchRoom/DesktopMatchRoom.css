@@ -1,55 +1,96 @@
-#match-room-desktop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--desktopBackground);
+:root {
+    --gamePanelHeight: 50px; /* Default height for game panels */
+    --sideNavWidth: 100px; /* Width of the side navigation */
+    --board-size: calc(min(calc(60vw - var(--sideNavWidth) - 20px), calc(100vh - 2 * var(--gamePanelHeight)))); /* Adaptive board size */
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 650px) {
+    :root {
+        --board-size: calc(min((100vw - var(--sideNavWidth) - 40px), calc(100vh - 2 * var(--gamePanelHeight)) )); /* Adjusted board size */
+    }
+    .centered-game-content {
+        width: calc(100vw - var(--sideNavWidth)); /* Full viewport width minus the sideNav width */
+    }
+    .desktop-play-options {
+        display: none !important;
+    }
+    .temp-menu {
+        display: none !important;
+    }
+}
+@media (max-width: 500px) {
+    :root {
+        --sideNavWidth: 50px;
+    }
 }
 
 .desktop-game {
     display: flex;
-    padding: 40px;
+    flex-direction: row; /* Horizontal layout */
+    width: 100%;
+    align-items: flex-start; /* Align items to the start, preventing vertical centering */
+    background-color: var(--desktopBackground);
 }
 
-.match-container{
-    width: calc(var(--boardDimension) + 40px);
-    background-color: azure;
+.side-nav {
+    flex: 0 0 var(--sideNavWidth); /* Fixed width, no grow, no shrink */
+    height: 100vh; /* Full viewport height */
+    background-color: cadetblue; /* Side navigation background */
+}
+
+.centered-game-content {
+    flex-grow: 1; /* Allow this container to take up remaining space */
+    display: flex;
+    justify-content: center; /* Center the game content horizontally */
+}
+
+.match-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* height: 100vh; */
+    height: calc(100vh - 20px);
+    margin-top: 10px;
+    width: var(--board-size); /* Width based on dynamically calculated board size */
+}
+
+.temp-game-panel {
+    height: var(--gamePanelHeight);
+    width: 100%; /* Full width of its container */
+    /* background-color: orange; */
 }
 
 .desktop-board {
-    width: calc(var(--boardDimension) + 40px);
-    /* height: auto; */
+    width: var(--board-size);
+    height: var(--board-size);
     display: flex;
     justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
+    align-items: center;
+    /* background-color: yellow; */
+}
+
+.temp-board {
+    /* background-color: green; */
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1; /* Maintain square shape */
+    margin: auto; /* Auto-margin to center within its container */
 }
 
 .desktop-play-options {
-    width: var(--playOptionsWidth);
+    width: 40%; /* Adjust if necessary */
     height: 100vh;
     display: flex;
+    justify-content: center;
     align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    min-width: 400px;
+    /* background-color: blue; */
 }
 
-/* @media (max-width: 960px) {
-    .desktop-board {
-        display: none;
-    }
-
-    .desktop-play-options {
-        display: block;
-        width: 100%;
-        padding: 20px;
-        box-sizing: border-box;
-    }
-} */
-
-
+.temp-menu {
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    /* background-color: rgba(0,0,0,0.5); */
+    border-radius: 0.4em;
+    overflow: hidden;
+}
